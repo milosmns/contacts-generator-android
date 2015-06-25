@@ -8,5 +8,4 @@ Summary (what I want it to do in the end)
 - Choose whether to use contact photos or not
 - Work in background so you get a notification when it's done
 
-This will probably use uinames.com and randomuser.me as public APIs
-===================================================================
+[ This will probably use uinames.com and randomuser.me as public APIs ]
