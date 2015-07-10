@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,37 +13,39 @@
         android:background="?attr/colorPrimary"
         android:elevation="8dp"
         android:minHeight="?attr/actionBarSize"
-        android:title="@string/app_name"
         android:visibility="visible"
-        tools:ignore="UnusedAttribute"/>
+        app:title="@string/app_name"
+        tools:ignore="UnusedAttribute" />
 
     <!-- How many contacts would you like TextView -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/how_many_contacts"
-        android:textSize="24sp"/>
+        android:textSize="24sp" />
 
-    <!-- Should we create a v14 layout where we use Space instead of View? -->
     <!-- Some empty space after it -->
+    <!-- TODO: check measuring performance - maybe we're better off with margins? -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp" />
 
     <!-- A dummy TextView - the custom control will come here -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/custom_control_dummy_text"/>
+        android:text="@string/custom_control_dummy_text" />
 
     <!-- Some empty space after it -->
+    <!-- TODO: check measuring performance - maybe we're better off with margins? -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp" />
 
-    <include layout="@layout/avatars_checkbox_with_radio_buttons"/>
+    <include layout="@layout/avatars_checkbox_with_radio_buttons" />
 
 </LinearLayout>
