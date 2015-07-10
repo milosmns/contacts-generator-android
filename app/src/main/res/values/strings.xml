@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Contacts Generator</string>
 
-    <string name="hello_world">Welcome here.</string>
     <string name="action_rate">Rate this app</string>
+    <string name="how_many_contacts">How many contacts do you want generated?</string>
+    <string name="want_avatars">I want avatars too</string>
+    <string name="custom_control_dummy_text">The custom control will come here</string>
+    <string name="all_males">Give me all males</string>
+    <string name="all_females">Give me all females</string>
+    <string name="do_not_care">I don\'t really care</string>
 </resources>

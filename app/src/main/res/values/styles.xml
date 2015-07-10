@@ -2,7 +2,9 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
-        <item name="colorPrimary">#EC407A</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_darker</item>
+        <item name="android:windowBackground">@color/background</item>
 
     </style>
 
