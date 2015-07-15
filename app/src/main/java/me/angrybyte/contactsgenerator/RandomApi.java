@@ -11,12 +11,12 @@ import java.io.InputStreamReader;
 
 public class RandomApi {
 
-    private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&key=%s";
+    private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&gender=%s&key=%s";
 
     public RandomApi(Context context) {
         super();
+        // we are actually building with another API key, this one is public
         String apiKey = readRawTextFile(context, R.raw.api_key);
-        // MM add parsing JSON and download choreographer in a separate thread (add progress updater!)
     }
 
     private String readRawTextFile(Context context, int resId) {
