@@ -2,6 +2,7 @@
 package me.angrybyte.contactsgenerator;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -11,12 +12,16 @@ import java.io.InputStreamReader;
 
 public class RandomApi {
 
+    private static final String TAG = RandomApi.class.getSimpleName();
     private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&gender=%s&key=%s";
 
     public RandomApi(Context context) {
         super();
         // we are actually building with another API key, this one is public
         String apiKey = readRawTextFile(context, R.raw.api_key);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "API Key = " + apiKey);
+        }
     }
 
     private String readRawTextFile(Context context, int resId) {
@@ -50,4 +55,5 @@ public class RandomApi {
             }
         }
     }
+
 }

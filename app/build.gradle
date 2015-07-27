@@ -6,10 +6,14 @@ android {
 
     defaultConfig {
         applicationId "me.angrybyte.contactsgenerator"
+        testApplicationId "me.angrybyte.contactsgenerator.test"
+
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -22,10 +26,27 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
+
+    // set this dependency to use the JUnit instrumentation runner
+    androidTestCompile 'com.android.support.test:runner:0.3'
+    // set this dependency to use JUnit 4 rules
+    androidTestCompile 'com.android.support.test:rules:0.3'
+    // set this dependency to build and run Espresso tests
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
+    // Lollipop only: set this dependency to build and run UI Automator tests
+    // androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 }
