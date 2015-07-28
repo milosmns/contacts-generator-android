@@ -19,3 +19,8 @@ To stop tracking files
 
 To start tracking files
 ``` git update-index --no-assume-unchanged FILENAME ```
+
+Testing
+-------
+
+You should be able to either test from AndroidStudio (```right click -> Run Test```) or from Gradle CLI (```gradlew connectedCheck```).
