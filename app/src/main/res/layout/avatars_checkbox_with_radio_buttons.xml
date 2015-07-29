@@ -7,17 +7,13 @@
 
     <!-- The "I would like some avatars, too" CheckBox -->
     <CheckBox
+        android:id="@+id/main_avatars_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:text="@string/want_avatars"
         android:textColor="@color/text"
         android:textSize="22sp" />
-
-    <!-- Some empty space after it -->
-    <!-- TODO: check measuring performance - maybe we're better off with margins? -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
 
     <include layout="@layout/radio_buttons" />
 

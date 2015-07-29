@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "me.angrybyte.contactsgenerator"
@@ -10,8 +10,8 @@ android {
 
         minSdkVersion 11
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "1.3"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -38,8 +38,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
 
     // set this dependency to use the JUnit instrumentation runner
     androidTestCompile 'com.android.support.test:runner:0.3'
@@ -49,4 +49,9 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2'
     // Lollipop only: set this dependency to build and run UI Automator tests
     // androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+
+    configurations.all {
+        // currently espresso is dependent on support-annotations:22.2.0
+        resolutionStrategy.force 'com.android.support:support-annotations:22.2.1'
+    }
 }

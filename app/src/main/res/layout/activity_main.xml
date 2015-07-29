@@ -19,32 +19,24 @@
 
     <!-- How many contacts would you like TextView -->
     <TextView
+        android:id="@+id/main_contacts_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:layout_marginTop="30dp"
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/how_many_contacts"
         android:textSize="24sp" />
 
-    <!-- Some empty space after it -->
-    <!-- TODO: check measuring performance - maybe we're better off with margins? -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
-
     <!-- A dummy TextView - the custom control will come here -->
     <TextView
+        android:id="@+id/main_number_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
         android:gravity="center"
         android:text="@string/custom_control_dummy_text" />
-
-    <!-- Some empty space after it -->
-    <!-- TODO: check measuring performance - maybe we're better off with margins? -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="40dp" />
 
     <include layout="@layout/avatars_checkbox_with_radio_buttons" />
 

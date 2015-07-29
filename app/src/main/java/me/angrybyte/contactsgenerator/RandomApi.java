@@ -2,6 +2,8 @@
 package me.angrybyte.contactsgenerator;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.RawRes;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,16 +17,25 @@ public class RandomApi {
     private static final String TAG = RandomApi.class.getSimpleName();
     private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&gender=%s&key=%s";
 
+    private Context mContext;
+    private String mApiKey;
+
     public RandomApi(Context context) {
         super();
-        // we are actually building with another API key, this one is public
-        String apiKey = readRawTextFile(context, R.raw.api_key);
+        mContext = context;
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "API Key = " + apiKey);
+            Log.d(TAG, "Random API object created.");
         }
     }
 
-    private String readRawTextFile(Context context, int resId) {
+    /**
+     * Reads a String from the given raw resource.
+     * 
+     * @param context Which context to use (can be app context)
+     * @param resId Which raw resource to use
+     * @return Contents of the raw resource, or an empty String if something fails
+     */
+    public String readRawTextFile(@NonNull Context context, @RawRes int resId) {
         InputStream inputStream = context.getResources().openRawResource(resId);
 
         InputStreamReader inputReader = new InputStreamReader(inputStream);
@@ -47,6 +58,22 @@ public class RandomApi {
         return text.toString();
     }
 
+    /**
+     * @return The current API security key in use.
+     */
+    public String getApiKey() {
+        if (mApiKey == null) {
+            // we are building with another API key, this one in the repo is public
+            mApiKey = readRawTextFile(mContext, R.raw.api_key);
+        }
+        return mApiKey;
+    }
+
+    /**
+     * Stream closer - closes the given {@link Closeable} instance.
+     * 
+     * @param closeable Instance of a closeable object
+     */
     private void close(Closeable closeable) {
         if (closeable != null) {
             try {
