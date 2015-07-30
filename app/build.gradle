@@ -39,7 +39,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
 
     // set this dependency to use the JUnit instrumentation runner
     androidTestCompile 'com.android.support.test:runner:0.3'
@@ -50,6 +50,7 @@ dependencies {
     // Lollipop only: set this dependency to build and run UI Automator tests
     // androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 
+    // noinspection GroovyAssignabilityCheck
     configurations.all {
         // currently espresso is dependent on support-annotations:22.2.0
         resolutionStrategy.force 'com.android.support:support-annotations:22.2.1'

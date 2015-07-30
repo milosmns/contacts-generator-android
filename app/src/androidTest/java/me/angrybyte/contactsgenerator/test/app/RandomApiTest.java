@@ -10,6 +10,10 @@ import me.angrybyte.contactsgenerator.RandomApi;
 
 public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
+    public static final String HTTP_TEST_URL = "http://pastebin.com/raw.php?i=VS10rPNJ";
+    public static final String HTTP_TEST_CONTENT = "TESTING... OK!";
+    public static final int DEFAULT_KEY_LENGTH = 19;
+
     private MainActivity mActivity;
     private RandomApi mApi;
 
@@ -32,11 +36,21 @@ public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity
     public void testReadingApiKey() {
         String apiKey = mApi.readRawTextFile(mActivity, R.raw.api_key);
         assertNotNull("Cannot read the API key.", apiKey);
-        apiKey = apiKey.trim();
 
-        // current API key length is always 19
-        int length = 19;
-        assertEquals("API Key has wrong length", length, apiKey.length());
+        int length = DEFAULT_KEY_LENGTH;
+        assertEquals("API Key '" + apiKey.trim() + "' has wrong length.", length, apiKey.trim().length());
+    }
+
+    @SmallTest
+    public void testHttpRequest() {
+        String pageText = mApi.readUsingHttp(HTTP_TEST_URL);
+        assertEquals("Invalid page content: '" + pageText + "'.", HTTP_TEST_CONTENT, pageText);
+    }
+
+    @SmallTest
+    public void testJsonRequest() {
+        String jsonText = mApi.getPersonsJson(1, RandomApi.BOTH);
+        assertEquals("Json response is empty.", true, jsonText.length() > 0);
     }
 
     @Override

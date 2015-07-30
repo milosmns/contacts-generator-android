@@ -36,19 +36,19 @@ public class MainActivityTest extends ActivityInstrumentationTestCase2<MainActiv
     @SmallTest
     public void testLayoutInflation() {
         Toolbar toolbar = (Toolbar) mActivity.findViewById(R.id.main_toolbar);
-        assertNotNull("Toolbar failed to inflate", toolbar);
+        assertNotNull("Toolbar failed to inflate.", toolbar);
 
         TextView question = (TextView) mActivity.findViewById(R.id.main_contacts_question);
-        assertNotNull("Question view failed to inflate", question);
+        assertNotNull("Question view failed to inflate.", question);
 
         View picker = mActivity.findViewById(R.id.main_number_picker);
-        assertNotNull("Number picker failed to inflate", picker);
+        assertNotNull("Number picker failed to inflate.", picker);
 
         CheckBox wantAvatars = (CheckBox) mActivity.findViewById(R.id.main_avatars_checkbox);
-        assertNotNull("Avatars checkbox failed to inflate", wantAvatars);
+        assertNotNull("Avatars checkbox failed to inflate.", wantAvatars);
 
         RadioGroup genders = (RadioGroup) mActivity.findViewById(R.id.main_genders);
-        assertNotNull("Genders picker failed to inflate", genders);
+        assertNotNull("Genders picker failed to inflate.", genders);
     }
 
     @Override
