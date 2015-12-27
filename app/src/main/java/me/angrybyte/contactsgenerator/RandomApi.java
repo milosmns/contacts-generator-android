@@ -1,8 +1,9 @@
-
 package me.angrybyte.contactsgenerator;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
 import android.util.Log;
 
@@ -17,6 +18,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+
+import me.angrybyte.contactsgenerator.parser.data.User;
+import me.angrybyte.contactsgenerator.parser.json.RandomUserJsonParser;
 
 /**
  * A clean interface to the Random API (check the README.md for more info). This class helps fetch and parse the persons information from
@@ -46,6 +51,25 @@ public class RandomApi {
         }
     }
 
+    /**
+     * Retrieves a list of {@link User} objects to populate the Contacts database with.
+     *
+     * @param amount The amount of contacts you would like
+     * @param gender The gender of the contacts. One of {@link #MALE}, {@link #FEMALE}, or {@link #BOTH}
+     * @return The list of {@link User} objects.
+     */
+    public List<User> getUsersForQuery(int amount, String gender) {
+        String response = getPersonsJson(amount, gender);
+        RandomUserJsonParser randomUserJsonParser = new RandomUserJsonParser();
+        List<User> users = randomUserJsonParser.parseResponse(response);
+
+        for (User user : users) {
+            user.setImage(BitmapFactory.decodeStream(readImageUsingHttp(user.getImageUrl())));
+        }
+
+        return users;
+    }
+
     public String getPersonsJson(int howMany, @Genders String gender) {
         if (howMany < 0 || howMany > MAX_RESULTS) {
             Log.e(TAG, "Cannot fetch less than 0 or more than " + MAX_RESULTS + " persons.");
@@ -69,7 +93,7 @@ public class RandomApi {
 
     /**
      * Reads a String from the given Internet location using the HTTP protocol. Connection method is <i>GET</i>.
-     * 
+     *
      * @param location Where to read from (must be a valid URL)
      * @return Parsed text from the given URL, or an empty String if something fails
      */
@@ -89,6 +113,31 @@ public class RandomApi {
         } catch (IOException e) {
             Log.e(TAG, "Cannot fetch " + url.toExternalForm() + ", reason: ", e);
             return "";
+        }
+    }
+
+    /**
+     * Reads an Image file from the Internet address supplied.
+     *
+     * @param imageUrl The URL pointing to the location of the image
+     * @return An InputStream of the image, or null, in case of an error
+     */
+    public @Nullable InputStream readImageUsingHttp(String imageUrl) {
+        URL url;
+        try {
+            url = new URL(imageUrl);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "Cannot parse, invalid URL: " + imageUrl, e);
+            return null;
+        }
+
+        try {
+            Request request = new Request.Builder().url(url).build();
+            Response response = mClient.newCall(request).execute();
+            return response.body().byteStream();
+        } catch (IOException e) {
+            Log.e(TAG, "Cannot fetch " + url.toExternalForm() + ", reason: ", e);
+            return null;
         }
     }
 

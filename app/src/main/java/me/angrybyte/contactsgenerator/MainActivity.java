@@ -8,6 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.List;
+
+import me.angrybyte.contactsgenerator.parser.data.User;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -30,4 +34,21 @@ public class MainActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.menu_main);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void tryItOut() {
+        final RandomApi randomApi = new RandomApi(this);
+        final ContactPersister contactPersister = new ContactPersister(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<User> users = randomApi.getUsersForQuery(1, RandomApi.BOTH);
+                User user = users.get(0);
+                contactPersister.storeContact(user);
+            }
+        }).start();
+    }
 }
