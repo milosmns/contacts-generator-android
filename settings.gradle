@@ -1,4 +1,1 @@
-// enable this parameter to speed up the build, but go online if you are missing dependencies
-startParameter.offline = true
-
 include ':app'

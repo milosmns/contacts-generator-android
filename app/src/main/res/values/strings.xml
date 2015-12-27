@@ -2,6 +2,7 @@
 
     <string name="app_name">Contacts Generator</string>
     <string name="action_rate">Rate this app</string>
+    <string name="action_info">About this app</string>
     <string name="how_many_contacts">How many contacts do you want generated?</string>
     <string name="want_avatars">I want images too</string>
     <string name="custom_control_dummy_text">The custom control will come here</string>
