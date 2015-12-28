@@ -1,5 +1,7 @@
 package me.angrybyte.contactsgenerator.parser.json;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -64,6 +66,7 @@ public class RandomUserJsonParser {
      * @param response The response received from a query sent to <a href="https://www.randomuser.me">RandomUser.me</a>
      * @return A list of {@link User} objects, suitable for use with ContactPersister
      */
+    @NonNull
     public List<User> parseResponse(String response) {
         List<User> userList = new ArrayList<>();
 

@@ -41,6 +41,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.google.code.gson:gson:2.4'
+    compile 'me.angrybyte.picker:picker:1.2.0'
 
     // set this dependency to use the JUnit instrumentation runner
     androidTestCompile 'com.android.support.test:runner:0.4.1'

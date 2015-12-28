@@ -64,7 +64,10 @@ public class RandomApi {
         List<User> users = randomUserJsonParser.parseResponse(response);
 
         for (User user : users) {
-            user.setImage(BitmapFactory.decodeStream(readImageUsingHttp(user.getImageUrl())));
+            InputStream imageStream = readImageUsingHttp(user.getImageUrl());
+            if (imageStream != null) {
+                user.setImage(BitmapFactory.decodeStream(imageStream));
+            }
         }
 
         return users;
@@ -122,7 +125,8 @@ public class RandomApi {
      * @param imageUrl The URL pointing to the location of the image
      * @return An InputStream of the image, or null, in case of an error
      */
-    public @Nullable InputStream readImageUsingHttp(String imageUrl) {
+    @Nullable
+    public InputStream readImageUsingHttp(String imageUrl) {
         URL url;
         try {
             url = new URL(imageUrl);
