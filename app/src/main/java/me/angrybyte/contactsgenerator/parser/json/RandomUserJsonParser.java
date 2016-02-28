@@ -146,7 +146,7 @@ public class RandomUserJsonParser {
      *
      * @param string Any string.
      * @return A string with the same characters, in the same order as the one that was passed, but
-     * the returned String has an uppercase first letter, and the rest of the letter lowercase - regardless
+     * the returned String has an uppercase first letter, and the rest of the letters lowercase - regardless
      * of the previous case of the String.
      */
     private String uppercaseFirstLetter(String string) {

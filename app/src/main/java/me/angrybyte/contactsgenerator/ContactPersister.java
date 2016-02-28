@@ -76,7 +76,7 @@ public class ContactPersister {
             try {
                 stream.flush();
             } catch (IOException e) {
-                Log.e(TAG, "Error while flushing stream!", e);
+                Log.e(TAG, "Error while flushing stream! Contact picture not added properly.", e);
             }
         }
 

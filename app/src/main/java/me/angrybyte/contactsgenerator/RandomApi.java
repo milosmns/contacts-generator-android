@@ -58,7 +58,7 @@ public class RandomApi {
      * @param gender The gender of the contacts. One of {@link #MALE}, {@link #FEMALE}, or {@link #BOTH}
      * @return The list of {@link User} objects.
      */
-    public List<User> getUsersForQuery(int amount, String gender) {
+    public List<User> getUsersForQuery(int amount, @Genders String gender) {
         String response = getPersonsJson(amount, gender);
         RandomUserJsonParser randomUserJsonParser = new RandomUserJsonParser();
         List<User> users = randomUserJsonParser.parseResponse(response);
