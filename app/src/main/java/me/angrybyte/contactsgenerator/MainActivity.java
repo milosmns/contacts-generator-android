@@ -1,8 +1,10 @@
 
 package me.angrybyte.contactsgenerator;
 
+import android.content.OperationApplicationException;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -46,7 +48,13 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 List<User> users = randomApi.getUsersForQuery(1, RandomApi.BOTH);
                 User user = users.get(0);
-                contactPersister.storeContact(user);
+                try {
+                    contactPersister.storeContact(user);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (OperationApplicationException e) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }

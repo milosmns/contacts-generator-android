@@ -1,18 +1,25 @@
 
 package me.angrybyte.contactsgenerator.test.app;
 
+import android.content.ContentResolver;
+import android.content.OperationApplicationException;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.RemoteException;
+import android.provider.ContactsContract;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.TextUtils;
+
+import java.util.List;
 
 import me.angrybyte.contactsgenerator.ContactPersister;
 import me.angrybyte.contactsgenerator.MainActivity;
 import me.angrybyte.contactsgenerator.R;
 import me.angrybyte.contactsgenerator.RandomApi;
 import me.angrybyte.contactsgenerator.parser.data.User;
-
-import java.util.List;
 
 public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -63,7 +70,7 @@ public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity
     public void testQueryUsers() {
         List<User> users = mApi.getUsersForQuery(1, RandomApi.BOTH);
         assertNotNull("Users list is null", users);
-        assertEquals("Users list is empty", 0, users.size());
+        assertEquals("Users list is empty", 1, users.size());
 
         User first = users.get(0);
         assertNotNull("User is null", first);
@@ -75,11 +82,44 @@ public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity
     }
 
     @MediumTest
-    public void testContactStorage() {
+    public void testContactStorage() throws RemoteException, OperationApplicationException {
         ContactPersister contactPersister = new ContactPersister(mActivity);
+        List<User> users = mApi.getUsersForQuery(3, RandomApi.BOTH);
+        for (User user : users) {
+            user.setImage(mApi.getUserImage(user));
+            contactPersister.storeContact(user);
+        }
+    }
+
+    @SmallTest
+    public void testImageDownload() {
         List<User> users = mApi.getUsersForQuery(1, RandomApi.BOTH);
         User user = users.get(0);
-        contactPersister.storeContact(user);
+
+        Bitmap bitmap = mApi.getUserImage(user);
+        assertNotNull("User's image is null!", bitmap);
+    }
+
+    @SmallTest
+    public void testDeleteContacts() {
+        ContentResolver contentResolver = mActivity.getContentResolver();
+        assertNotNull("Content resolver is null", contentResolver);
+
+        String[] projection = new String[] {ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.CommonDataKinds.Email.ADDRESS};
+        Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                projection, null, null, null);
+        assertNotNull("Cursor is null", cursor);
+
+        while (cursor.moveToNext()) {
+            if (cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS)).contains("example.com")) {
+                String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
+                System.out.println("The uri is " + uri.toString());
+                contentResolver.delete(uri, null, null);
+            }
+        }
+
+        cursor.close();
     }
 
     @Override

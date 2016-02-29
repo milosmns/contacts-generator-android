@@ -2,10 +2,11 @@ package me.angrybyte.contactsgenerator;
 
 import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.graphics.Bitmap;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class ContactPersister {
      *
      * @param user The user to be persisted to the database.
      */
-    public void storeContact(User user) {
+    public void storeContact(User user) throws RemoteException, OperationApplicationException {
         ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
         ContentProviderOperation.Builder op = ContentProviderOperation.newInsert(ContactsContract
@@ -87,15 +88,6 @@ public class ContactPersister {
 
         Log.d(TAG, "Creating contact: " + user.getFirstName() + " " + user.getLastName());
 
-        try {
-            mContext.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-        } catch (Exception e) {
-            Context context = mContext.getApplicationContext();
-
-            Toast toast = Toast.makeText(context, "Contact(s) not created", Toast.LENGTH_SHORT);
-            toast.show();
-
-            Log.e(TAG, "Exception encountered while inserting contact: " + e);
-        }
+        mContext.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
     }
 }
