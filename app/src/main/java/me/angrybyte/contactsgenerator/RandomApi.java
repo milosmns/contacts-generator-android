@@ -1,7 +1,9 @@
+
 package me.angrybyte.contactsgenerator;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RawRes;
@@ -11,6 +13,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import me.angrybyte.contactsgenerator.parser.data.User;
+import me.angrybyte.contactsgenerator.parser.json.RandomUserJsonParser;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -19,9 +24,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-
-import me.angrybyte.contactsgenerator.parser.data.User;
-import me.angrybyte.contactsgenerator.parser.json.RandomUserJsonParser;
 
 /**
  * A clean interface to the Random API (check the README.md for more info). This class helps fetch and parse the persons information from
@@ -73,7 +75,14 @@ public class RandomApi {
         return users;
     }
 
-    public String getPersonsJson(int howMany, @Genders String gender) {
+    /**
+     * Reads the JSON object from the web API.
+     *
+     * @param howMany An {@code int} value for the POST request to tell the API how many contacts to pack in the response
+     * @param gender Which gender should the API return, must be one of {@link Genders}
+     * @return A valid JSON object pulled out from the HTTP response in String format
+     */
+    public String getPersonsJson(@IntRange(from = 0) int howMany, @Genders String gender) {
         if (howMany < 0 || howMany > MAX_RESULTS) {
             Log.e(TAG, "Cannot fetch less than 0 or more than " + MAX_RESULTS + " persons.");
             return "";
