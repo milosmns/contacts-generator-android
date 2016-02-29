@@ -63,9 +63,30 @@ $axure.internal(function($ax) {
     var _refreshRepeater = function(repeaterId, eventInfo) {
         // Don't show if you have a parent rdos thats limboed.
         var rdoPath = $ax.getPathFromScriptId(repeaterId);
-        while(rdoPath.length > 1) {
-            $ax.splice(rdoPath, rdoPath.length - 1, 1);
-            if($obj($ax.getScriptIdFromPath(rdoPath)).style.limbo) return;
+        var view = $ax.adaptive.currentViewId;
+        var chain = $ax.adaptive.getAdaptiveIdChain(view);
+        var testView = view;
+        // Check each parent rdo through appropriate views to see if you are limboed
+        while (rdoPath.length > 0) {
+            var testingChain = testView;
+            var rdoObj = $obj($ax.getScriptIdFromPath(rdoPath));
+            var style = testView ? rdoObj.adaptiveStyles && rdoObj.adaptiveStyles[testView] : rdoObj.style;
+            if(style && typeof (style.limbo) != 'undefined') {
+                if(style.limbo) {
+                    removeItems(repeaterId);
+                    return;
+                }
+                // Otherwise this chain is good, move up rdo again
+                testingChain = false;
+            }
+
+            if(testingChain) {
+                var viewIndex = chain.indexOf(testView);
+                testView = viewIndex == 0 ? '' : chain[viewIndex - 1];
+            } else {
+                $ax.splice(rdoPath, rdoPath.length - 1, 1);
+                testView = view;
+            }
         }
 
         _loaded[repeaterId] = true;
@@ -1487,6 +1508,11 @@ $axure.internal(function($ax) {
             for(var i = 0; i < children.length; i++) {
                 var elementId = children[i].id;
                 var obj = $obj(elementId);
+                if(obj == null) {
+                    elementId = elementId.split('_')[0];
+                    obj = $obj(elementId);
+                }
+                if(obj == null) continue;
                 if(obj.type == 'dynamicPanel' && !obj.propagate) continue;
 
                 if(hover) $ax.style.SetWidgetHover(elementId, value);

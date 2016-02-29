@@ -115,7 +115,7 @@ $axure.internal(function($ax) {
                 toAdd += key + '=' + encodeURIComponent(val);
             }
         }
-        return toAdd.length > 0 ? baseUrl + '#' + toAdd + "&CSUM=1" : baseUrl;
+        return toAdd.length > 0 ? baseUrl + ($axure.shouldSendVarsToServer() ? '?' : '#') + toAdd + "&CSUM=1" : baseUrl;
     };
     _globalVariableProvider.getLinkUrl = getLinkUrl;
 

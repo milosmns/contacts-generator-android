@@ -28,7 +28,23 @@ function setUpController() {
     //-----------------------------------------
     var _globalVars = {};
 
-    var _getLinkUrl = function(baseUrl) {
+    //-----------------------------------------
+    //Used by getLinkUrl below to check if local server is running 
+    //in order to send back the global variables as a query string
+    //in the page url
+    //-----------------------------------------
+    var _shouldSendVarsToServer = function () {
+        //If exception occurs (due to page in content frame being from a different domain, etc)
+        //then run the check without the url (which will end up checking against sitemap url)
+        try {
+            var mainFrame = document.getElementById("mainFrame");
+            return $axure.shouldSendVarsToServer(mainFrame.contentWindow.location.href);
+        } catch (e) {
+            return $axure.shouldSendVarsToServer();
+        }
+    };
+
+    var _getLinkUrl = function (baseUrl) {
         var toAdd = '';
         for(var globalVarName in _globalVars) {
             var val = _globalVars[globalVarName];
@@ -37,7 +53,7 @@ function setUpController() {
                 toAdd += globalVarName + '=' + encodeURIComponent(val);
             }
         }
-        return toAdd.length > 0 ? baseUrl + '#' + toAdd + "&CSUM=1" : baseUrl;
+        return toAdd.length > 0 ? baseUrl + (_shouldSendVarsToServer() ? '?' : '#') + toAdd + "&CSUM=1" : baseUrl;
     };
     $axure.getLinkUrlWithVars = _getLinkUrl;
 
