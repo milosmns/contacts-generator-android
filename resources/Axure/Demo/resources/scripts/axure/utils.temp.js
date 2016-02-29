@@ -7,7 +7,7 @@ $axure.internal(function($ax) {
             if(index != -1) return _originalToCopy[index][1];
         }
         var isArray = original instanceof Array;
-        var isObject = !(original instanceof Function) && (original instanceof Object);
+        var isObject = !(original instanceof Function) && !(original instanceof Date) && (original instanceof Object);
         if(!isArray && !isObject) return original;
         var copy = isArray ? [] : { };
         if(trackCopies) _originalToCopy.push([original, copy]);

@@ -1,5 +1,5 @@
 ﻿.ax_shape {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -8,7 +8,7 @@
   line-height:normal;
 }
 .ax_paragraph {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -17,7 +17,7 @@
   line-height:normal;
 }
 .ax_h1 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:32px;
@@ -26,7 +26,7 @@
   line-height:normal;
 }
 .ax_h2 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:24px;
@@ -35,7 +35,7 @@
   line-height:normal;
 }
 .ax_h3 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:18px;
@@ -44,7 +44,7 @@
   line-height:normal;
 }
 .ax_h4 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:14px;
@@ -53,7 +53,7 @@
   line-height:normal;
 }
 .ax_h5 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:13px;
@@ -62,7 +62,7 @@
   line-height:normal;
 }
 .ax_h6 {
-  font-family:'Arial Bold', 'Arial';
+  font-family:'Arial-BoldMT', 'Arial Bold', 'Arial';
   font-weight:700;
   font-style:normal;
   font-size:10px;
@@ -71,7 +71,7 @@
   line-height:normal;
 }
 .ax_image {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -87,7 +87,7 @@
 .ax_text_link_mouse_down {
 }
 .ax_text_field {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -96,7 +96,7 @@
   line-height:normal;
 }
 .ax_text_area {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -105,7 +105,7 @@
   line-height:normal;
 }
 .ax_droplist {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -114,7 +114,7 @@
   line-height:normal;
 }
 .ax_list_box {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -123,7 +123,7 @@
   line-height:normal;
 }
 .ax_checkbox {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -132,7 +132,7 @@
   line-height:normal;
 }
 .ax_radio_button {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -141,7 +141,7 @@
   line-height:normal;
 }
 .ax_flow_shape {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -150,7 +150,7 @@
   line-height:normal;
 }
 .ax_tree_node {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -159,7 +159,7 @@
   line-height:normal;
 }
 .ax_html_button {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -192,7 +192,7 @@
   line-height:normal;
 }
 .ax_repeater {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -201,7 +201,7 @@
   line-height:normal;
 }
 .ax_table {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -210,7 +210,7 @@
   line-height:normal;
 }
 .ax_table_cell {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;
@@ -237,7 +237,7 @@
   line-height:normal;
 }
 .ax_connector {
-  font-family:'Arial Regular', 'Arial';
+  font-family:'ArialMT', 'Arial';
   font-weight:400;
   font-style:normal;
   font-size:13px;

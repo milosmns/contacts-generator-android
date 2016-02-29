@@ -139,6 +139,7 @@
             var current = $ax.pageData.objectPaths;
             for(var i = 0; i < path.length; i++) {
                 current = current[path[i]];
+                if(!current) return current;
             }
             return current && current.scriptId;
         };

@@ -447,10 +447,7 @@ $axure.internal(function($ax) {
                 $element.mouseenter(function() {
                     var elementId = this.id;
                     var parent = $ax.dynamicPanelManager.parentHandlesStyles(elementId);
-                    if(parent) {
-                        dynamicPanelMouseOver(parent.id);
-                        if(parent.direct) return;
-                    }
+                    if(parent && parent.direct) return;
                     if($.inArray(elementId, _event.mouseOverIds) != -1) return;
                     _event.mouseOverIds[_event.mouseOverIds.length] = elementId;
 
@@ -462,10 +459,7 @@ $axure.internal(function($ax) {
                 }).mouseleave(function() {
                     var elementId = this.id;
                     var parent = $ax.dynamicPanelManager.parentHandlesStyles(elementId);
-                    if(parent) {
-                        dynamicPanelMouseLeave(parent.id);
-                        if(parent.direct) return;
-                    }
+                    if(parent && parent.direct) return;
                     $ax.splice(_event.mouseOverIds, $.inArray(elementId, _event.mouseOverIds), 1);
 
                     if(elementId == _event.mouseOverObjectId) {

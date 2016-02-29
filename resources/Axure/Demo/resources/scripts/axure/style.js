@@ -733,7 +733,7 @@
 
     var _getObjVisible = _style.getObjVisible = function(id) {
         var element = document.getElementById(id);
-        return element && element.offsetWidth && element.offsetHeight;
+        return element && (element.offsetWidth || element.offsetHeight);
     };
 
     var _setTextAlignment = function(textId, alignProps, updateProps) {
