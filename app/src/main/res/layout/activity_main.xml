@@ -32,30 +32,69 @@
     <me.angrybyte.numberpicker.view.ActualNumberPicker
         android:id="@+id/actual_picker"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="70dp"
         android:layout_gravity="center"
-        android:background="@color/primary"
-        app:bar_color="@android:color/white"
         android:layout_marginBottom="40dp"
-        app:bar_width="1dp"
+        app:bar_color="?attr/colorAccent"
+        app:bar_width="1.3dp"
         app:bars_count="26"
-        app:controls_color="@android:color/white"
-        app:draw_over_controls="false"
         app:draw_over_text="false"
-        app:fast_controls_color="@android:color/darker_gray"
-        app:highlight_color="#FFFF3040"
         app:max_value="1000"
         app:min_value="0"
-        app:selection_color="#A0FF3040"
         app:show_bars="true"
         app:show_controls="false"
         app:show_fast_controls="false"
-        app:show_highlight="true"
+        app:show_highlight="false"
         app:show_text="true"
-        app:text_color="@android:color/white"
-        app:text_size="16sp"
-        app:value="50" />
+        app:text_color="?attr/colorAccent"
+        app:text_size="20sp"
+        app:value="0" />
 
-    <include layout="@layout/avatars_checkbox_with_radio_buttons" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
+        <!-- The "I would like some avatars, too" CheckBox -->
+        <CheckBox
+            android:id="@+id/main_avatars_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:text="@string/want_avatars"
+            android:textColor="@color/text"
+            android:textSize="18sp" />
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/main_genders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_males"
+                android:textColor="@color/text"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_females"
+                android:textColor="@color/text"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/activity_main_do_not_care"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/do_not_care"
+                android:textColor="@color/text"
+                android:textSize="18sp" />
+
+        </RadioGroup>
+    </LinearLayout>
 </LinearLayout>

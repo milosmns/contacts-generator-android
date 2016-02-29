@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.util.List;
@@ -32,11 +33,9 @@ public class MainActivity extends AppCompatActivity {
         });
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.inflateMenu(R.menu.menu_main);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+        RadioButton radioButton = (RadioButton) findViewById(R.id.activity_main_do_not_care);
+        radioButton.toggle();
     }
 
     private void tryItOut() {
