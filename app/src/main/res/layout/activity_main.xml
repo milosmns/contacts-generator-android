@@ -30,7 +30,7 @@
         android:textSize="24sp" />
 
     <me.angrybyte.numberpicker.view.ActualNumberPicker
-        android:id="@+id/actual_picker"
+        android:id="@+id/main_number_picker"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:layout_gravity="center"
