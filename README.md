@@ -24,3 +24,4 @@ Testing
 -------
 
 You should be able to either test from AndroidStudio (```right click -> Run Test```) or from Gradle CLI (```gradlew connectedCheck```).
+Some tests require private user permissions, so you need to enable those manually from device settings in order for tests to pass.
