@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE)
 @StringDef({
-        RandomApi.MALE, RandomApi.FEMALE, RandomApi.BOTH
+        Operations.MALE, Operations.FEMALE, Operations.BOTH
 })
-public @interface Genders {
+public @interface Gender {
 }

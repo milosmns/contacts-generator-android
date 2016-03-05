@@ -1,100 +1,126 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/main_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="8dp"
-        android:minHeight="?attr/actionBarSize"
-        android:visibility="visible"
-        app:title="@string/app_name"
-        tools:ignore="UnusedAttribute" />
-
-    <!-- How many contacts would you like TextView -->
-    <TextView
-        android:id="@+id/main_contacts_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:padding="@dimen/activity_horizontal_margin"
-        android:text="@string/how_many_contacts"
-        android:textSize="24sp" />
-
-    <me.angrybyte.numberpicker.view.ActualNumberPicker
-        android:id="@+id/main_number_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
-        app:bar_color="?attr/colorAccent"
-        app:bar_width="1.3dp"
-        app:bars_count="26"
-        app:draw_over_text="false"
-        app:max_value="1000"
-        app:min_value="0"
-        app:show_bars="true"
-        app:show_controls="false"
-        app:show_fast_controls="false"
-        app:show_highlight="false"
-        app:show_text="true"
-        app:text_color="?attr/colorAccent"
-        app:text_size="20sp"
-        app:value="0" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:gravity="top|center_horizontal"
         android:orientation="vertical">
 
-        <!-- The "I would like some avatars, too" CheckBox -->
-        <CheckBox
-            android:id="@+id/main_avatars_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
-            android:text="@string/want_avatars"
-            android:textColor="@color/text"
-            android:textSize="18sp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="8dp"
+            android:minHeight="?attr/actionBarSize"
+            android:visibility="visible"
+            app:title="@string/app_name"
+            tools:ignore="UnusedAttribute" />
 
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main_genders"
+        <TextView
+            android:id="@+id/main_contacts_question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:maxWidth="300dp"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/how_many_contacts"
+            android:textSize="24sp" />
+
+        <me.angrybyte.numberpicker.view.ActualNumberPicker
+            android:id="@+id/main_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            app:bar_color="?attr/colorAccent"
+            app:bar_width="1.3dp"
+            app:bars_count="26"
+            app:draw_over_text="false"
+            app:max_value="1000"
+            app:min_value="0"
+            app:show_bars="true"
+            app:show_controls="false"
+            app:show_fast_controls="false"
+            app:show_highlight="false"
+            app:show_text="true"
+            app:text_color="?attr/colorAccent"
+            app:text_size="20sp"
+            app:value="0" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
             android:orientation="vertical">
 
-            <RadioButton
+            <CheckBox
+                android:id="@+id/main_avatars_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all_males"
+                android:layout_marginBottom="20dp"
+                android:checked="true"
+                android:text="@string/want_avatars"
                 android:textColor="@color/text"
                 android:textSize="18sp" />
 
-            <RadioButton
+            <RadioGroup
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all_females"
-                android:textColor="@color/text"
-                android:textSize="18sp" />
+                android:orientation="vertical">
 
-            <RadioButton
-                android:id="@+id/activity_main_do_not_care"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/do_not_care"
-                android:textColor="@color/text"
-                android:textSize="18sp" />
+                <RadioButton
+                    android:id="@+id/activity_main_gender_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_males"
+                    android:textColor="@color/text"
+                    android:textSize="18sp" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/activity_main_gender_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all_females"
+                    android:textColor="@color/text"
+                    android:textSize="18sp" />
+
+                <!-- checked by default, but from code - XML didn't work.. -->
+                <RadioButton
+                    android:id="@+id/activity_main_gender_both"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/do_not_care"
+                    android:textColor="@color/text"
+                    android:textSize="18sp" />
+            </RadioGroup>
+
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+
+    <ImageButton
+        android:id="@+id/activity_main_button_generate"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/circle_states"
+        android:contentDescription="@string/desc_generate"
+        android:elevation="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_generate"
+        tools:ignore="UnusedAttribute" />
+
+</FrameLayout>

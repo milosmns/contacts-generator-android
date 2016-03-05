@@ -4,10 +4,11 @@
     <string name="action_rate">Rate this app</string>
     <string name="action_info">About this app</string>
     <string name="how_many_contacts">How many contacts do you want generated?</string>
-    <string name="want_avatars">I want images too</string>
-    <string name="custom_control_dummy_text">The custom control will come here</string>
-    <string name="all_males">Give me all males</string>
-    <string name="all_females">Give me all females</string>
-    <string name="do_not_care">I don\'t really care</string>
+    <string name="want_avatars">With contact photos</string>
+    <string name="all_males">Males only</string>
+    <string name="all_females">Females only</string>
+    <string name="do_not_care">Both genders</string>
+
+    <string name="desc_generate">Generate contacts</string>
 
 </resources>

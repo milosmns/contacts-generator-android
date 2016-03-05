@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:autoMirrored="true"
+    android:enterFadeDuration="50"
+    android:exitFadeDuration="250"
+    tools:ignore="UnusedAttribute">
+
+    <item android:drawable="@drawable/circle_active" android:state_active="true" />
+    <item android:drawable="@drawable/circle_active" android:state_checked="true" />
+    <item android:drawable="@drawable/circle_active" android:state_selected="true" />
+    <item android:drawable="@drawable/circle_active" android:state_hovered="true" />
+    <item android:drawable="@drawable/circle_normal" />
 
 </selector>

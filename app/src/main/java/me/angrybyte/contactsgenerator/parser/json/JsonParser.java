@@ -1,3 +1,4 @@
+
 package me.angrybyte.contactsgenerator.parser.json;
 
 import android.support.annotation.NonNull;
@@ -5,18 +6,18 @@ import android.support.annotation.NonNull;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.angrybyte.contactsgenerator.parser.data.User;
+import me.angrybyte.contactsgenerator.parser.data.Person;
 
 /**
- * Parses data from <a href="https://www.randomuser.me">RandomUser.me</a> and returns a list of {@link User} objects.
+ * Parses data from <a href="https://www.randomuser.me">RandomUser.me</a> and returns a list of {@link Person} objects.
  * <p/>
  * This is the specification:
  * <p/>
+ *
  * <pre>
  * {
  * results: [{
@@ -58,19 +59,19 @@ import me.angrybyte.contactsgenerator.parser.data.User;
  * }
  * </pre>
  */
-public class RandomUserJsonParser {
+public class JsonParser {
     /**
-     * Parses the response from <a href="https://www.randomuser.me">RandomUser.me</a> and returns a list
-     * of {@link User} objects, filled with Bitmaps, alongside other contact data.
+     * Parses the response from <a href="https://www.randomuser.me">RandomUser.me</a> and returns a list of {@link Person} objects, filled
+     * with Bitmaps, alongside other contact data.
      *
      * @param response The response received from a query sent to <a href="https://www.randomuser.me">RandomUser.me</a>
-     * @return A list of {@link User} objects, suitable for use with ContactPersister
+     * @return A list of {@link Person} objects, suitable for use with ContactPersister
      */
     @NonNull
-    public List<User> parseResponse(String response) {
-        List<User> userList = new ArrayList<>();
+    public List<Person> parseResponse(String response) {
+        List<Person> personList = new ArrayList<>();
 
-        JsonParser parser = new JsonParser();
+        com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
         JsonElement element = parser.parse(response);
 
         if (element.isJsonObject()) {
@@ -78,76 +79,74 @@ public class RandomUserJsonParser {
             JsonArray results = root.getAsJsonArray(JsonConstants.RESULTS);
             for (int i = 0; i < results.size(); i++) {
                 JsonObject result = results.get(i).getAsJsonObject();
-                userList.add(parseUser(result));
+                personList.add(parsePerson(result));
             }
         }
 
-        return userList;
+        return personList;
     }
 
     /**
-     * Parses the "user" field found in the JSON response. You can expand this method, alongside the
-     * {@link User} class to get more data.
+     * Parses the "user" field found in the JSON response. You can expand this method, alongside the {@link Person} class to get more data.
      *
-     * @param jsonResult The result of the query previously parsed by {@link JsonParser}
-     * @return A {@link User} object filled with the data from #jsonResult
+     * @param jsonResult The result of the query previously parsed by {@link com.google.gson.JsonParser}
+     * @return A {@link Person} object filled with the data from #jsonResult
      */
-    private User parseUser(JsonObject jsonResult) {
+    private Person parsePerson(JsonObject jsonResult) {
         JsonObject jsonUser = jsonResult.getAsJsonObject(JsonConstants.USER);
 
-        User user = new User();
+        Person person = new Person();
         String gender = uppercaseFirstLetter(jsonUser.get(JsonConstants.GENDER).getAsString());
-        user.setGender(gender);
+        person.setGender(gender);
 
-        parseName(user, jsonUser);
+        parseName(person, jsonUser);
 
-        user.setEmail(jsonUser.get(JsonConstants.EMAIL).getAsString());
-        user.setPhone(jsonUser.get(JsonConstants.PHONE).getAsString());
+        person.setEmail(jsonUser.get(JsonConstants.EMAIL).getAsString());
+        person.setPhone(jsonUser.get(JsonConstants.PHONE).getAsString());
 
-        parsePicture(user, jsonUser);
+        parsePicture(person, jsonUser);
 
-        return user;
+        return person;
     }
 
     /**
      * Parses the name field of the JSON response from the server.
      *
-     * @param user     The user in which you will store name data
+     * @param person The user in which you will store name data
      * @param jsonUser The parsed {@link JsonObject} which contains the "name" field
      */
-    private void parseName(User user, JsonObject jsonUser) {
+    private void parseName(Person person, JsonObject jsonUser) {
         JsonObject jsonName = jsonUser.getAsJsonObject(JsonConstants.NAME);
 
         String title = uppercaseFirstLetter(jsonName.get(JsonConstants.NAME_TITLE).getAsString());
-        user.setTitle(title);
+        person.setTitle(title);
 
         String firstName = uppercaseFirstLetter(jsonName.get(JsonConstants.NAME_FIRST).getAsString());
-        user.setFirstName(firstName);
+        person.setFirstName(firstName);
 
         String lastName = uppercaseFirstLetter(jsonName.get(JsonConstants.NAME_LAST).getAsString());
-        user.setLastName(lastName);
+        person.setLastName(lastName);
     }
 
     /**
      * Puts the links of the pictures provided inside of the JSON response
      *
-     * @param user     The {@link User} object to be filled with image URL data
+     * @param person The {@link Person} object to be filled with image URL data
      * @param jsonUser The parsed {@link JsonObject} which contains the "picture" field
      */
-    private void parsePicture(User user, JsonObject jsonUser) {
+    private void parsePicture(Person person, JsonObject jsonUser) {
         JsonObject jsonPicture = jsonUser.getAsJsonObject(JsonConstants.PICTURE);
 
-        user.setImageUrl(jsonPicture.get(JsonConstants.PICTURE_LARGE).getAsString());
-        user.setThumbImageUrl(jsonPicture.get(JsonConstants.PICTURE_THUMB).getAsString());
+        person.setImageUrl(jsonPicture.get(JsonConstants.PICTURE_LARGE).getAsString());
+        person.setThumbImageUrl(jsonPicture.get(JsonConstants.PICTURE_THUMB).getAsString());
     }
 
     /**
      * Returns the same String that was passed, only with a different case.
      *
      * @param string Any string.
-     * @return A string with the same characters, in the same order as the one that was passed, but
-     * the returned String has an uppercase first letter, and the rest of the letters lowercase - regardless
-     * of the previous case of the String.
+     * @return A string with the same characters, in the same order as the one that was passed, but the returned String has an uppercase
+     *         first letter, and the rest of the letters lowercase - regardless of the previous case of the String.
      */
     private String uppercaseFirstLetter(String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);

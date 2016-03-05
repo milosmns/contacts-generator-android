@@ -23,16 +23,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import me.angrybyte.contactsgenerator.parser.data.User;
-import me.angrybyte.contactsgenerator.parser.json.RandomUserJsonParser;
+import me.angrybyte.contactsgenerator.parser.data.Person;
+import me.angrybyte.contactsgenerator.parser.json.JsonParser;
 
 /**
  * A clean interface to the Random API (check the README.md for more info). This class helps fetch and parse the persons information from
  * the cloud.
  */
-public class RandomApi {
+public class Operations {
 
-    private static final String TAG = RandomApi.class.getSimpleName();
+    private static final String TAG = Operations.class.getSimpleName();
     private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&gender=%s&key=%s";
     private static final int MAX_RESULTS = 1000;
 
@@ -45,7 +45,7 @@ public class RandomApi {
     private String mApiKey;
     private OkHttpClient mClient;
 
-    public RandomApi(Context context) {
+    public Operations(Context context) {
         super();
         mContext = context;
         mClient = new OkHttpClient();
@@ -55,21 +55,23 @@ public class RandomApi {
     }
 
     /**
-     * Retrieves a list of {@link User} objects to populate the Contacts database with.
+     * Retrieves a list of {@link Person} objects to populate the Contacts database with.
      *
      * @param amount The amount of contacts you would like
      * @param gender The gender of the contacts. One of {@link #MALE}, {@link #FEMALE}, or {@link #BOTH}
-     * @return The list of {@link User} objects.
+     * @return A list of {@link Person} objects
      */
-    public List<User> getUsersForQuery(int amount, @Genders String gender) {
+    @NonNull
+    public List<Person> getPersons(int amount, @Gender String gender) {
         String response = getPersonsJson(amount, gender);
-        RandomUserJsonParser randomUserJsonParser = new RandomUserJsonParser();
+        JsonParser jsonParser = new JsonParser();
 
-        return randomUserJsonParser.parseResponse(response);
+        return jsonParser.parseResponse(response);
     }
 
-    public Bitmap getUserImage(User user) {
-        InputStream imageStream = readImageUsingHttp(user.getImageUrl());
+    @Nullable
+    public Bitmap getImage(Person person) {
+        InputStream imageStream = readImageUsingHttp(person.getImageUrl());
 
         Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
         close(imageStream);
@@ -81,10 +83,11 @@ public class RandomApi {
      * Reads the JSON object from the web API.
      *
      * @param howMany An {@code int} value for the POST request to tell the API how many contacts to pack in the response
-     * @param gender  Which gender should the API return, must be one of {@link Genders}
+     * @param gender Which gender should the API return, must be one of {@link Gender}
      * @return A valid JSON object pulled out from the HTTP response in String format
      */
-    public String getPersonsJson(@IntRange(from = 0) int howMany, @Genders String gender) {
+    @NonNull
+    public String getPersonsJson(@IntRange(from = 0) int howMany, @Gender String gender) {
         if (howMany < 0 || howMany > MAX_RESULTS) {
             Log.e(TAG, "Cannot fetch less than 0 or more than " + MAX_RESULTS + " persons.");
             return "";
@@ -97,6 +100,7 @@ public class RandomApi {
     /**
      * @return The current API security key in use.
      */
+    @NonNull
     public String getApiKey() {
         if (mApiKey == null) {
             // we are building with another API key, this one in the repo is public
@@ -111,6 +115,7 @@ public class RandomApi {
      * @param location Where to read from (must be a valid URL)
      * @return Parsed text from the given URL, or an empty String if something fails
      */
+    @NonNull
     public String readUsingHttp(String location) {
         URL url;
         try {
@@ -160,9 +165,10 @@ public class RandomApi {
      * Reads a String from the given raw resource.
      *
      * @param context Which context to use (can be app context)
-     * @param resId   Which raw resource to use
+     * @param resId Which raw resource to use
      * @return Contents of the raw resource, or an empty String if something fails
      */
+    @NonNull
     public String readRawTextFile(@NonNull Context context, @RawRes int resId) {
         InputStream inputStream = context.getResources().openRawResource(resId);
 
@@ -181,8 +187,9 @@ public class RandomApi {
         } catch (IOException e) {
             close(bufferedReader);
             close(inputReader);
-            return null;
+            return "";
         }
+
         return text.toString();
     }
 

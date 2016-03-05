@@ -7,21 +7,36 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!-- TODO: Fix warning -->
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ContactsTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!-- TODO: Register URL at https://g.co/AppIndexing/AndroidStudio -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- TODO discuss adding android:pathPrefix="/whatever" to <data> tag -->
+                <data
+                    android:host="contacts.angrybyte.me"
+                    android:scheme="http" />
+            </intent-filter>
+            
         </activity>
+
     </application>
 
 </manifest>
