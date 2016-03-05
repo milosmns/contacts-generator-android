@@ -21,7 +21,10 @@ import me.angrybyte.contactsgenerator.R;
 import me.angrybyte.contactsgenerator.RandomApi;
 import me.angrybyte.contactsgenerator.parser.data.User;
 
-public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity> {
+/**
+ * A test case used for testing app's core functionality. Note that all methods are returning {@code void} and asserting result values.
+ */
+public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     public static final String HTTP_TEST_URL = "http://pastebin.com/raw.php?i=VS10rPNJ";
     public static final String HTTP_TEST_CONTENT = "TESTING... OK!";
@@ -33,7 +36,7 @@ public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity
     /**
      * The default constructor.
      */
-    public RandomApiTest() {
+    public OperationTest() {
         super(MainActivity.class);
     }
 
@@ -105,9 +108,10 @@ public class RandomApiTest extends ActivityInstrumentationTestCase2<MainActivity
         ContentResolver contentResolver = mActivity.getContentResolver();
         assertNotNull("Content resolver is null", contentResolver);
 
-        String[] projection = new String[] {ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.CommonDataKinds.Email.ADDRESS};
-        Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
-                projection, null, null, null);
+        String[] projection = new String[] {
+                ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.CommonDataKinds.Email.ADDRESS
+        };
+        Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, projection, null, null, null);
         assertNotNull("Cursor is null", cursor);
 
         while (cursor.moveToNext()) {

@@ -8,8 +8,8 @@ import junit.framework.TestCase;
 import me.angrybyte.contactsgenerator.samples.SampleTestClass;
 
 /**
- * A sample class used to test the {@link me.angrybyte.contactsgenerator.samples.SampleTestClass}. Note that all methods are returning <b>
- * {@code void}</b> and asserting result values.
+ * A sample class used to test the {@link me.angrybyte.contactsgenerator.samples.SampleTestClass}. Note that all methods are returning
+ * {@code void} and asserting result values.
  */
 public class SampleTestCase extends TestCase {
 
