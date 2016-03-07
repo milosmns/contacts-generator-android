@@ -85,7 +85,7 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
         List<Person> persons = mApi.getPersons(1, Operations.BOTH);
         Person person = persons.get(0);
 
-        Bitmap bitmap = mApi.getImage(person);
+        Bitmap bitmap = mApi.fetchImage(person);
         assertNotNull("Person's image is null!", bitmap);
         assertNotSame("Bitmap width is 0", bitmap.getWidth(), 0);
         assertNotSame("Bitmap height is 0", bitmap.getHeight(), 0);
@@ -96,7 +96,7 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
         ContactOperations contacts = new ContactOperations(mActivity);
         List<Person> persons = mApi.getPersons(5, Operations.BOTH);
         for (Person person : persons) {
-            person.setImage(mApi.getImage(person));
+            person.setImage(mApi.fetchImage(person));
             contacts.storeContact(person);
         }
     }

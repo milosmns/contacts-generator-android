@@ -61,7 +61,7 @@ public class Operations {
      *
      * @param amount The amount of contacts you would like
      * @param gender The gender of the contacts. One of {@link #MALE}, {@link #FEMALE}, or {@link #BOTH}
-     * @return A list of {@link Person} objects
+     * @return A non-{@code null} list of {@link Person} objects
      */
     @NonNull
     public List<Person> getPersons(int amount, @Gender String gender) {
@@ -72,7 +72,7 @@ public class Operations {
     }
 
     @Nullable
-    public Bitmap getImage(Person person) {
+    public Bitmap fetchImage(Person person) {
         InputStream imageStream = readImageUsingHttp(person.getImageUrl());
 
         Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
