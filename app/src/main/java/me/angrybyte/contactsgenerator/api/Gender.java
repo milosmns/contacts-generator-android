@@ -1,5 +1,5 @@
 
-package me.angrybyte.contactsgenerator;
+package me.angrybyte.contactsgenerator.api;
 
 import android.support.annotation.StringDef;
 

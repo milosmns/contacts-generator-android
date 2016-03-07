@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="me.angrybyte.contactsgenerator"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
@@ -11,13 +12,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/ContactsTheme">
-
         <activity
-            android:name="me.angrybyte.contactsgenerator.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -33,8 +33,42 @@
                     android:host="contacts.angrybyte.me"
                     android:scheme="http" />
             </intent-filter>
-
         </activity>
+
+        <activity
+            android:name=".ProgressActivity"
+            android:label="@string/activity_progress_title"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.angrybyte.contactsgenerator.MainActivity" />
+
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".StatsActivity"
+            android:label="@string/activity_stats_title"
+            android:parentActivityName=".MainActivity"
+            tools:ignore="UnusedAttribute">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.angrybyte.contactsgenerator.MainActivity" />
+
+            <intent-filter tools:ignore="GoogleAppIndexingWarning">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".service.GeneratorService"
+            android:description="@string/service_desc"
+            android:label="@string/service_label" />
 
     </application>
 

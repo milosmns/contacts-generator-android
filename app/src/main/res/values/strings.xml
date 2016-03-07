@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- App strings -->
     <string name="app_name">Contacts Generator</string>
     <string name="action_rate">Rate this app</string>
     <string name="action_info">About this app</string>
@@ -8,7 +9,12 @@
     <string name="all_males">Males only</string>
     <string name="all_females">Females only</string>
     <string name="do_not_care">Both genders</string>
+    <string name="service_label">Generator Service</string>
+    <string name="service_desc">You really don\'t want to stop this.</string>
+    <string name="activity_progress_title">Generator</string>
+    <string name="activity_stats_title">Statistics</string>
 
+    <!-- ImageView descriptions -->
     <string name="desc_generate">Generate contacts</string>
 
 </resources>

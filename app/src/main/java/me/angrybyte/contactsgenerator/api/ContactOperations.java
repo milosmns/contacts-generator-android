@@ -1,5 +1,5 @@
 
-package me.angrybyte.contactsgenerator;
+package me.angrybyte.contactsgenerator.api;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
@@ -14,13 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import me.angrybyte.contactsgenerator.parser.data.Person;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import me.angrybyte.contactsgenerator.parser.data.Person;
 
 public class ContactOperations {
 

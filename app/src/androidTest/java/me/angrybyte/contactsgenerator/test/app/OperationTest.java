@@ -9,13 +9,13 @@ import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.TextUtils;
 
-import java.util.List;
-
-import me.angrybyte.contactsgenerator.ContactOperations;
 import me.angrybyte.contactsgenerator.MainActivity;
-import me.angrybyte.contactsgenerator.Operations;
 import me.angrybyte.contactsgenerator.R;
+import me.angrybyte.contactsgenerator.api.ContactOperations;
+import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
+
+import java.util.List;
 
 /**
  * A test case used for testing app's core functionality. Note that all methods are returning {@code void} and asserting result values.
