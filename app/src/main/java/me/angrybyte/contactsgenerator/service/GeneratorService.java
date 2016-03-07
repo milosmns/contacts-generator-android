@@ -78,7 +78,16 @@ public class GeneratorService extends Service implements ServiceApi {
     @Override
     public boolean generate(@IntRange(from = 0) int howMany, boolean withPhotos, @Gender String gender) {
         if (mProgressListener == null || mResultListener == null) {
+            Log.e(TAG, "Cannot generate, no listeners attached");
             return false;
+        }
+
+        if (mGenerator != null && mGenerator.isAlive()) {
+            Log.e(TAG, "Cannot generate, already generating");
+            return false;
+        } else if (mGenerator != null) {
+            // probably not needed
+            mGenerator.interrupt();
         }
 
         mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
