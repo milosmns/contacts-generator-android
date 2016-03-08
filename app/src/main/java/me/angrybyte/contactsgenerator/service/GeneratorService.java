@@ -112,4 +112,10 @@ public class GeneratorService extends Service implements ServiceApi {
         mResultListener = listener;
     }
 
+    @Override
+    public void interruptGeneration() {
+        if (mGenerator != null) {
+            mGenerator.interrupt();
+        }
+    }
 }

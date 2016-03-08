@@ -8,7 +8,7 @@ android {
         applicationId "me.angrybyte.contactsgenerator"
         testApplicationId "me.angrybyte.contactsgenerator.test"
 
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 5
         versionName "1.5"
@@ -42,6 +42,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'me.angrybyte.picker:picker:1.2.0'
+    compile 'com.pkmmte.view:circularimageview:1.1'
 
     // set this dependency to use the JUnit instrumentation runner
     androidTestCompile 'com.android.support.test:runner:0.4.1'

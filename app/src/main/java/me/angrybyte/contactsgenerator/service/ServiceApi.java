@@ -60,4 +60,8 @@ public interface ServiceApi {
      */
     void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener);
 
+    /**
+     * Interrupts the current thread generating the contacts.
+     */
+    void interruptGeneration();
 }

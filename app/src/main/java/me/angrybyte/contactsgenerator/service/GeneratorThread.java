@@ -9,14 +9,16 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.List;
+
 import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 
-import java.util.List;
-
 public class GeneratorThread extends Thread {
+
+    private static final String TAG = GeneratorThread.class.getSimpleName();
 
     private Handler mHandler;
     private GeneratorService mService;

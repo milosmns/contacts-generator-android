@@ -1,4 +1,3 @@
-
 package me.angrybyte.contactsgenerator;
 
 import android.content.ComponentName;
@@ -18,15 +17,14 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import java.util.List;
+
 import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
-import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection {
 
@@ -91,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 Person person = persons.get(0);
                 try {
                     contacts.storeContact(person);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (OperationApplicationException e) {
+                } catch (RemoteException | OperationApplicationException e) {
                     e.printStackTrace();
                 }
             }
@@ -108,7 +104,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 generatorIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
                 generatorIntent.putExtra(ProgressActivity.KEY_IMAGES, mUseAvatars.isChecked());
                 generatorIntent.putExtra(ProgressActivity.KEY_GENDER, getChosenGender());
-                startActivity(generatorIntent);
+
+                Intent generatorServiceIntent = new Intent(this, GeneratorService.class);
+                startService(generatorServiceIntent);
+
                 break;
             }
         }
@@ -145,17 +144,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public void onServiceConnected(ComponentName name, IBinder binder) {
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
-        if (!(binder instanceof GeneratorServiceBinder)) {
-            Log.d(TAG, "Cannot use service: " + name.getShortClassName());
-            return;
-        }
 
-        if (((GeneratorServiceBinder) binder).getService().isInitialized()) {
-            // just show the generator UI
-            Intent progressIntent = new Intent(this, ProgressActivity.class);
-            startActivity(progressIntent);
-            finish();
-        }
+        // just show the generator UI
+        Intent progressIntent = new Intent(this, ProgressActivity.class);
+        startActivity(progressIntent);
+        finish();
     }
 
     @Override
