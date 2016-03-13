@@ -112,7 +112,9 @@ public class ProgressActivity extends AppCompatActivity
             mContactDisplayNameView.setText(person.getDisplayName());
             mContactPhoneNumberView.setText(person.getPhone());
             mContactEmailView.setText(person.getEmail());
-            mContactPhotoView.setImageBitmap(person.getImage());
+            if (person.getImage() != null) {
+                mContactPhotoView.setImageBitmap(person.getImage());
+            }
         }
 
         mProgressBar.setProgress((int) (progress * 100) + 10);

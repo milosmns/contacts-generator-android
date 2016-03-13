@@ -81,6 +81,9 @@ public class GeneratorThread extends Thread {
                 mService.setLastGenerated(current);
             }
 
+            // Free up the image reference for the garbage collector
+            current.setImage(null);
+
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -117,7 +120,7 @@ public class GeneratorThread extends Thread {
     /**
      * Notifies the listener (if available) that the generating sequence is finished. Also notifies the service that thread is dying so that
      * it can clear the resources, most likely by calling {@link #clear()}.
-     * 
+     *
      * @param forcedStop Whether this thread was stopped manually (by calling {@link #interrupt()}), or naturally (generating finished)
      */
     private void notifyFinished(final boolean forcedStop) {

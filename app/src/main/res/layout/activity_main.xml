@@ -46,7 +46,7 @@
             app:bars_count="26"
             app:draw_over_text="false"
             app:max_value="1000"
-            app:min_value="0"
+            app:min_value="1"
             app:show_bars="true"
             app:show_controls="false"
             app:show_fast_controls="false"
@@ -54,7 +54,7 @@
             app:show_text="true"
             app:text_color="?attr/colorAccent"
             app:text_size="20sp"
-            app:value="0" />
+            app:value="1" />
 
         <LinearLayout
             android:layout_width="wrap_content"

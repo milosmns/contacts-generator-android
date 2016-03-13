@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private RadioButton mMales;
     private RadioButton mFemales;
     private ActualNumberPicker mPicker;
+    private Intent mShowProgressIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main_button_generate: {
-                Intent generatorIntent = new Intent(this, ProgressActivity.class);
-                generatorIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
-                generatorIntent.putExtra(ProgressActivity.KEY_IMAGES, mUseAvatars.isChecked());
-                generatorIntent.putExtra(ProgressActivity.KEY_GENDER, getChosenGender());
+                mShowProgressIntent = new Intent(this, ProgressActivity.class);
+                mShowProgressIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
+                mShowProgressIntent.putExtra(ProgressActivity.KEY_IMAGES, mUseAvatars.isChecked());
+                mShowProgressIntent.putExtra(ProgressActivity.KEY_GENDER, getChosenGender());
 
                 Intent generatorServiceIntent = new Intent(this, GeneratorService.class);
                 startService(generatorServiceIntent);
@@ -146,8 +147,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
 
         // just show the generator UI
-        Intent progressIntent = new Intent(this, ProgressActivity.class);
-        startActivity(progressIntent);
+        startActivity(mShowProgressIntent);
         finish();
     }
 
