@@ -13,6 +13,7 @@ import java.util.List;
 
 import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
+import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 
@@ -21,6 +22,7 @@ public class GeneratorThread extends Thread {
     private static final String TAG = GeneratorThread.class.getSimpleName();
 
     private Handler mHandler;
+    private GeneratorStats mStats;
     private GeneratorService mService;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
@@ -35,6 +37,7 @@ public class GeneratorThread extends Thread {
             @NonNull OnGenerateResultListener resultListener, @NonNull GeneratorService service, @IntRange(from = 0) int howMany,
             boolean withPhotos, @Gender String gender) {
         super();
+        mStats = new GeneratorStats();
         setName(TAG);
 
         mHandler = handler;
@@ -107,6 +110,10 @@ public class GeneratorThread extends Thread {
         }
     }
 
+    public GeneratorStats getStats() {
+        return mStats;
+    }
+
     /**
      * Notifies the listener (if available) that the generating sequence is finished. Also notifies the service that thread is dying so that
      * it can clear the resources, most likely by calling {@link #clear()}.
@@ -136,10 +143,11 @@ public class GeneratorThread extends Thread {
     }
 
     public void clear() {
+        mStats = null;
         mHandler = null;
-        mProgressListener = null;
-        mResultListener = null;
         mService = null;
+        mResultListener = null;
+        mProgressListener = null;
     }
 
 }

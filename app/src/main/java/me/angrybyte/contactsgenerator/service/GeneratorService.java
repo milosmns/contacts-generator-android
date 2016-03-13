@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import me.angrybyte.contactsgenerator.api.Gender;
+import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 
 public class GeneratorService extends Service implements ServiceApi {
@@ -18,6 +19,7 @@ public class GeneratorService extends Service implements ServiceApi {
 
     private Person mLastGenerated;
     private Handler mHandler;
+    private GeneratorStats mStats;
     private GeneratorThread mGenerator;
     private GeneratorServiceBinder mBinder;
     private OnGenerateResultListener mResultListener;
@@ -49,12 +51,13 @@ public class GeneratorService extends Service implements ServiceApi {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Destroying " + TAG + "...");
+        mStats = null;
         mBinder = null;
         mHandler.removeCallbacksAndMessages(null);
         mHandler = null;
         mLastGenerated = null;
-        mProgressListener = null;
         mResultListener = null;
+        mProgressListener = null;
     }
 
     /* Local API */
@@ -68,6 +71,7 @@ public class GeneratorService extends Service implements ServiceApi {
         Log.d(TAG, "Generating " + (forced ? " force-" : "") + "finished");
         mGenerator.clear();
         mGenerator = null;
+        mIsGenerating = false;
     }
 
     public void setLastGenerated(@Nullable Person person) {
@@ -97,6 +101,8 @@ public class GeneratorService extends Service implements ServiceApi {
         }
 
         mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
+        mStats = mGenerator.getStats();
+        mIsGenerating = true;
         mGenerator.start();
 
         return true;
@@ -123,6 +129,12 @@ public class GeneratorService extends Service implements ServiceApi {
         if (mGenerator != null && !mGenerator.isInterrupted()) {
             mGenerator.interrupt();
         }
+    }
+
+    @Nullable
+    @Override
+    public GeneratorStats getStats() {
+        return mStats;
     }
 
 }

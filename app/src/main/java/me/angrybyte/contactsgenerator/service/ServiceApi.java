@@ -6,6 +6,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 
 import me.angrybyte.contactsgenerator.api.Gender;
+import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 
@@ -13,8 +14,8 @@ import me.angrybyte.contactsgenerator.parser.data.Person;
  * Public API available to all clients that need to use the contact generating service. The service is not considered initialized until
  * {@link #generate(int, boolean, String)} is invoked for the first time. After that, the service will remain alive until the task
  * completes, which will trigger {@link android.content.ServiceConnection#onServiceDisconnected(ComponentName)}. Before the service gets
- * killed completely, it will invoke the {@link OnGenerateResultListener#onGenerateResult(int, int)} on its listener. It will also invoke
- * {@link OnGenerateProgressListener#onGenerateProgress(float, int, int)} along the way as each of the contacts is generated.
+ * killed completely, it will invoke the {@link OnGenerateResultListener#onGenerateResult(int, int, boolean)} on its listener. It will also
+ * invoke {@link OnGenerateProgressListener#onGenerateProgress(float, int, int)} along the way as each of the contacts is generated.
  */
 public interface ServiceApi {
 
@@ -27,9 +28,9 @@ public interface ServiceApi {
 
     /**
      * Starts generating contacts asynchronously. Events {@link OnGenerateProgressListener#onGenerateProgress(float, int, int)} and
-     * {@link OnGenerateResultListener#onGenerateResult(int, int)} are posted to the main UI thread's message queue along the way. Note that
-     * listeners need to be already attached in order to actually start generating contacts. Contacts are saved to the local contact list
-     * and are not synchronized with any of device's accounts.
+     * {@link OnGenerateResultListener#onGenerateResult(int, int, boolean)} are posted to the main UI thread's message queue along the way.
+     * Note that listeners need to be already attached in order to actually start generating contacts. Contacts are saved to the local
+     * contact list and are not synchronized with any of device's accounts.
      *
      * @param howMany How many contacts do you need generated
      * @param withPhotos Whether to use contact photos when saving contacts
@@ -61,8 +62,15 @@ public interface ServiceApi {
     void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener);
 
     /**
-     * Interrupts the current contact generating sequence. You will still get a {@link OnGenerateResultListener#onGenerateResult(int, int)}.
+     * Interrupts the current contact generating sequence. You will still get a
+     * {@link OnGenerateResultListener#onGenerateResult(int, int, boolean)}.
      */
     void stopGenerating();
+
+    /**
+     * @return Statistics object containing various analysis data. Can be {@code null}
+     */
+    @Nullable
+    GeneratorStats getStats();
 
 }
