@@ -1,3 +1,4 @@
+
 package me.angrybyte.contactsgenerator.parser.data;
 
 import android.graphics.Bitmap;
@@ -6,7 +7,9 @@ import android.graphics.Bitmap;
  * A data class holding all the relevant info about the user needed by our app.
  */
 public class Person {
+
     private static final String NEW_LINE = "\n";
+
     private String gender;
     private String title;
     private String firstName;
@@ -95,11 +98,14 @@ public class Person {
 
     @Override
     public String toString() {
+        // @formatter:off
         return "Gender: " + getGender() + NEW_LINE +
                 "Title: " + getTitle() + NEW_LINE +
                 "First name: " + getFirstName() + NEW_LINE +
                 "Last name: " + getLastName() + NEW_LINE +
                 "Email: " + getEmail() + NEW_LINE +
                 "Phone: " + getPhone(); // etc.
+        // @formatter:on
     }
+
 }

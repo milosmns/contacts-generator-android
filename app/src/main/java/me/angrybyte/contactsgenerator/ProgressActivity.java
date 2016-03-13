@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import me.angrybyte.contactsgenerator.api.Gender;
-import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
 import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
@@ -26,7 +25,8 @@ import me.angrybyte.contactsgenerator.service.OnGenerateProgressListener;
 import me.angrybyte.contactsgenerator.service.OnGenerateResultListener;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 
-public class ProgressActivity extends AppCompatActivity implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener, View.OnClickListener {
+public class ProgressActivity extends AppCompatActivity
+        implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener, View.OnClickListener {
 
     public static final String TAG = ProgressActivity.class.getSimpleName();
 
@@ -65,7 +65,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mFetchImages = getIntent().getBooleanExtra(KEY_IMAGES, false);
         //noinspection WrongConstant
         mGender = getIntent().getStringExtra(KEY_GENDER);
-        Log.d(TAG, "Received request for " + mRequestedNumber + " contacts " + (mFetchImages ? "with " : "without ") + "pictures. Gender: " + mGender);
+        Log.d(TAG, "Received request for " + mRequestedNumber + " contacts " + (mFetchImages ? "with " : "without ") + "pictures. Gender: "
+                + mGender);
     }
 
     private void assignViews() {
@@ -130,7 +131,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         switch (view.getId()) {
             case R.id.activity_progress_stop_service:
                 if (mService != null) {
-                    mService.interruptGeneration();
+                    mService.stopGenerating();
                 }
 
                 Intent serviceStopper = new Intent(ProgressActivity.this, GeneratorService.class);
