@@ -11,11 +11,13 @@ import android.support.annotation.IntRange;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
@@ -24,47 +26,55 @@ import me.angrybyte.contactsgenerator.service.OnGenerateProgressListener;
 import me.angrybyte.contactsgenerator.service.OnGenerateResultListener;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 
-public class ProgressActivity extends AppCompatActivity implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener {
+public class ProgressActivity extends AppCompatActivity implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener, View.OnClickListener {
 
     public static final String TAG = ProgressActivity.class.getSimpleName();
 
     public static final String KEY_NUMBER = "KEY_NUMBER";
     public static final String KEY_IMAGES = "KEY_IMAGES";
     public static final String KEY_GENDER = "KEY_GENDER";
+
     private ServiceApi mService;
-    private ProgressBar mProgressBar;
-    private int mNumber;
-    private boolean mFetchImages;
+
+    @Gender
     private String mGender;
+    private boolean mFetchImages;
+    private int mRequestedNumber;
+
+    private TextView mContactDisplayNameView;
+    private TextView mContactPhoneNumberView;
+    private TextView mContactEmailView;
+    private ImageView mContactPhotoView;
+    private ProgressBar mProgressBar;
+    private Button mStopButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
 
+        assignViews();
+        readIntentData();
+
+        mStopButton.setOnClickListener(this);
+    }
+
+    private void readIntentData() {
         // demo, don't look.
-        String format = "Number: %s, Images: %s, Gender: %s";
-        mNumber = getIntent().getIntExtra(KEY_NUMBER, 0);
+        mRequestedNumber = getIntent().getIntExtra(KEY_NUMBER, 0);
         mFetchImages = getIntent().getBooleanExtra(KEY_IMAGES, false);
+        //noinspection WrongConstant
         mGender = getIntent().getStringExtra(KEY_GENDER);
-        Log.d(TAG, "Received request for " + mNumber + " contacts " + (mFetchImages ? "with " : "without ") + "pictures.");
+        Log.d(TAG, "Received request for " + mRequestedNumber + " contacts " + (mFetchImages ? "with " : "without ") + "pictures. Gender: " + mGender);
+    }
 
-        // demo, also don't look.
-        findViewById(R.id.activity_progress_stop_service).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mService.stopGenerating();
-                Intent serviceStopper = new Intent(ProgressActivity.this, GeneratorService.class);
-                stopService(serviceStopper);
-
-                Intent mainActIntent = new Intent(ProgressActivity.this, MainActivity.class);
-                startActivity(mainActIntent);
-
-                finish();
-            }
-        });
-
+    private void assignViews() {
+        mContactDisplayNameView = ((TextView) findViewById(R.id.activity_progress_name));
+        mContactPhoneNumberView = ((TextView) findViewById(R.id.activity_progress_number));
+        mContactEmailView = ((TextView) findViewById(R.id.activity_progress_email));
+        mContactPhotoView = ((ImageView) findViewById(R.id.activity_progress_photo));
         mProgressBar = (ProgressBar) findViewById(R.id.activity_progress_progress_bar);
+        mStopButton = (Button) findViewById(R.id.activity_progress_stop_service);
     }
 
     @Override
@@ -86,12 +96,11 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mService = ((GeneratorServiceBinder) iBinder).getService();
         mService.setOnGenerateProgressListener(this);
         mService.setOnGenerateResultListener(this);
-        mService.generate(15, true, Operations.MALE);
+        mService.generate(mRequestedNumber, mFetchImages, mGender);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
-
     }
 
     @Override
@@ -99,11 +108,10 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
             @IntRange(from = 0) int generated) {
         Person person = mService.getLastGeneratedPerson();
         if (person != null) {
-            String personName = person.getFirstName() + " " + person.getLastName();
-            ((TextView) findViewById(R.id.activity_progress_name)).setText(personName);
-            ((TextView) findViewById(R.id.activity_progress_number)).setText(person.getPhone());
-            ((TextView) findViewById(R.id.activity_progress_email)).setText(person.getEmail());
-            ((ImageView) findViewById(R.id.activity_progress_photo)).setImageBitmap(person.getImage());
+            mContactDisplayNameView.setText(person.getDisplayName());
+            mContactPhoneNumberView.setText(person.getPhone());
+            mContactEmailView.setText(person.getEmail());
+            mContactPhotoView.setImageBitmap(person.getImage());
         }
 
         mProgressBar.setProgress((int) (progress * 100) + 10);
@@ -115,6 +123,28 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.activity_progress_stop_service:
+                if (mService != null) {
+                    mService.interruptGeneration();
+                }
+
+                Intent serviceStopper = new Intent(ProgressActivity.this, GeneratorService.class);
+                stopService(serviceStopper);
+
+                Intent goToStartScreen = new Intent(ProgressActivity.this, MainActivity.class);
+                startActivity(goToStartScreen);
+
+                finish();
+                break;
+
+            default:
+                Log.d(TAG, "Unprocessed click.");
+        }
     }
 
 }
