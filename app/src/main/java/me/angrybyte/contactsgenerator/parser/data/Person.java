@@ -89,6 +89,10 @@ public class Person {
         this.image = image;
     }
 
+    public String getDisplayName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     @Override
     public String toString() {
         return "Gender: " + getGender() + NEW_LINE +
