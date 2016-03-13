@@ -14,7 +14,7 @@ import me.angrybyte.contactsgenerator.parser.data.Person;
  * {@link #generate(int, boolean, String)} is invoked for the first time. After that, the service will remain alive until the task
  * completes, which will trigger {@link android.content.ServiceConnection#onServiceDisconnected(ComponentName)}. Before the service gets
  * killed completely, it will invoke the {@link OnGenerateResultListener#onGenerateResult(int, int)} on its listener. It will also invoke
- * {@link OnGenerateProgressListener#onGenerateProgress(float)} along the way as each of the contacts is generated.
+ * {@link OnGenerateProgressListener#onGenerateProgress(float, int, int)} along the way as each of the contacts is generated.
  */
 public interface ServiceApi {
 
@@ -23,10 +23,10 @@ public interface ServiceApi {
      *
      * @return {@code True} if the service has started generating contacts, {@code false} if it has just been created or already finished
      */
-    boolean isInitialized();
+    boolean isGenerating();
 
     /**
-     * Starts generating contacts asynchronously. Events {@link OnGenerateProgressListener#onGenerateProgress(float)} and
+     * Starts generating contacts asynchronously. Events {@link OnGenerateProgressListener#onGenerateProgress(float, int, int)} and
      * {@link OnGenerateResultListener#onGenerateResult(int, int)} are posted to the main UI thread's message queue along the way. Note that
      * listeners need to be already attached in order to actually start generating contacts. Contacts are saved to the local contact list
      * and are not synchronized with any of device's accounts.
@@ -61,7 +61,8 @@ public interface ServiceApi {
     void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener);
 
     /**
-     * Interrupts the current thread generating the contacts.
+     * Interrupts the current contact generating sequence. You will still get a {@link OnGenerateResultListener#onGenerateResult(int, int)}.
      */
-    void interruptGeneration();
+    void stopGenerating();
+
 }

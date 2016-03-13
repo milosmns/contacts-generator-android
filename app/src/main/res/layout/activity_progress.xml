@@ -21,26 +21,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="Added to your contact list"
+            android:text="@string/progress_header"
             android:textSize="26sp" />
-
 
         <com.pkmmte.view.CircularImageView
             android:id="@+id/activity_progress_photo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginBottom="20dp"
+            android:src="@drawable/avatar_30"
             app:border="true"
-            app:border_color="#EEEEEE"
-            app:border_width="4dp"
-            app:shadow="true" />
+            app:border_color="#F0F0F0"
+            app:border_width="8dp"
+            app:shadow="false" />
 
         <TextView
             android:id="@+id/activity_progress_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Name"
+            android:text="@string/progress_name"
             android:textSize="18sp" />
 
         <TextView
@@ -48,19 +48,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Phone" />
+            android:text="@string/progress_number" />
 
         <TextView
             android:id="@+id/activity_progress_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:text="Email" />
+            android:text="@string/progress_email" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -77,10 +78,7 @@
             android:id="@+id/activity_progress_stop_service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="52dp"
-            android:text="STOP" />
+            android:text="@string/progress_stop" />
     </LinearLayout>
 
 </LinearLayout>

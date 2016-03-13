@@ -21,17 +21,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- TODO: Register URL at https://g.co/AppIndexing/AndroidStudio -->
-            <intent-filter>
+            <!-- We can later register the URL at https://g.co/AppIndexing/AndroidStudio -->
+            <intent-filter
+                android:autoVerify="true"
+                tools:ignore="UnusedAttribute">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <!-- TODO discuss adding android:pathPrefix="/whatever" to <data> tag -->
                 <data
                     android:host="contacts.angrybyte.me"
                     android:scheme="http" />
+                <data
+                    android:host="contacts.angrybyte.me"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
 

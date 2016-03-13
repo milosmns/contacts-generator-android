@@ -13,8 +13,13 @@
     <string name="service_desc">You really don\'t want to stop this.</string>
     <string name="activity_progress_title">Generator</string>
     <string name="activity_stats_title">Statistics</string>
+    <string name="progress_header">Added to your contact list</string>
+    <string name="progress_name">Name</string>
+    <string name="progress_number">Phone</string>
+    <string name="progress_email">Email</string>
+    <string name="progress_stop">Stop</string>
 
-    <!-- ImageView descriptions -->
+    <!-- Descriptions -->
     <string name="desc_generate">Generate contacts</string>
 
 </resources>

@@ -22,7 +22,7 @@ public class GeneratorService extends Service implements ServiceApi {
     private GeneratorServiceBinder mBinder;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
-    private boolean mInitialized;
+    private boolean mIsGenerating;
 
     @Override
     public void onCreate() {
@@ -59,7 +59,13 @@ public class GeneratorService extends Service implements ServiceApi {
 
     /* Local API */
 
-    public void onGeneratingFinished() {
+    /**
+     * Called by the generator thread just before it dies.
+     *
+     * @param forced Whether the thread was stopped on purpose (called {@link #stopGenerating()}), or naturally (finished generating)
+     */
+    public void onGeneratingFinished(boolean forced) {
+        Log.d(TAG, "Generating " + (forced ? " force-" : "") + "finished");
         mGenerator.clear();
         mGenerator = null;
     }
@@ -71,8 +77,8 @@ public class GeneratorService extends Service implements ServiceApi {
     /* Service API */
 
     @Override
-    public boolean isInitialized() {
-        return mInitialized;
+    public boolean isGenerating() {
+        return mIsGenerating;
     }
 
     @Override
@@ -82,12 +88,12 @@ public class GeneratorService extends Service implements ServiceApi {
             return false;
         }
 
-        if (mGenerator != null && mGenerator.isAlive()) {
+        if (mGenerator != null && !mGenerator.isInterrupted() && mGenerator.isAlive()) {
             Log.e(TAG, "Cannot generate, already generating");
             return false;
         } else if (mGenerator != null) {
             // probably not needed
-            mGenerator.interrupt();
+            stopGenerating();
         }
 
         mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
@@ -113,9 +119,10 @@ public class GeneratorService extends Service implements ServiceApi {
     }
 
     @Override
-    public void interruptGeneration() {
-        if (mGenerator != null) {
+    public void stopGenerating() {
+        if (mGenerator != null && !mGenerator.isInterrupted()) {
             mGenerator.interrupt();
         }
     }
+
 }

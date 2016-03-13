@@ -24,8 +24,9 @@ public class GeneratorThread extends Thread {
     private GeneratorService mService;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
-    private int mHowMany;
-    private boolean mWithPhotos;
+    private int mHowMany = 0;
+    private int mTotalGenerated = 0;
+    private boolean mWithPhotos = true;
 
     @Gender
     private String mGender;
@@ -34,6 +35,7 @@ public class GeneratorThread extends Thread {
             @NonNull OnGenerateResultListener resultListener, @NonNull GeneratorService service, @IntRange(from = 0) int howMany,
             boolean withPhotos, @Gender String gender) {
         super();
+        setName(TAG);
 
         mHandler = handler;
         mProgressListener = progressListener;
@@ -54,7 +56,10 @@ public class GeneratorThread extends Thread {
 
         final List<Person> persons = operations.getPersons(mHowMany, mGender);
         final int listSize = persons.size();
-        int totalGenerated = 0;
+
+        if (listSize != mHowMany) {
+            throw new RuntimeException("Requested number differs from actual list size");
+        }
 
         for (int i = 0; i < listSize; i++) {
             final int finalI = i;
@@ -69,7 +74,7 @@ public class GeneratorThread extends Thread {
 
             boolean stored = storeContact(contacts, current);
             if (stored) {
-                totalGenerated++;
+                mTotalGenerated++;
                 mService.setLastGenerated(current);
             }
 
@@ -77,27 +82,18 @@ public class GeneratorThread extends Thread {
                 @Override
                 public void run() {
                     if (mProgressListener != null) {
-                        mProgressListener.onGenerateProgress((float) finalI / (float) listSize);
+                        mProgressListener.onGenerateProgress((float) finalI / (float) listSize, finalI, mTotalGenerated);
                     }
                 }
             });
         }
 
-        final int finalTotal = totalGenerated;
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mResultListener != null) {
-                    mResultListener.onGenerateResult(listSize, finalTotal);
-                }
-                mService.onGeneratingFinished();
-            }
-        });
+        notifyFinished(false);
 
         persons.clear();
-        // noinspection UnusedAssignment
+        // noinspection UnusedAssignment: cyclic dependency possible
         operations = null;
-        // noinspection UnusedAssignment
+        // noinspection UnusedAssignment: cyclic dependency possible
         contacts = null;
     }
 
@@ -109,6 +105,34 @@ public class GeneratorThread extends Thread {
             Log.e(GeneratorThread.class.getSimpleName(), "Failed to store contact", e);
             return false;
         }
+    }
+
+    /**
+     * Notifies the listener (if available) that the generating sequence is finished. Also notifies the service that thread is dying so that
+     * it can clear the resources, most likely by calling {@link #clear()}.
+     * 
+     * @param forcedStop Whether this thread was stopped manually (by calling {@link #interrupt()}), or naturally (generating finished)
+     */
+    private void notifyFinished(final boolean forcedStop) {
+        if (forcedStop) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mResultListener != null) {
+                    mResultListener.onGenerateResult(mHowMany, mTotalGenerated, forcedStop);
+                }
+                mService.onGeneratingFinished(forcedStop);
+            }
+        });
+    }
+
+    @Override
+    public void interrupt() {
+        Log.d(TAG, "Requested interrupt");
+        notifyFinished(true);
+        super.interrupt();
     }
 
     public void clear() {

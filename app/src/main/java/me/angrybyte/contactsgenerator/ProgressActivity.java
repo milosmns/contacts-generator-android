@@ -1,3 +1,4 @@
+
 package me.angrybyte.contactsgenerator;
 
 import android.content.ComponentName;
@@ -52,7 +53,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         findViewById(R.id.activity_progress_stop_service).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.interruptGeneration();
+                mService.stopGenerating();
                 Intent serviceStopper = new Intent(ProgressActivity.this, GeneratorService.class);
                 stopService(serviceStopper);
 
@@ -94,7 +95,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     }
 
     @Override
-    public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress) {
+    public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress, @IntRange(from = 0) int iStep,
+            @IntRange(from = 0) int generated) {
         Person person = mService.getLastGeneratedPerson();
         if (person != null) {
             String personName = person.getFirstName() + " " + person.getLastName();
@@ -108,10 +110,11 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     }
 
     @Override
-    public void onGenerateResult(@IntRange(from = 0) int requested, @IntRange(from = 0) int generated) {
+    public void onGenerateResult(@IntRange(from = 0) int requested, @IntRange(from = 0) int generated, boolean forced) {
         Toast.makeText(this, "Requested: " + requested + ", generated: " + generated, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
         finish();
     }
+
 }
