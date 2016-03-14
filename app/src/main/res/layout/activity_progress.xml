@@ -8,21 +8,22 @@
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.ProgressActivity">
 
+    <TextSwitcher
+        android:id="@+id/activity_progress_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/waiting"
+        android:textSize="26sp" />
+
     <LinearLayout
+        android:id="@+id/activity_progress_contact_info_group"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="30dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/progress_activity_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="@string/progress_header"
-            android:textSize="26sp" />
 
         <com.pkmmte.view.CircularImageView
             android:id="@+id/activity_progress_photo"
