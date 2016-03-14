@@ -28,6 +28,7 @@ public class GeneratorThread extends Thread {
     private int mHowMany = 0;
     private int mTotalGenerated = 0;
     private boolean mWithPhotos = true;
+    private boolean mLocalInterrupted = false;
 
     @Gender
     private String mGender;
@@ -189,8 +190,17 @@ public class GeneratorThread extends Thread {
     }
 
     @Override
+    public boolean isInterrupted() {
+        // if you are shocked by this.. take a look at OkIO/OkHTTP InterruptedIOException handling - it's silent
+        // and they check the interrupted flag by using Thread.interrupted() which resets the flag instead of
+        // Thread.isInterrupted() which does not. so.. not 'OK'.
+        return super.isInterrupted() || mLocalInterrupted;
+    }
+
+    @Override
     public void interrupt() {
         super.interrupt();
+        mLocalInterrupted = true;
         Log.i(TAG, "Thread interrupt requested, current state is " + isInterrupted());
         notifyFinished(true);
     }
