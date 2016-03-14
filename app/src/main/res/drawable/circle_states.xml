@@ -7,7 +7,6 @@
     tools:ignore="UnusedAttribute">
 
     <item android:drawable="@drawable/circle_active" android:state_active="true" />
-    <item android:drawable="@drawable/circle_active" android:state_checked="true" />
     <item android:drawable="@drawable/circle_active" android:state_selected="true" />
     <item android:drawable="@drawable/circle_active" android:state_hovered="true" />
     <item android:drawable="@drawable/circle_normal" />

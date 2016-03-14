@@ -69,11 +69,10 @@
                 android:layout_marginBottom="20dp"
                 android:checked="true"
                 android:text="@string/want_avatars"
-                android:textColor="@color/text"
                 android:textSize="18sp" />
 
-            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/main_genders"
+            <RadioGroup android:id="@+id/main_genders"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -83,7 +82,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/all_males"
-                    android:textColor="@color/text"
                     android:textSize="18sp" />
 
                 <RadioButton
@@ -91,7 +89,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/all_females"
-                    android:textColor="@color/text"
                     android:textSize="18sp" />
 
                 <!-- checked by default, but from code - XML didn't work.. -->
@@ -100,7 +97,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/do_not_care"
-                    android:textColor="@color/text"
                     android:textSize="18sp" />
             </RadioGroup>
 
