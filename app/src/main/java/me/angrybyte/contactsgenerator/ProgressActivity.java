@@ -11,11 +11,14 @@ import android.support.annotation.IntRange;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.parser.data.Person;
@@ -29,7 +32,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         View.OnClickListener {
 
     public static final String TAG = ProgressActivity.class.getSimpleName();
-    private static final int[] AVATARS = new int[] {
+    private static final int[] AVATARS = new int[]{
             R.drawable.avatar_1, R.drawable.avatar_2, R.drawable.avatar_3, R.drawable.avatar_4, R.drawable.avatar_5, R.drawable.avatar_6,
             R.drawable.avatar_7, R.drawable.avatar_8, R.drawable.avatar_9, R.drawable.avatar_10, R.drawable.avatar_11,
             R.drawable.avatar_12, R.drawable.avatar_13, R.drawable.avatar_14, R.drawable.avatar_15, R.drawable.avatar_16,
@@ -49,12 +52,17 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     private boolean mFetchImages;
     private int mRequestedNumber;
 
+    private ViewGroup mContactInfoView;
+    private TextSwitcher mActivityTitle;
     private TextView mContactDisplayNameView;
     private TextView mContactPhoneNumberView;
     private TextView mContactEmailView;
     private ImageView mContactPhotoView;
     private ProgressBar mProgressBar;
     private Button mStopButton;
+
+    private String mHeader;
+    private long mAnimationLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +71,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
 
         readIntentData();
         assignViews();
-
-        mStopButton.setOnClickListener(this);
-        mProgressBar.setMax(mRequestedNumber);
+        performInitialSetup();
     }
 
     private void readIntentData() {
@@ -78,12 +84,38 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     }
 
     private void assignViews() {
+        mContactInfoView = (ViewGroup) findViewById(R.id.activity_progress_contact_info_group);
+        mActivityTitle = (TextSwitcher) findViewById(R.id.activity_progress_title);
         mContactDisplayNameView = ((TextView) findViewById(R.id.activity_progress_name));
         mContactPhoneNumberView = ((TextView) findViewById(R.id.activity_progress_number));
         mContactEmailView = ((TextView) findViewById(R.id.activity_progress_email));
         mContactPhotoView = ((ImageView) findViewById(R.id.activity_progress_photo));
         mProgressBar = (ProgressBar) findViewById(R.id.activity_progress_progress_bar);
         mStopButton = (Button) findViewById(R.id.activity_progress_stop_service);
+    }
+
+    private void performInitialSetup() {
+        mContactInfoView.setAlpha(0f);
+        mProgressBar.setMax(mRequestedNumber);
+
+        mHeader = getResources().getString(R.string.progress_header);
+        mAnimationLength = getAnimationDuration();
+
+        mActivityTitle.setInAnimation(this, android.R.anim.fade_in);
+        mActivityTitle.setOutAnimation(this, android.R.anim.fade_out);
+        mActivityTitle.setAnimateFirstView(false);
+
+        mActivityTitle.setFactory(new ViewSwitcher.ViewFactory() {
+            @Override
+            public View makeView() {
+                TextView holder = new TextView(ProgressActivity.this);
+                holder.setTextSize(26);
+                return holder;
+            }
+        });
+
+        mActivityTitle.setText(getResources().getText(R.string.waiting));
+        mStopButton.setOnClickListener(this);
     }
 
     @Override
@@ -114,9 +146,11 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
 
     @Override
     public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress, @IntRange(from = 0) int iStep,
-            @IntRange(from = 0) int generated) {
+                                   @IntRange(from = 0) int generated) {
         Person person = mService.getLastGeneratedPerson();
         if (person != null) {
+            mActivityTitle.setText(mHeader);
+            mContactInfoView.animate().setDuration(mAnimationLength).alpha(1f);
             mContactDisplayNameView.setText(person.getDisplayName());
             mContactPhoneNumberView.setText(person.getPhone());
             mContactEmailView.setText(person.getEmail());
@@ -161,4 +195,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         }
     }
 
+    private long getAnimationDuration() {
+        return getResources().getInteger(android.R.integer.config_mediumAnimTime);
+    }
 }
