@@ -1,13 +1,16 @@
 package me.angrybyte.contactsgenerator;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.OperationApplicationException;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,18 +20,17 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import java.util.List;
-
-import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.Operations;
-import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int PERMISSIONS_WRITE_REQUEST_CODE = 0;
+    private static final int PERMISSIONS_READ_REQUEST_CODE = 1;
 
     private CheckBox mUseAvatars;
     private RadioButton mMales;
@@ -80,38 +82,29 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         }
     }
 
-    private void tryItOut() {
-        final Operations operations = new Operations(this);
-        final ContactOperations contacts = new ContactOperations(this);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Person> persons = operations.getPersons(1, Operations.BOTH);
-                Person person = persons.get(0);
-                try {
-                    contacts.storeContact(person);
-                } catch (RemoteException | OperationApplicationException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.activity_main_button_generate: {
-                mShowProgressIntent = new Intent(this, ProgressActivity.class);
-                mShowProgressIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
-                mShowProgressIntent.putExtra(ProgressActivity.KEY_IMAGES, mUseAvatars.isChecked());
-                mShowProgressIntent.putExtra(ProgressActivity.KEY_GENDER, getChosenGender());
-
-                Intent generatorServiceIntent = new Intent(this, GeneratorService.class);
-                startService(generatorServiceIntent);
-
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    generateContacts();
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS}, PERMISSIONS_WRITE_REQUEST_CODE);
+                }
                 break;
             }
         }
+    }
+
+    @RequiresPermission(Manifest.permission.WRITE_CONTACTS)
+    private void generateContacts() {
+        mShowProgressIntent = new Intent(this, ProgressActivity.class);
+        mShowProgressIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
+        mShowProgressIntent.putExtra(ProgressActivity.KEY_IMAGES, mUseAvatars.isChecked());
+        mShowProgressIntent.putExtra(ProgressActivity.KEY_GENDER, getChosenGender());
+
+        Intent generatorServiceIntent = new Intent(this, GeneratorService.class);
+        startService(generatorServiceIntent);
     }
 
     @Override
@@ -156,4 +149,19 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_WRITE_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //noinspection MissingPermission | We just checked?!
+                    generateContacts();
+                } else {
+                    Toast.makeText(this, R.string.permission_denied_wow, Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
 }

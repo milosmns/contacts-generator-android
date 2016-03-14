@@ -18,6 +18,7 @@
     <string name="progress_number">Phone</string>
     <string name="progress_email">Email</string>
     <string name="progress_stop">Stop</string>
+    <string name="permission_denied_wow">Wow, really?</string>
 
     <!-- Descriptions -->
     <string name="desc_generate">Generate contacts</string>
