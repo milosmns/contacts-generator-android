@@ -1,14 +1,13 @@
 
 package me.angrybyte.contactsgenerator.service;
 
-import android.content.OperationApplicationException;
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.os.RemoteException;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.angrybyte.contactsgenerator.api.ContactOperations;
@@ -57,14 +56,30 @@ public class GeneratorThread extends Thread {
         Operations operations = new Operations(mService);
         ContactOperations contacts = new ContactOperations(mService);
 
-        final List<Person> persons = operations.getPersons(mHowMany, mGender);
+        List<Person> persons = new ArrayList<>();
+        try {
+            persons = operations.getPersons(mHowMany, mGender);
+        } catch (Exception e) {
+            // most likely a thread interrupted exception
+            Log.e(TAG, "Cannot download person list", e);
+        }
+
+        if (isInterrupted()) {
+            return;
+        }
+
         final int listSize = persons.size();
 
         if (listSize != mHowMany) {
-            throw new RuntimeException("Requested number differs from actual list size");
+            Log.e(TAG, "Requested number differs from actual list size");
+            return;
         }
 
         for (int i = 0; i < listSize; i++) {
+            if (isInterrupted()) {
+                return;
+            }
+
             final int finalI = i;
             Person current = persons.get(i);
 
@@ -75,27 +90,50 @@ public class GeneratorThread extends Thread {
                 }
             }
 
+            if (isInterrupted()) {
+                break;
+            }
+
             boolean stored = storeContact(contacts, current);
             if (stored) {
                 mTotalGenerated++;
-                mService.setLastGenerated(current);
-            }
-
-            // Free up the image reference for the garbage collector
-            current.setImage(null);
-
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mProgressListener != null) {
-                        float progressFraction = (float) (finalI + 1) / (float) listSize;
-                        mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mTotalGenerated);
+                synchronized (this) {
+                    // need to sync on this because #clear() gets called before the actual interrupt
+                    if (mService != null) {
+                        mService.setLastGenerated(current);
                     }
                 }
-            });
+            }
+
+            if (isInterrupted()) {
+                break;
+            }
+
+            synchronized (this) {
+                // need to sync on this because #clear() gets called before the actual interrupt
+                if (mHandler != null) {
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mProgressListener != null) {
+                                float progressFraction = (float) (finalI + 1) / (float) listSize;
+                                mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mTotalGenerated);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        if (isInterrupted()) {
+            return;
         }
 
         notifyFinished(false);
+
+        if (isInterrupted()) {
+            return;
+        }
 
         persons.clear();
         // noinspection UnusedAssignment: cyclic dependency possible
@@ -108,8 +146,8 @@ public class GeneratorThread extends Thread {
         try {
             operations.storeContact(person);
             return true;
-        } catch (RemoteException | OperationApplicationException e) {
-            Log.e(GeneratorThread.class.getSimpleName(), "Failed to store contact", e);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to store contact " + String.valueOf(person), e);
             return false;
         }
     }
@@ -125,18 +163,24 @@ public class GeneratorThread extends Thread {
      * @param forcedStop Whether this thread was stopped manually (by calling {@link #interrupt()}), or naturally (generating finished)
      */
     private void notifyFinished(final boolean forcedStop) {
-        if (forcedStop) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mResultListener != null) {
-                    mResultListener.onGenerateResult(mHowMany, mTotalGenerated, forcedStop);
+        synchronized (this) {
+            if (mHandler != null) {
+                if (forcedStop) {
+                    mHandler.removeCallbacksAndMessages(null);
                 }
-                mService.onGeneratingFinished(forcedStop);
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mResultListener != null) {
+                            mResultListener.onGenerateResult(mHowMany, mTotalGenerated, forcedStop);
+                        }
+                        if (mService != null) {
+                            mService.onGeneratingFinished(forcedStop);
+                        }
+                    }
+                });
             }
-        });
+        }
     }
 
     @Override
@@ -146,7 +190,7 @@ public class GeneratorThread extends Thread {
         super.interrupt();
     }
 
-    public void clear() {
+    public synchronized void clear() {
         mStats = null;
         mHandler = null;
         mService = null;
