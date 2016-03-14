@@ -100,6 +100,9 @@ public class GeneratorService extends Service implements ServiceApi {
             stopGenerating();
         }
 
+        String format = "Starting generate sequence. Generating %s, gender: %s, with photos: %s";
+        Log.i(TAG, String.format(format, howMany, gender, withPhotos));
+
         mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
         mStats = mGenerator.getStats();
         mIsGenerating = true;

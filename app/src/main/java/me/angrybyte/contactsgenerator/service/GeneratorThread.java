@@ -88,7 +88,8 @@ public class GeneratorThread extends Thread {
                 @Override
                 public void run() {
                     if (mProgressListener != null) {
-                        mProgressListener.onGenerateProgress((float) finalI / (float) listSize, finalI, mTotalGenerated);
+                        float progressFraction = (float) (finalI + 1) / (float) listSize;
+                        mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mTotalGenerated);
                     }
                 }
             });

@@ -25,10 +25,18 @@ import me.angrybyte.contactsgenerator.service.OnGenerateProgressListener;
 import me.angrybyte.contactsgenerator.service.OnGenerateResultListener;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 
-public class ProgressActivity extends AppCompatActivity
-        implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener, View.OnClickListener {
+public class ProgressActivity extends AppCompatActivity implements ServiceConnection, OnGenerateProgressListener, OnGenerateResultListener,
+        View.OnClickListener {
 
     public static final String TAG = ProgressActivity.class.getSimpleName();
+    private static final int[] AVATARS = new int[] {
+            R.drawable.avatar_1, R.drawable.avatar_2, R.drawable.avatar_3, R.drawable.avatar_4, R.drawable.avatar_5, R.drawable.avatar_6,
+            R.drawable.avatar_7, R.drawable.avatar_8, R.drawable.avatar_9, R.drawable.avatar_10, R.drawable.avatar_11,
+            R.drawable.avatar_12, R.drawable.avatar_13, R.drawable.avatar_14, R.drawable.avatar_15, R.drawable.avatar_16,
+            R.drawable.avatar_17, R.drawable.avatar_18, R.drawable.avatar_19, R.drawable.avatar_20, R.drawable.avatar_21,
+            R.drawable.avatar_22, R.drawable.avatar_23, R.drawable.avatar_24, R.drawable.avatar_25, R.drawable.avatar_26,
+            R.drawable.avatar_27, R.drawable.avatar_28, R.drawable.avatar_29, R.drawable.avatar_30
+    };
 
     public static final String KEY_NUMBER = "KEY_NUMBER";
     public static final String KEY_IMAGES = "KEY_IMAGES";
@@ -53,17 +61,17 @@ public class ProgressActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_progress);
 
-        assignViews();
         readIntentData();
+        assignViews();
 
         mStopButton.setOnClickListener(this);
+        mProgressBar.setMax(mRequestedNumber);
     }
 
     private void readIntentData() {
-        // demo, don't look.
-        mRequestedNumber = getIntent().getIntExtra(KEY_NUMBER, 0);
+        mRequestedNumber = getIntent().getIntExtra(KEY_NUMBER, 1);
         mFetchImages = getIntent().getBooleanExtra(KEY_IMAGES, false);
-        //noinspection WrongConstant
+        // noinspection WrongConstant
         mGender = getIntent().getStringExtra(KEY_GENDER);
         Log.d(TAG, "Received request for " + mRequestedNumber + " contacts " + (mFetchImages ? "with " : "without ") + "pictures. Gender: "
                 + mGender);
@@ -114,10 +122,13 @@ public class ProgressActivity extends AppCompatActivity
             mContactEmailView.setText(person.getEmail());
             if (person.getImage() != null) {
                 mContactPhotoView.setImageBitmap(person.getImage());
+            } else {
+                int drawable = AVATARS[(int) Math.round(Math.random() * AVATARS.length)];
+                mContactPhotoView.setImageResource(drawable);
             }
         }
 
-        mProgressBar.setProgress((int) (progress * 100) + 10);
+        mProgressBar.setProgress(iStep);
     }
 
     @Override
