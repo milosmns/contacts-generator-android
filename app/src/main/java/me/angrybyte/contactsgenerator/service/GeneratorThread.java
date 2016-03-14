@@ -77,18 +77,20 @@ public class GeneratorThread extends Thread {
 
         for (int i = 0; i < listSize; i++) {
             if (isInterrupted()) {
-                return;
+                break;
             }
 
             final int finalI = i;
-            Person current = persons.get(i);
+            Person current = new Person(persons.get(i));
 
+            Log.i(TAG, "Before loading the photo, thread status is " + isInterrupted());
             if (mWithPhotos) {
                 Bitmap bitmap = operations.fetchImage(current);
                 if (bitmap != null) {
                     current.setImage(bitmap);
                 }
             }
+            Log.i(TAG, "After loading the photo, thread status is " + isInterrupted());
 
             if (isInterrupted()) {
                 break;
@@ -123,6 +125,9 @@ public class GeneratorThread extends Thread {
                     });
                 }
             }
+
+            // free up the space
+            persons.set(i, null);
         }
 
         if (isInterrupted()) {
@@ -185,9 +190,9 @@ public class GeneratorThread extends Thread {
 
     @Override
     public void interrupt() {
-        Log.d(TAG, "Requested interrupt");
-        notifyFinished(true);
         super.interrupt();
+        Log.i(TAG, "Thread interrupt requested, current state is " + isInterrupted());
+        notifyFinished(true);
     }
 
     public synchronized void clear() {

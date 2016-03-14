@@ -19,6 +19,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InterruptedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -78,8 +79,15 @@ public class Operations {
         try {
             imageStream = readImageUsingHttp(person.getImageUrl());
             bitmap = BitmapFactory.decodeStream(imageStream);
-        } catch (Exception ignored) {
-            // thread interrupted most likely
+        } catch (Exception e) {
+            // noinspection ConstantConditions
+            if (e instanceof InterruptedIOException || e instanceof InterruptedException) {
+                // if you are wondering why we did it like this.. it's because OK HTTP decided to
+                // check if thread was interrupted with Thread#interrupted() - which resets the interrupted
+                // flag to false. so that's why.
+                Log.e(TAG, "THREAD FAKE INTERRUPTED. EXTERMINATE!");
+                Thread.currentThread().interrupt();
+            }
         }
         close(imageStream);
 

@@ -20,6 +20,35 @@ public class Person {
     private String thumbImageUrl;
     private Bitmap image;
 
+    public Person() {
+        super();
+    }
+
+    public Person(Person otherPerson) {
+        // @formatter:off
+        this(otherPerson.getGender(), otherPerson.getTitle(), otherPerson.getFirstName(),
+             otherPerson.getLastName(), otherPerson.getEmail(), otherPerson.getPhone(),
+             otherPerson.getImageUrl(), otherPerson.getThumbImageUrl(), otherPerson.getImage());
+        // @formatter:on
+    }
+
+    // @formatter:off
+    public Person(String gender, String title, String firstName,
+                  String lastName, String email, String phone,
+                  String imageUrl, String thumbUrl, Bitmap image) {
+    // @formatter:on
+        super();
+        this.gender = gender;
+        this.title = title;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phone = phone;
+        this.imageUrl = imageUrl;
+        this.thumbImageUrl = thumbUrl;
+        this.image = image;
+    }
+
     public String getGender() {
         return gender;
     }

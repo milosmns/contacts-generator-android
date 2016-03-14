@@ -14,13 +14,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import me.angrybyte.contactsgenerator.parser.data.Person;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import me.angrybyte.contactsgenerator.parser.data.Person;
 
 public class ContactOperations {
 
@@ -85,7 +85,8 @@ public class ContactOperations {
         }
 
         // gives priority to other threads after the chunk before this line has been executed
-        providerOperation.withYieldAllowed(true);
+        // fake.
+        // providerOperation.withYieldAllowed(true);
 
         operations.add(providerOperation.build());
         Log.d(TAG, "Creating contact: " + person.getFirstName() + " " + person.getLastName());
