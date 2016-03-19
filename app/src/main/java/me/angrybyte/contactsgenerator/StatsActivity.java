@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
@@ -15,6 +16,8 @@ import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 
 public class StatsActivity extends AppCompatActivity implements ServiceConnection {
+
+    private static final String TAG = StatsActivity.class.getSimpleName();
 
     private TextView mRequestedCountView;
     private TextView mGeneratedCountView;
@@ -50,6 +53,8 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
+        Log.d(TAG, "Service connected to " + TAG);
+
         ServiceApi serviceApi = ((GeneratorServiceBinder) service).getService();
         GeneratorStats stats = serviceApi.getStats();
         Intent serviceStopper = new Intent(this, GeneratorService.class);
@@ -63,6 +68,7 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+        Log.d(TAG, "Service disconnected from " + TAG);
     }
 
 }

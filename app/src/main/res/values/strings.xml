@@ -21,6 +21,16 @@
     <string name="permission_denied_wow">Wow, really?</string>
     <string name="waiting">Please wait…</string>
 
+    <!-- Stats -->
+    <string name="stat_males">Generated males: %s</string>
+    <string name="stat_females">Generated females: %s</string>
+    <string name="stat_total_requested">Total requested: %s</string>
+    <string name="stat_total_generated">Total generated: %s</string>
+    <string name="stat_total_time">Total time spent: %s ms</string>
+    <string name="stat_average_time">Average time spent per contact: %s</string>
+    <string name="stat_longest_contact" formatted="false">Longest contact %s took %s ms</string>
+    <string name="stat_shortest_contacts" formatted="false">Shortest contact %s took %s ms</string>
+
     <!-- Descriptions -->
     <string name="desc_generate">Generate contacts</string>
 

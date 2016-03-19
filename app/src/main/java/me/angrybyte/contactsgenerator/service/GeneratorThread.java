@@ -192,8 +192,8 @@ public class GeneratorThread extends Thread {
     @Override
     public boolean isInterrupted() {
         // if you are shocked by this.. take a look at OkIO/OkHTTP InterruptedIOException handling - it's silent
-        // and they check the interrupted flag by using Thread.interrupted() which resets the flag instead of
-        // Thread.isInterrupted() which does not. so.. not 'OK'.
+        // and they check the interrupted flag by using Thread.interrupted() [which resets the flag] instead of
+        // Thread.isInterrupted() [which does not]. so.. not 'OK'.
         return super.isInterrupted() || mLocalInterrupted;
     }
 
@@ -206,7 +206,7 @@ public class GeneratorThread extends Thread {
     }
 
     public synchronized void clear() {
-        mStats = null;
+        Log.d(TAG, "Cleaning up " + TAG + "...");
         mHandler = null;
         mService = null;
         mResultListener = null;
