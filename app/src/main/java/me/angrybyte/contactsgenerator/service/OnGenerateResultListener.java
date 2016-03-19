@@ -1,17 +1,18 @@
 
 package me.angrybyte.contactsgenerator.service;
 
-import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
+
+import me.angrybyte.contactsgenerator.api.GeneratorStats;
 
 public interface OnGenerateResultListener {
 
     /**
      * Callback associated with the final step of generating sequence. It is called on the UI thread when generating completes.
      * 
-     * @param requested How many contacts were requested
-     * @param generated How many contacts were actually generated
+     * @param stats Stats object containing a lot of information about the generator operation
      * @param forced Whether finishing was forced (by manually stopping) or not (finished generator sequence)
      */
-    void onGenerateResult(@IntRange(from = 0) int requested, @IntRange(from = 0) int generated, boolean forced);
+    void onGenerateResult(@NonNull GeneratorStats stats, boolean forced);
 
 }

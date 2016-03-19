@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import me.angrybyte.contactsgenerator.api.Gender;
+import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
 import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
@@ -114,7 +116,6 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         });
 
         mActivityTitle.setText(getResources().getText(R.string.waiting));
-        mStopButton.setOnClickListener(this);
     }
 
     @Override
@@ -129,18 +130,6 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     protected void onStop() {
         super.onStop();
         unbindService(this);
-    }
-
-    @Override
-    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        mService = ((GeneratorServiceBinder) iBinder).getService();
-        mService.setOnGenerateProgressListener(this);
-        mService.setOnGenerateResultListener(this);
-        mService.generate(mRequestedNumber, mFetchImages, mGender);
-    }
-
-    @Override
-    public void onServiceDisconnected(ComponentName componentName) {
     }
 
     @Override
@@ -165,8 +154,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     }
 
     @Override
-    public void onGenerateResult(@IntRange(from = 0) int requested, @IntRange(from = 0) int generated, boolean forced) {
-        Log.d(TAG, "Requested: " + requested + ", generated: " + generated);
+    public void onGenerateResult(@NonNull GeneratorStats stats, boolean forced) {
+        Log.d(TAG, "Requested: " + stats.requested + ", generated: " + stats.generated);
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
         finish();
@@ -175,26 +164,34 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.activity_progress_stop_service:
-                if (mService != null) {
-                    mService.stopGenerating();
-                }
-
-                Intent serviceStopper = new Intent(ProgressActivity.this, GeneratorService.class);
-                stopService(serviceStopper);
-
-                Intent goToStartScreen = new Intent(ProgressActivity.this, MainActivity.class);
-                startActivity(goToStartScreen);
-
-                finish();
+            case R.id.activity_progress_stop_service: {
+                mService.stopGenerating();
                 break;
-
-            default:
-                Log.d(TAG, "Unprocessed click.");
+            }
         }
     }
 
     private long getAnimationDuration() {
         return getResources().getInteger(android.R.integer.config_mediumAnimTime);
     }
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder binder) {
+        Log.d(TAG, "Service connected to " + TAG);
+        mStopButton.setOnClickListener(this);
+
+        mService = ((GeneratorServiceBinder) binder).getService();
+        mService.setOnGenerateProgressListener(this);
+        mService.setOnGenerateResultListener(this);
+        mService.generate(mRequestedNumber, mFetchImages, mGender);
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        Log.d(TAG, "Service disconnected from " + TAG);
+        mStopButton.setOnClickListener(null);
+        mService.setOnGenerateResultListener(null);
+        mService.setOnGenerateProgressListener(null);
+    }
+
 }

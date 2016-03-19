@@ -2,6 +2,10 @@
 package me.angrybyte.contactsgenerator.parser.data;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+
+import me.angrybyte.contactsgenerator.api.Gender;
+import me.angrybyte.contactsgenerator.api.Operations;
 
 /**
  * A data class holding all the relevant info about the user needed by our app.
@@ -51,6 +55,26 @@ public class Person {
 
     public String getGender() {
         return gender;
+    }
+
+    /**
+     * @return A {@link Gender} constant, defaults to {@link Operations#MALE} if {@code null} or invalid
+     */
+    @Gender
+    public String getAppGender() {
+        if (gender == null) {
+            Log.e("ERROR", "No gender here: " + getDisplayName());
+            return Operations.MALE;
+        }
+
+        if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("m")) {
+            return Operations.MALE;
+        } else if (gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("f")) {
+            return Operations.FEMALE;
+        } else {
+            Log.e("ERROR", "What gender is this? " + gender + ": " + getDisplayName());
+            return Operations.MALE;
+        }
     }
 
     public void setGender(String gender) {

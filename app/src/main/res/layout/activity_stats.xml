@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="top|center_horizontal"
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.StatsActivity">
 
@@ -21,17 +21,36 @@
     -->
 
     <TextView
+        android:id="@+id/stats_check_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:text="@string/stat_check_device"
+        android:textColor="#303050"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/stats_requested_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Requested: %d"
-        android:textSize="26sp" />
+        android:layout_marginTop="50dp"
+        android:text="@string/stat_total_requested"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/stats_generated_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generated: %d"
-        android:textSize="26sp" />
+        android:text="@string/stat_total_generated"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/stats_generated_average"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_average_time"
+        android:textSize="22sp" />
 
 </LinearLayout>

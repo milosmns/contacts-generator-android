@@ -3,10 +3,12 @@ package me.angrybyte.contactsgenerator.api;
 
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 /**
  * Statistics wrapper. Holding some interesting statistic values described using class field names, so check those out.
  */
-public class GeneratorStats {
+public class GeneratorStats implements Serializable {
 
     // number
     public int males;

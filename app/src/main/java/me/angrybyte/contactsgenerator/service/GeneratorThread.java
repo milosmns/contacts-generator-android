@@ -25,8 +25,6 @@ public class GeneratorThread extends Thread {
     private GeneratorService mService;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
-    private int mHowMany = 0;
-    private int mTotalGenerated = 0;
     private boolean mWithPhotos = true;
     private boolean mLocalInterrupted = false;
 
@@ -38,6 +36,7 @@ public class GeneratorThread extends Thread {
             boolean withPhotos, @Gender String gender) {
         super();
         mStats = new GeneratorStats();
+        mStats.requested = howMany;
         setName(TAG);
 
         mHandler = handler;
@@ -45,7 +44,6 @@ public class GeneratorThread extends Thread {
         mResultListener = resultListener;
         mService = service;
 
-        mHowMany = howMany;
         mWithPhotos = withPhotos;
         mGender = gender;
     }
@@ -54,12 +52,14 @@ public class GeneratorThread extends Thread {
     public void run() {
         super.run();
 
+        long totalStartTime = System.currentTimeMillis();
+
         Operations operations = new Operations(mService);
         ContactOperations contacts = new ContactOperations(mService);
 
         List<Person> persons = new ArrayList<>();
         try {
-            persons = operations.getPersons(mHowMany, mGender);
+            persons = operations.getPersons(mStats.requested, mGender);
         } catch (Exception e) {
             // most likely a thread interrupted exception
             Log.e(TAG, "Cannot download person list", e);
@@ -71,12 +71,15 @@ public class GeneratorThread extends Thread {
 
         final int listSize = persons.size();
 
-        if (listSize != mHowMany) {
+        if (listSize != mStats.requested) {
             Log.e(TAG, "Requested number differs from actual list size");
+            notifyFinished(false);
             return;
         }
 
         for (int i = 0; i < listSize; i++) {
+            long contactStartTime = System.currentTimeMillis();
+
             if (isInterrupted()) {
                 break;
             }
@@ -84,14 +87,12 @@ public class GeneratorThread extends Thread {
             final int finalI = i;
             Person current = new Person(persons.get(i));
 
-            Log.i(TAG, "Before loading the photo, thread status is " + isInterrupted());
             if (mWithPhotos) {
                 Bitmap bitmap = operations.fetchImage(current);
                 if (bitmap != null) {
                     current.setImage(bitmap);
                 }
             }
-            Log.i(TAG, "After loading the photo, thread status is " + isInterrupted());
 
             if (isInterrupted()) {
                 break;
@@ -99,7 +100,14 @@ public class GeneratorThread extends Thread {
 
             boolean stored = storeContact(contacts, current);
             if (stored) {
-                mTotalGenerated++;
+                mStats.generated++;
+
+                if (current.getAppGender().equalsIgnoreCase(Operations.MALE)) {
+                    mStats.males++;
+                } else {
+                    mStats.females++;
+                }
+
                 synchronized (this) {
                     // need to sync on this because #clear() gets called before the actual interrupt
                     if (mService != null) {
@@ -120,7 +128,7 @@ public class GeneratorThread extends Thread {
                         public void run() {
                             if (mProgressListener != null) {
                                 float progressFraction = (float) (finalI + 1) / (float) listSize;
-                                mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mTotalGenerated);
+                                mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mStats.generated);
                             }
                         }
                     });
@@ -129,11 +137,26 @@ public class GeneratorThread extends Thread {
 
             // free up the space
             persons.set(i, null);
+
+            long contactTime = System.currentTimeMillis() - contactStartTime;
+            if (mStats.shortestContactTime == 0 || mStats.longestContactTime < contactTime) {
+                mStats.longestContact = current.getDisplayName();
+                mStats.longestContactTime = contactTime;
+            }
+
+            if (mStats.shortestContactTime == 0 || mStats.shortestContactTime > contactTime) {
+                mStats.shortestContact = current.getDisplayName();
+                mStats.shortestContactTime = contactTime;
+            }
         }
 
         if (isInterrupted()) {
             return;
         }
+
+        mStats.totalTime = System.currentTimeMillis() - totalStartTime;
+        // noinspection RedundantCast
+        mStats.averageTimePerContact = ((float) mStats.totalTime) / ((float) mStats.generated);
 
         notifyFinished(false);
 
@@ -178,7 +201,7 @@ public class GeneratorThread extends Thread {
                     @Override
                     public void run() {
                         if (mResultListener != null) {
-                            mResultListener.onGenerateResult(mHowMany, mTotalGenerated, forcedStop);
+                            mResultListener.onGenerateResult(mStats, forcedStop);
                         }
                         if (mService != null) {
                             mService.onGeneratingFinished(forcedStop);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
@@ -19,6 +20,8 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
     private static final String TAG = StatsActivity.class.getSimpleName();
 
+    private TextView mCheckDeviceView;
+    private TextView mAverageTimeView;
     private TextView mRequestedCountView;
     private TextView mGeneratedCountView;
 
@@ -27,6 +30,8 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
+        mCheckDeviceView = (TextView) findViewById(R.id.stats_check_device);
+        mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average);
         mRequestedCountView = (TextView) findViewById(R.id.stats_requested_count);
         mGeneratedCountView = (TextView) findViewById(R.id.stats_generated_count);
     }
@@ -46,8 +51,12 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
     @Override
     public void onBackPressed() {
+        Intent serviceStopper = new Intent(this, GeneratorService.class);
+        stopService(serviceStopper);
+
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
+
         finish();
     }
 
@@ -57,12 +66,18 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
         ServiceApi serviceApi = ((GeneratorServiceBinder) service).getService();
         GeneratorStats stats = serviceApi.getStats();
-        Intent serviceStopper = new Intent(this, GeneratorService.class);
-        stopService(serviceStopper);
 
         if (stats != null) {
+            if (stats.requested == 0 || stats.generated < stats.requested) {
+                mCheckDeviceView.setVisibility(View.VISIBLE);
+            } else {
+                mCheckDeviceView.setVisibility(View.GONE);
+            }
+
+            // FIXME don't. Just... don't. #gili
             mRequestedCountView.setText(String.format(mRequestedCountView.getText().toString(), stats.requested));
             mGeneratedCountView.setText(String.format(mGeneratedCountView.getText().toString(), stats.generated));
+            mAverageTimeView.setText(String.format(mAverageTimeView.getText().toString(), stats.averageTimePerContact));
         }
     }
 
