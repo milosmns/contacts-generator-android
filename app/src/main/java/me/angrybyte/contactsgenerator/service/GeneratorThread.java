@@ -25,6 +25,7 @@ public class GeneratorThread extends Thread {
     private GeneratorService mService;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
+    private long mTotalStartTime = System.currentTimeMillis();
     private boolean mWithPhotos = true;
     private boolean mLocalInterrupted = false;
 
@@ -52,7 +53,7 @@ public class GeneratorThread extends Thread {
     public void run() {
         super.run();
 
-        long totalStartTime = System.currentTimeMillis();
+        mTotalStartTime = System.currentTimeMillis();
 
         Operations operations = new Operations(mService);
         ContactOperations contacts = new ContactOperations(mService);
@@ -154,10 +155,6 @@ public class GeneratorThread extends Thread {
             return;
         }
 
-        mStats.totalTime = System.currentTimeMillis() - totalStartTime;
-        // noinspection RedundantCast
-        mStats.averageTimePerContact = ((float) mStats.totalTime) / ((float) mStats.generated);
-
         notifyFinished(false);
 
         if (isInterrupted()) {
@@ -192,6 +189,12 @@ public class GeneratorThread extends Thread {
      * @param forcedStop Whether this thread was stopped manually (by calling {@link #interrupt()}), or naturally (generating finished)
      */
     private void notifyFinished(final boolean forcedStop) {
+        mStats.totalTime = System.currentTimeMillis() - mTotalStartTime;
+        if (mStats.generated != 0) {
+            // noinspection RedundantCast
+            mStats.averageTimePerContact = ((float) mStats.totalTime) / ((float) mStats.generated);
+        }
+
         synchronized (this) {
             if (mHandler != null) {
                 if (forcedStop) {
