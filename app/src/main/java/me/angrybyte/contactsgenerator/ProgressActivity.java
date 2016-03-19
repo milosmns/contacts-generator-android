@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import me.angrybyte.contactsgenerator.api.Gender;
@@ -32,7 +31,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         View.OnClickListener {
 
     public static final String TAG = ProgressActivity.class.getSimpleName();
-    private static final int[] AVATARS = new int[]{
+    private static final int[] AVATARS = new int[] {
             R.drawable.avatar_1, R.drawable.avatar_2, R.drawable.avatar_3, R.drawable.avatar_4, R.drawable.avatar_5, R.drawable.avatar_6,
             R.drawable.avatar_7, R.drawable.avatar_8, R.drawable.avatar_9, R.drawable.avatar_10, R.drawable.avatar_11,
             R.drawable.avatar_12, R.drawable.avatar_13, R.drawable.avatar_14, R.drawable.avatar_15, R.drawable.avatar_16,
@@ -146,7 +145,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
 
     @Override
     public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress, @IntRange(from = 0) int iStep,
-                                   @IntRange(from = 0) int generated) {
+            @IntRange(from = 0) int generated) {
         Person person = mService.getLastGeneratedPerson();
         if (person != null) {
             mActivityTitle.setText(mHeader);
@@ -167,7 +166,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
 
     @Override
     public void onGenerateResult(@IntRange(from = 0) int requested, @IntRange(from = 0) int generated, boolean forced) {
-        Toast.makeText(this, "Requested: " + requested + ", generated: " + generated, Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Requested: " + requested + ", generated: " + generated);
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
         finish();
