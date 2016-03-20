@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/primary"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.StatsActivity">
@@ -15,64 +16,98 @@
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/stat_check_device"
+        android:textAllCaps="true"
         android:textColor="#303050"
         android:textSize="24sp"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/stats_generated_males"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_males"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_generated_females"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_females"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_requested_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_total_requested"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_generated_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_total_generated"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_generated_total_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_total_time"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_generated_average_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_average_time"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_longest_generated_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_longest_contact"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/stats_shortest_generated_contact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/stat_shortest_contacts"
-        android:textSize="22sp" />
+        android:textAllCaps="true"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/stats_activity_text_size"
+        android:textStyle="bold" />
 
 </LinearLayout>

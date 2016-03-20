@@ -27,8 +27,8 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
     private TextView mGeneratedFemalesView;
     private TextView mAverageTimeView;
     private TextView mTotalTimeView;
-    private TextView mLongestContactView;
     private TextView mShortestContactView;
+    private TextView mLongestContactView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +36,14 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
         setContentView(R.layout.activity_stats);
 
         mCheckDeviceView = (TextView) findViewById(R.id.stats_check_device);
+        mRequestedCountView = (TextView) findViewById(R.id.stats_requested_count);
+        mGeneratedCountView = (TextView) findViewById(R.id.stats_generated_count);
         mGeneratedMalesView = (TextView) findViewById(R.id.stats_generated_males);
         mGeneratedFemalesView = (TextView) findViewById(R.id.stats_generated_females);
-        mTotalTimeView = (TextView) findViewById(R.id.stats_generated_total_time);
         mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average_time);
-        mGeneratedCountView = (TextView) findViewById(R.id.stats_generated_count);
-        mRequestedCountView = (TextView) findViewById(R.id.stats_requested_count);
-        mLongestContactView = (TextView) findViewById(R.id.stats_longest_generated_contact);
+        mTotalTimeView = (TextView) findViewById(R.id.stats_generated_total_time);
         mShortestContactView = (TextView) findViewById(R.id.stats_shortest_generated_contact);
+        mLongestContactView = (TextView) findViewById(R.id.stats_longest_generated_contact);
     }
 
     @Override
@@ -90,9 +90,32 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
             String generatedTotal = getString(R.string.stat_total_generated);
             generatedTotal = String.format(generatedTotal, stats.generated);
 
+            String malesGenerated = getString(R.string.stat_males);
+            malesGenerated = String.format(malesGenerated, stats.males);
+
+            String femalesGenerated = getString(R.string.stat_females);
+            femalesGenerated = String.format(femalesGenerated, stats.females);
+
+            String averageTimePerContact = getString(R.string.stat_average_time);
+            averageTimePerContact = String.format(averageTimePerContact, stats.averageTimePerContact);
+
+            String totalTimeUsed = getString(R.string.stat_total_time);
+            totalTimeUsed = String.format(totalTimeUsed, stats.totalTime);
+
+            String shortestTimeForContact = getString(R.string.stat_shortest_contacts);
+            shortestTimeForContact = String.format(shortestTimeForContact, stats.shortestContact, stats.shortestContactTime);
+
+            String longestTimeForContact = getString(R.string.stat_longest_contact);
+            longestTimeForContact = String.format(longestTimeForContact, stats.longestContact, stats.longestContactTime);
+
             mRequestedCountView.setText(requested);
-            mGeneratedCountView.setText(String.format(mGeneratedCountView.getText().toString(), stats.generated));
-            mAverageTimeView.setText(String.format(mAverageTimeView.getText().toString(), stats.averageTimePerContact));
+            mGeneratedCountView.setText(generatedTotal);
+            mGeneratedMalesView.setText(malesGenerated);
+            mGeneratedFemalesView.setText(femalesGenerated);
+            mAverageTimeView.setText(averageTimePerContact);
+            mTotalTimeView.setText(totalTimeUsed);
+            mShortestContactView.setText(shortestTimeForContact);
+            mLongestContactView.setText(longestTimeForContact);
         }
     }
 
