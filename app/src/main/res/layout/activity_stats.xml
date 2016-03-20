@@ -3,27 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="top|center_horizontal"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.StatsActivity">
-
-    <!-- TODO add all of these:
-
-    <string name="stat_males">Generated males: %s</string>
-    <string name="stat_females">Generated females: %s</string>
-    <string name="stat_total_requested">Total requested: %s</string>
-    <string name="stat_total_generated">Total generated: %s</string>
-    <string name="stat_total_time">Total time spent: %s ms</string>
-    <string name="stat_average_time">Average time spent per contact: %s</string>
-    <string name="stat_longest_contact">Longest contact %s took %s ms</string>
-    <string name="stat_shortest_contacts">Shortest contact %s took %s ms</string>
-
-    -->
 
     <TextView
         android:id="@+id/stats_check_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:padding="@dimen/activity_horizontal_margin"
         android:text="@string/stat_check_device"
@@ -32,10 +20,23 @@
         android:visibility="gone" />
 
     <TextView
+        android:id="@+id/stats_generated_males"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_males"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/stats_generated_females"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_females"
+        android:textSize="22sp" />
+
+    <TextView
         android:id="@+id/stats_requested_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:text="@string/stat_total_requested"
         android:textSize="22sp" />
 
@@ -47,10 +48,31 @@
         android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/stats_generated_average"
+        android:id="@+id/stats_generated_total_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_total_time"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/stats_generated_average_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/stat_average_time"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/stats_longest_generated_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_longest_contact"
+        android:textSize="22sp" />
+
+    <TextView
+        android:id="@+id/stats_shortest_generated_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stat_shortest_contacts"
         android:textSize="22sp" />
 
 </LinearLayout>

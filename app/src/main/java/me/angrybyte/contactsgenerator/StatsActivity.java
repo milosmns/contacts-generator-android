@@ -21,9 +21,14 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
     private static final String TAG = StatsActivity.class.getSimpleName();
 
     private TextView mCheckDeviceView;
-    private TextView mAverageTimeView;
     private TextView mRequestedCountView;
     private TextView mGeneratedCountView;
+    private TextView mGeneratedMalesView;
+    private TextView mGeneratedFemalesView;
+    private TextView mAverageTimeView;
+    private TextView mTotalTimeView;
+    private TextView mLongestContactView;
+    private TextView mShortestContactView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +36,14 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
         setContentView(R.layout.activity_stats);
 
         mCheckDeviceView = (TextView) findViewById(R.id.stats_check_device);
-        mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average);
-        mRequestedCountView = (TextView) findViewById(R.id.stats_requested_count);
+        mGeneratedMalesView = (TextView) findViewById(R.id.stats_generated_males);
+        mGeneratedFemalesView = (TextView) findViewById(R.id.stats_generated_females);
+        mTotalTimeView = (TextView) findViewById(R.id.stats_generated_total_time);
+        mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average_time);
         mGeneratedCountView = (TextView) findViewById(R.id.stats_generated_count);
+        mRequestedCountView = (TextView) findViewById(R.id.stats_requested_count);
+        mLongestContactView = (TextView) findViewById(R.id.stats_longest_generated_contact);
+        mShortestContactView = (TextView) findViewById(R.id.stats_shortest_generated_contact);
     }
 
     @Override
@@ -74,8 +84,13 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
                 mCheckDeviceView.setVisibility(View.GONE);
             }
 
-            // FIXME don't. Just... don't. #gili
-            mRequestedCountView.setText(String.format(mRequestedCountView.getText().toString(), stats.requested));
+            String requested = getString(R.string.stat_total_requested);
+            requested = String.format(requested, stats.requested);
+
+            String generatedTotal = getString(R.string.stat_total_generated);
+            generatedTotal = String.format(generatedTotal, stats.generated);
+
+            mRequestedCountView.setText(requested);
             mGeneratedCountView.setText(String.format(mGeneratedCountView.getText().toString(), stats.generated));
             mAverageTimeView.setText(String.format(mAverageTimeView.getText().toString(), stats.averageTimePerContact));
         }
