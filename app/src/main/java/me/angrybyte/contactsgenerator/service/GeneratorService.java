@@ -24,6 +24,7 @@ public class GeneratorService extends Service implements ServiceApi {
     private GeneratorServiceBinder mBinder;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
+    private boolean mIsForceStopped;
     private boolean mIsGenerating;
 
     @Override
@@ -129,9 +130,15 @@ public class GeneratorService extends Service implements ServiceApi {
 
     @Override
     public void stopGenerating() {
+        mIsForceStopped = true;
         if (mGenerator != null && !mGenerator.isInterrupted()) {
             mGenerator.interrupt();
         }
+    }
+
+    @Override
+    public boolean isForceStopped() {
+        return mIsForceStopped;
     }
 
     @Nullable
