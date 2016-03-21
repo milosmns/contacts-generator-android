@@ -6,4 +6,6 @@
     <color name="accent">#E74C3C</color>
     <color name="accent_lighter">#F97D6D</color>
 
+    <color name="stop_text">@color/primary</color>
+
 </resources>

@@ -21,6 +21,17 @@
     <string name="permission_denied_wow">Wow, really?</string>
     <string name="waiting">Please wait…</string>
 
+    <!-- Developer notes -->
+    <string name="developer_source">https://github.com/milosmns/contacts-generator-android</string>
+    <string name="developer_store">https://play.google.com/store/apps/details?id=</string>
+    <string name="developer_note">We built this app because we thought it would be fun. And because we don\'t show any ads,
+        we would appreciate a share or two if you could. Thanks for supporting further development!</string>
+    <string name="developer_share">Share</string>
+    <string name="developer_dont_care">Don\'t care</string>
+    <string name="developer_github">Source</string>
+    <string name="developer_about">About</string>
+    <string name="developer_check_out">Check out this awesome app:</string>
+
     <!-- Stats -->
     <string name="stat_males">Generated males: %s</string>
     <string name="stat_females">Generated females: %s</string>
@@ -34,5 +45,8 @@
 
     <!-- Descriptions -->
     <string name="desc_generate">Generate contacts</string>
+    <string name="desc_ic_name">Person\'s name</string>
+    <string name="desc_ic_phone">Person\'s phone</string>
+    <string name="desc_ic_email">Person\'s email</string>
 
 </resources>

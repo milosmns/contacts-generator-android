@@ -3,15 +3,18 @@ package me.angrybyte.contactsgenerator;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -28,7 +31,8 @@ import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
 
-public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection,
+        AlertDialog.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private CheckBox mUseAvatars;
     private RadioButton mMales;
     private RadioButton mFemales;
+    private AlertDialog mAboutDialog;
     private ActualNumberPicker mPicker;
 
     @Override
@@ -110,15 +115,68 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_rate: {
-                Toast.makeText(this, "Rating action missing", Toast.LENGTH_LONG).show();
+                rateApp();
                 return true;
             }
             case R.id.action_info: {
-                Toast.makeText(this, "About action missing", Toast.LENGTH_SHORT).show();
+                closeAboutDialog();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(false);
+                builder.setTitle(R.string.developer_about);
+                builder.setMessage(R.string.developer_note);
+                builder.setPositiveButton(R.string.developer_share, this);
+                builder.setNegativeButton(R.string.developer_dont_care, this);
+                builder.setNeutralButton(R.string.developer_github, this);
+                mAboutDialog = builder.show();
                 return true;
             }
         }
         return false;
+    }
+
+    private void shareApp() {
+        String url = getString(R.string.developer_store) + getPackageName();
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("text/plain");
+        String text = getString(R.string.developer_check_out) + " " + url;
+        share.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(Intent.createChooser(share, getString(R.string.app_name)));
+    }
+
+    private void rateApp() {
+        String url = getString(R.string.developer_store) + getPackageName();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+
+    private void viewAppSource() {
+        String url = getString(R.string.developer_source);
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE: {
+                shareApp();
+                break;
+            }
+            case DialogInterface.BUTTON_NEGATIVE: {
+                dialog.dismiss();
+                break;
+            }
+            case DialogInterface.BUTTON_NEUTRAL: {
+                viewAppSource();
+                break;
+            }
+        }
+    }
+
+    private void closeAboutDialog() {
+        if (mAboutDialog != null && mAboutDialog.isShowing()) {
+            mAboutDialog.dismiss();
+        }
     }
 
     @Override
