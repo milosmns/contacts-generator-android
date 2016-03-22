@@ -135,6 +135,8 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/accent"
             android:backgroundTintMode="src_atop"
+            android:drawableTint="@color/accent"
+            android:drawableTintMode="src_atop"
             android:minWidth="150dp"
             android:text="@string/progress_stop"
             android:textColor="@color/stop_text"

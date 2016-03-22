@@ -11,7 +11,6 @@ import android.os.IBinder;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import me.angrybyte.contactsgenerator.ProgressActivity;
@@ -81,10 +80,7 @@ public class GeneratorService extends Service implements ServiceApi {
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
 
         Intent resultIntent = new Intent(this, ProgressActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(ProgressActivity.class);
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(resultPendingIntent);
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
     }
@@ -155,11 +151,17 @@ public class GeneratorService extends Service implements ServiceApi {
     @Override
     public void setOnGenerateProgressListener(@Nullable OnGenerateProgressListener listener) {
         mProgressListener = listener;
+        if (mGenerator != null && !mGenerator.isInterrupted() && mGenerator.isAlive()) {
+            mGenerator.setOnGenerateProgressListener(mProgressListener);
+        }
     }
 
     @Override
     public void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener) {
         mResultListener = listener;
+        if (mGenerator != null && !mGenerator.isInterrupted() && mGenerator.isAlive()) {
+            mGenerator.setOnGenerateResultListener(mResultListener);
+        }
     }
 
     @Override

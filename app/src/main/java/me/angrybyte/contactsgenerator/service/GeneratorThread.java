@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -176,6 +177,14 @@ public class GeneratorThread extends Thread {
             Log.e(TAG, "Failed to store contact " + String.valueOf(person), e);
             return false;
         }
+    }
+
+    public void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener) {
+        mResultListener = listener;
+    }
+
+    public void setOnGenerateProgressListener(@Nullable OnGenerateProgressListener listener) {
+        mProgressListener = listener;
     }
 
     public GeneratorStats getStats() {

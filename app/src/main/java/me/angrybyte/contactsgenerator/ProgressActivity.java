@@ -183,7 +183,12 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mService = ((GeneratorServiceBinder) binder).getService();
         mService.setOnGenerateProgressListener(this);
         mService.setOnGenerateResultListener(this);
-        mService.generate(mRequestedNumber, mFetchImages, mGender);
+
+        if (!mService.isGenerating()) {
+            mService.generate(mRequestedNumber, mFetchImages, mGender);
+        } else if (mService.getStats() != null) {
+            mProgressBar.setMax(mService.getStats().requested);
+        }
     }
 
     @Override
