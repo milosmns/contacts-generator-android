@@ -9,6 +9,7 @@
     <string name="all_males">Males only</string>
     <string name="all_females">Females only</string>
     <string name="do_not_care">Both genders</string>
+    <string name="generating">Generating contacts in the background…</string>
     <string name="service_label">Generator Service</string>
     <string name="service_desc">You really don\'t want to stop this.</string>
     <string name="activity_progress_title">Generator</string>

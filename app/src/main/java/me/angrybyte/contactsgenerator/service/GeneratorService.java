@@ -1,14 +1,21 @@
 
 package me.angrybyte.contactsgenerator.service;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import me.angrybyte.contactsgenerator.ProgressActivity;
+import me.angrybyte.contactsgenerator.R;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
@@ -16,11 +23,13 @@ import me.angrybyte.contactsgenerator.parser.data.Person;
 public class GeneratorService extends Service implements ServiceApi {
 
     public static final String TAG = GeneratorService.class.getSimpleName();
+    public static final int NOTIFICATION_ID = 1475369;
 
     private Person mLastGenerated;
     private Handler mHandler;
     private GeneratorStats mStats;
     private GeneratorThread mGenerator;
+    private NotificationManager mNotificationManager;
     private GeneratorServiceBinder mBinder;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
@@ -32,6 +41,7 @@ public class GeneratorService extends Service implements ServiceApi {
         super.onCreate();
         Log.d(TAG, "Creating " + TAG + "...");
         mBinder = new GeneratorServiceBinder(this);
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mHandler = new Handler();
     }
 
@@ -59,6 +69,28 @@ public class GeneratorService extends Service implements ServiceApi {
         mLastGenerated = null;
         mResultListener = null;
         mProgressListener = null;
+        mNotificationManager = null;
+    }
+
+    private void showNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setCategory(NotificationCompat.CATEGORY_SERVICE);
+        builder.setSmallIcon(R.drawable.ic_stat_generator);
+        builder.setContentTitle(getString(R.string.app_name));
+        builder.setContentText(getString(R.string.generating));
+        builder.setPriority(NotificationCompat.PRIORITY_LOW);
+
+        Intent resultIntent = new Intent(this, ProgressActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(ProgressActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(resultPendingIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private void hideNotification() {
+        mNotificationManager.cancel(NOTIFICATION_ID);
     }
 
     /* Local API */
@@ -70,6 +102,7 @@ public class GeneratorService extends Service implements ServiceApi {
      */
     public void onGeneratingFinished(boolean forced) {
         Log.d(TAG, "Generating " + (forced ? " force-" : "") + "finished");
+        hideNotification();
         mGenerator.clear();
         mGenerator = null;
         mIsGenerating = false;
@@ -107,6 +140,7 @@ public class GeneratorService extends Service implements ServiceApi {
         mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
         mStats = mGenerator.getStats();
         mIsGenerating = true;
+        showNotification();
         mGenerator.start();
 
         return true;
