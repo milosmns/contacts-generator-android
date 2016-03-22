@@ -89,7 +89,7 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
         GeneratorStats stats = serviceApi.getStats();
 
         if (stats != null) {
-            if (stats.requested == 0 || stats.generated < stats.requested) {
+            if (!serviceApi.isForceStopped() && (stats.requested == 0 || stats.generated < stats.requested)) {
                 mCheckDeviceView.setVisibility(View.VISIBLE);
             } else {
                 mCheckDeviceView.setVisibility(View.INVISIBLE);
