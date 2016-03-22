@@ -1,7 +1,13 @@
 <resources>
 
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_big">28dp</dimen>
+
     <dimen name="activity_horizontal_margin">24dp</dimen>
     <dimen name="activity_vertical_margin">24dp</dimen>
 
     <dimen name="stats_activity_text_size">18sp</dimen>
+    <dimen name="stats_activity_large_numbers_text_size">60sp</dimen>
+    <dimen name="stats_activity_small_text_size">14sp</dimen>
+
 </resources>

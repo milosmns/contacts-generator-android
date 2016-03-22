@@ -4,9 +4,12 @@ package me.angrybyte.contactsgenerator;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -27,8 +30,10 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
     private TextView mGeneratedFemalesView;
     private TextView mAverageTimeView;
     private TextView mTotalTimeView;
-    private TextView mShortestContactView;
-    private TextView mLongestContactView;
+    private TextView mShortestContactViewLabel;
+    private TextView mShortestContactViewValue;
+    private TextView mLongestContactViewLabel;
+    private TextView mLongestContactViewValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +45,16 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
         mGeneratedCountView = (TextView) findViewById(R.id.stats_generated_count);
         mGeneratedMalesView = (TextView) findViewById(R.id.stats_generated_males);
         mGeneratedFemalesView = (TextView) findViewById(R.id.stats_generated_females);
-        mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average_time);
-        mTotalTimeView = (TextView) findViewById(R.id.stats_generated_total_time);
-        mShortestContactView = (TextView) findViewById(R.id.stats_shortest_generated_contact);
-        mLongestContactView = (TextView) findViewById(R.id.stats_longest_generated_contact);
+        mAverageTimeView = (TextView) findViewById(R.id.stats_generated_average_time_value);
+        mTotalTimeView = (TextView) findViewById(R.id.stats_generated_total_time_value);
+        mShortestContactViewLabel = (TextView) findViewById(R.id.stats_shortest_generated_contact_label);
+        mShortestContactViewValue = (TextView) findViewById(R.id.stats_shortest_generated_contact_value);
+        mLongestContactViewLabel = (TextView) findViewById(R.id.stats_longest_generated_contact_label);
+        mLongestContactViewValue = (TextView) findViewById(R.id.stats_longest_generated_contact_value);
+
+        // prepare the toolbar with title coloring
+        Toolbar toolbar = (Toolbar) findViewById(R.id.stats_toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
     }
 
     @Override
@@ -81,32 +92,19 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
             if (stats.requested == 0 || stats.generated < stats.requested) {
                 mCheckDeviceView.setVisibility(View.VISIBLE);
             } else {
-                mCheckDeviceView.setVisibility(View.GONE);
+                mCheckDeviceView.setVisibility(View.INVISIBLE);
             }
 
-            String requested = getString(R.string.stat_total_requested);
-            requested = String.format(requested, stats.requested);
-
-            String generatedTotal = getString(R.string.stat_total_generated);
-            generatedTotal = String.format(generatedTotal, stats.generated);
-
-            String malesGenerated = getString(R.string.stat_males);
-            malesGenerated = String.format(malesGenerated, stats.males);
-
-            String femalesGenerated = getString(R.string.stat_females);
-            femalesGenerated = String.format(femalesGenerated, stats.females);
-
-            String averageTimePerContact = getString(R.string.stat_average_time);
-            averageTimePerContact = String.format(averageTimePerContact, stats.averageTimePerContact);
-
-            String totalTimeUsed = getString(R.string.stat_total_time);
-            totalTimeUsed = String.format(totalTimeUsed, stats.totalTime);
-
-            String shortestTimeForContact = getString(R.string.stat_shortest_contacts);
-            shortestTimeForContact = String.format(shortestTimeForContact, stats.shortestContact, stats.shortestContactTime);
-
-            String longestTimeForContact = getString(R.string.stat_longest_contact);
-            longestTimeForContact = String.format(longestTimeForContact, stats.longestContact, stats.longestContactTime);
+            String requested = String.valueOf(stats.requested);
+            String generatedTotal = String.valueOf(stats.generated);
+            String malesGenerated = String.valueOf(stats.males);
+            String femalesGenerated = String.valueOf(stats.females);
+            String averageTimePerContact = stats.averageTimePerContact / 1000 + "s";
+            String totalTimeUsed = stats.totalTime / 1000 + "s";
+            String shortestTimeForContact = TextUtils.isEmpty(stats.shortestContact) ? "" : stats.shortestContact + " ("
+                    + stats.shortestContactTime / 1000 + "s)";
+            String longestTimeForContact = TextUtils.isEmpty(stats.longestContact) ? "" : stats.longestContact + " ("
+                    + stats.longestContactTime / 1000 + "s)";
 
             mRequestedCountView.setText(requested);
             mGeneratedCountView.setText(generatedTotal);
@@ -114,8 +112,17 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
             mGeneratedFemalesView.setText(femalesGenerated);
             mAverageTimeView.setText(averageTimePerContact);
             mTotalTimeView.setText(totalTimeUsed);
-            mShortestContactView.setText(shortestTimeForContact);
-            mLongestContactView.setText(longestTimeForContact);
+
+            mShortestContactViewValue.setText(shortestTimeForContact);
+            mLongestContactViewValue.setText(longestTimeForContact);
+
+            int shortestFieldsVisibility = shortestTimeForContact.isEmpty() ? View.GONE : View.VISIBLE;
+            mShortestContactViewLabel.setVisibility(shortestFieldsVisibility);
+            mShortestContactViewValue.setVisibility(shortestFieldsVisibility);
+
+            int longestFieldsVisibility = longestTimeForContact.isEmpty() ? View.GONE : View.VISIBLE;
+            mLongestContactViewLabel.setVisibility(longestFieldsVisibility);
+            mLongestContactViewValue.setVisibility(longestFieldsVisibility);
         }
     }
 
