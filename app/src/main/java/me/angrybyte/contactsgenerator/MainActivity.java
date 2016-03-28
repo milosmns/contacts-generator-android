@@ -3,9 +3,11 @@ package me.angrybyte.contactsgenerator;
 
 import android.Manifest;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -39,9 +41,14 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private static final int PERMISSIONS_WRITE_REQUEST_CODE = 0;
     private static final int PERMISSIONS_READ_REQUEST_CODE = 1;
 
+    private static final String PERSISTENT_NUMBER_OF_REQUESTS = "number";
+    private static final String PERSISTENT_GENDER = "gender";
+    private static final String PERSISTENT_USAGE_OF_PHOTOS = "use_photos";
+
     private CheckBox mUseAvatars;
     private RadioButton mMales;
     private RadioButton mFemales;
+    private RadioButton mBothGenders;
     private AlertDialog mAboutDialog;
     private ActualNumberPicker mPicker;
 
@@ -62,11 +69,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         mMales = (RadioButton) findViewById(R.id.activity_main_gender_male);
         mFemales = (RadioButton) findViewById(R.id.activity_main_gender_female);
         mUseAvatars = (CheckBox) findViewById(R.id.main_avatars_checkbox);
-        RadioButton bothGenders = (RadioButton) findViewById(R.id.activity_main_gender_both);
+        mBothGenders = (RadioButton) findViewById(R.id.activity_main_gender_both);
         findViewById(R.id.activity_main_button_generate).setOnClickListener(this);
 
         // hack-fix for the buggy RadioGroup
-        bothGenders.setChecked(true);
+        mBothGenders.setChecked(true);
     }
 
     @Override
@@ -76,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         Intent serviceIntent = new Intent(this, GeneratorService.class);
         bindService(serviceIntent, this, 0);
+
+        restoreUiState();
     }
 
     @Gender
@@ -96,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                     generateContacts();
                 } else {
-                    ActivityCompat.requestPermissions(this, new String[] {
-                        Manifest.permission.WRITE_CONTACTS
+                    ActivityCompat.requestPermissions(this, new String[]{
+                            Manifest.permission.WRITE_CONTACTS
                     }, PERMISSIONS_WRITE_REQUEST_CODE);
                 }
                 break;
@@ -183,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "Stopping " + TAG + "...");
+        saveUiState();
         unbindService(this);
     }
 
@@ -237,4 +247,38 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             }
         }
     }
+
+    private void restoreUiState() {
+        SharedPreferences sharedPreferences = getSharedPreferences(getApplicationInfo().name, Context.MODE_PRIVATE);
+        int requests = sharedPreferences.getInt(PERSISTENT_NUMBER_OF_REQUESTS, 1);
+        String gender = sharedPreferences.getString(PERSISTENT_GENDER, Operations.BOTH);
+        boolean usePhotos = sharedPreferences.getBoolean(PERSISTENT_USAGE_OF_PHOTOS, true);
+
+        mPicker.setValue(requests);
+        switch (gender) {
+            case Operations.BOTH:
+                mBothGenders.toggle();
+                break;
+            case Operations.MALE:
+                mMales.toggle();
+                break;
+            case Operations.FEMALE:
+                mFemales.toggle();
+                break;
+            default:
+                Log.w(TAG, "How?");
+        }
+
+        mUseAvatars.setChecked(usePhotos);
+    }
+
+    private void saveUiState() {
+        SharedPreferences sharedPreferences = getSharedPreferences(getApplicationInfo().name, Context.MODE_PRIVATE);
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putInt(PERSISTENT_NUMBER_OF_REQUESTS, mPicker.getValue());
+        preferencesEditor.putString(PERSISTENT_GENDER, getChosenGender());
+        preferencesEditor.putBoolean(PERSISTENT_USAGE_OF_PHOTOS, mUseAvatars.isChecked());
+        preferencesEditor.apply();
+    }
+
 }
