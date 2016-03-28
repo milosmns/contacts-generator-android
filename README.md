@@ -1,16 +1,21 @@
-# Contacts Generator for Android (WorkInProgress)
+# Contacts Generator for Android (Lorem Contacts)
 
-A simple contacts generating app (with images)
+A simple contacts generating app (with contact photos)
 
-Summary (what I want it to do in the end)
------------------------------------------
+Summary (what it can do right now)
+----------------------------------
 - Choose a number of contacts to generate
 - Choose whether to use contact photos or not
 - Work in background so you get a notification when it's done
 
-[ This will probably use uinames.com and/or randomuser.me as public APIs ]
+Google Play
+-----------
 
-*Note: API key stored in the **raw** folder is a public one. We keep the private one locally.
+You can check out the app at https://play.google.com/store/apps/details?id=me.angrybyte.contactsgenerator
+
+*We use randomuser.me, so big thanks to those guys!*
+
+*_Note_: API key stored in the **raw** folder is a public one. We keep the private one locally.
 When modifying the project, be sure to exclude that file either in your **local** version
 of the **.gitignore** file, or using the following **git** commands:*
 
