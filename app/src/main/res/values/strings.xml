@@ -1,7 +1,7 @@
 <resources>
 
     <!-- App strings -->
-    <string name="app_name">Contacts Generator</string>
+    <string name="app_name">Lorem Contacts</string>
     <string name="action_rate">Rate this app</string>
     <string name="action_info">About this app</string>
     <string name="how_many_contacts">How many contacts do you want generated?</string>
@@ -43,7 +43,7 @@
     <string name="stat_average_time">Contact average time</string>
     <string name="stat_longest_contact">Slowest generation</string>
     <string name="stat_shortest_contacts">Quickest generation</string>
-    <string name="stat_check_device">Please check if you have a\nreliable Internet connection</string>
+    <string name="stat_check_device">Please verify that you have a\nreliable Internet connection</string>
 
     <!-- Descriptions -->
     <string name="desc_generate">Generate contacts</string>
