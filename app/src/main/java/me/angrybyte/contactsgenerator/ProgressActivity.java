@@ -20,6 +20,8 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import java.util.Locale;
+
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
@@ -58,6 +60,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     private TextView mContactDisplayNameView;
     private TextView mContactPhoneNumberView;
     private TextView mContactEmailView;
+    private TextView mCurrentCountView;
+    private TextView mCurrentPercentageView;
     private ImageView mContactPhotoView;
     private ProgressBar mProgressBar;
     private Button mStopButton;
@@ -93,6 +97,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mContactPhotoView = ((ImageView) findViewById(R.id.activity_progress_photo));
         mProgressBar = (ProgressBar) findViewById(R.id.activity_progress_progress_bar);
         mStopButton = (Button) findViewById(R.id.activity_progress_stop_service);
+        mCurrentCountView = (TextView) findViewById(R.id.activity_progress_count_progress);
+        mCurrentPercentageView = (TextView) findViewById(R.id.activity_progress_percentage_progress);
     }
 
     private void performInitialSetup() {
@@ -142,6 +148,9 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
             mContactDisplayNameView.setText(person.getDisplayName());
             mContactPhoneNumberView.setText(person.getPhone());
             mContactEmailView.setText(person.getEmail());
+            // noinspection ConstantConditions
+            mCurrentCountView.setText(String.format("%s/%s", iStep, mService.getStats().requested));
+            mCurrentPercentageView.setText(getCurrentPercentage(progress));
             if (person.getImage() != null) {
                 mContactPhotoView.setImageBitmap(person.getImage());
             } else {
@@ -151,6 +160,14 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         }
 
         mProgressBar.setProgress(iStep);
+    }
+
+    private String getCurrentPercentage(@FloatRange(from = 0.0f, to = 1.0f) float progress) {
+        Locale currentLocale = getResources().getConfiguration().locale;
+        String formatString = "%d%%";
+        int currentPercentage = (int) Math.floor(progress * 100);
+
+        return String.format(currentLocale, formatString, currentPercentage);
     }
 
     @Override

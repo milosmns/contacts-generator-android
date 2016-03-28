@@ -120,14 +120,34 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/activity_progress_progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:indeterminate="false" />
+            android:layout_marginRight="25dp">
+
+            <TextView
+                android:id="@+id/activity_progress_count_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="80/400" />
+
+            <TextView
+                android:id="@+id/activity_progress_percentage_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                tools:text="20%" />
+
+            <ProgressBar
+                android:id="@+id/activity_progress_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/activity_progress_count_progress"
+                android:indeterminate="false" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/activity_progress_stop_service"
