@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Large tablet -->
-<resources>
+<?xml version="1.0" encoding="utf-8"?><!-- Large tablet -->
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ContactsTheme.NumberPickerStyle" parent="Base.Theme.AppCompat">
         <item name="android:layout_height">100dp</item>
@@ -10,6 +9,21 @@
         <item name="bar_width">1.4dp</item>
         <item name="bars_count">30</item>
         <item name="text_size">22sp</item>
+    </style>
+
+    <style name="ContactsTheme.MainAppBarTheme" parent="Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:elevation" tools:ignore="NewApi">@dimen/spacing_small</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="theme">@style/ContactsTheme.WhiteOverflow</item>
+    </style>
+
+    <style name="ContactsTheme.WhiteOverflow">
+        <item name="android:textColorSecondary">@android:color/white</item>
     </style>
 
 </resources>

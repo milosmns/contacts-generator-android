@@ -1,8 +1,5 @@
 <resources>
 
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_big">28dp</dimen>
-
     <dimen name="activity_horizontal_margin">24dp</dimen>
     <dimen name="activity_vertical_margin">24dp</dimen>
 
