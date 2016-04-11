@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "me.angrybyte.contactsgenerator"
@@ -10,18 +10,24 @@ android {
 
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 6
-        versionName "1.5.1"
+        versionCode 7
+        versionName "1.5.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
+    dexOptions {
+        maxProcessCount 4
+    }
+
     buildTypes {
         release {
+            useProguard false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            useProguard false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
