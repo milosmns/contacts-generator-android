@@ -12,7 +12,7 @@
     <string name="generating">Generating contacts in the background…</string>
     <string name="service_label">Generator Service</string>
     <string name="service_desc">You really don\'t want to stop this.</string>
-    <string name="activity_progress_title">Generator</string>
+    <string name="activity_progress_title">Generating…</string>
     <string name="activity_stats_title">Statistics</string>
     <string name="progress_header">Added to your contact list</string>
     <string name="progress_name">Name</string>

@@ -17,10 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:elevation="8dp"
+            android:elevation="@dimen/spacing_small"
             android:minHeight="?attr/actionBarSize"
             android:visibility="visible"
             app:title="@string/app_name"
+            app:titleTextColor="@android:color/white"
             tools:ignore="UnusedAttribute" />
 
         <TextView
@@ -39,10 +40,10 @@
             android:id="@+id/main_number_picker"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             app:bar_color="?attr/colorAccent"
             app:bar_width="1.3dp"
             app:bars_count="26"

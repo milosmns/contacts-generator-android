@@ -8,6 +8,15 @@
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.ProgressActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        android:elevation="@dimen/spacing_small"
+        app:title="@string/activity_progress_title"
+        app:titleTextColor="@android:color/white"
+        tools:ignore="UnusedAttribute" />
+
     <TextSwitcher
         android:id="@+id/activity_progress_title"
         android:layout_width="wrap_content"

@@ -15,6 +15,7 @@
         android:elevation="8dp"
         android:minHeight="?attr/actionBarSize"
         app:title="@string/stat_title"
+        app:titleTextColor="@android:color/white"
         tools:ignore="UnusedAttribute" />
 
     <!-- Total requested and generated layout -->
