@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Phone - portrait -->
+<resources>
+
+    <style name="ContactsTheme.NumberPickerStyle" parent="Base.Theme.AppCompat">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_small</item>
+        <item name="android:layout_marginRight">@dimen/spacing_small</item>
+        <item name="bar_width">1.2dp</item>
+        <item name="bars_count">26</item>
+        <item name="text_size">18sp</item>
+    </style>
+
+</resources>
