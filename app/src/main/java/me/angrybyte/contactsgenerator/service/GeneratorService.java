@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.IntRange;
@@ -15,6 +16,7 @@ import android.util.Log;
 
 import me.angrybyte.contactsgenerator.ProgressActivity;
 import me.angrybyte.contactsgenerator.R;
+import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
@@ -34,6 +36,8 @@ public class GeneratorService extends Service implements ServiceApi {
     private OnGenerateProgressListener mProgressListener;
     private boolean mIsForceStopped;
     private boolean mIsGenerating;
+    private boolean mIsDeleting;
+    private AsyncTask<Void, Void, Void> mDeletionTask;
 
     @Override
     public void onCreate() {
@@ -47,6 +51,26 @@ public class GeneratorService extends Service implements ServiceApi {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "Starting " + TAG + " with intent " + String.valueOf(intent));
+
+        if (ServiceApi.DELETE_CONTACTS_ACTION.equals(intent.getAction())) {
+            mIsDeleting = true;
+            mDeletionTask = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    ContactOperations contacts = new ContactOperations(GeneratorService.this);
+                    contacts.deleteContacts("example.com");
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    super.onPostExecute(aVoid);
+                    mIsDeleting = false;
+                    GeneratorService.this.stopSelf();
+                }
+            }.execute();
+        }
+
         return START_NOT_STICKY;
     }
 
@@ -61,6 +85,9 @@ public class GeneratorService extends Service implements ServiceApi {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Destroying " + TAG + "...");
+        if (mDeletionTask != null) {
+            mDeletionTask.cancel(true);
+        }
         mStats = null;
         mBinder = null;
         mHandler.removeCallbacksAndMessages(null);
@@ -181,6 +208,11 @@ public class GeneratorService extends Service implements ServiceApi {
     @Override
     public GeneratorStats getStats() {
         return mStats;
+    }
+
+    @Override
+    public boolean isDeleting() {
+        return mIsDeleting;
     }
 
 }

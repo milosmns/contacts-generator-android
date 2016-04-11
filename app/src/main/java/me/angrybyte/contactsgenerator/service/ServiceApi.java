@@ -19,6 +19,8 @@ import me.angrybyte.contactsgenerator.parser.data.Person;
  */
 public interface ServiceApi {
 
+    String DELETE_CONTACTS_ACTION = "delete";
+
     /**
      * Checks whether the service is initialized.
      *
@@ -80,4 +82,8 @@ public interface ServiceApi {
     @Nullable
     GeneratorStats getStats();
 
+    /**
+     * @return {@code true} if the service is currently deleting contacts, {@code false} otherwise
+     */
+    boolean isDeleting();
 }

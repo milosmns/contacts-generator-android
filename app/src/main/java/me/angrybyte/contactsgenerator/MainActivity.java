@@ -2,6 +2,8 @@
 package me.angrybyte.contactsgenerator;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private RadioButton mBothGenders;
     private AlertDialog mAboutDialog;
     private ActualNumberPicker mPicker;
+    private Dialog mConfirmationDialog;
+    private ProgressDialog mProgressDialog;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +125,13 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         startService(generatorServiceIntent);
     }
 
+    @RequiresPermission(Manifest.permission.READ_CONTACTS)
+    private void deleteGeneratedContacts() {
+        Intent deleteIntent = new Intent(MainActivity.this, GeneratorService.class);
+        deleteIntent.setAction(ServiceApi.DELETE_CONTACTS_ACTION);
+        MainActivity.this.startService(deleteIntent);
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
@@ -137,6 +149,33 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 builder.setNegativeButton(R.string.developer_dont_care, this);
                 builder.setNeutralButton(R.string.developer_github, this);
                 mAboutDialog = builder.show();
+                return true;
+            }
+            case R.id.action_delete_generated: {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.delete_confirmation_title);
+                builder.setMessage(R.string.delete_confirmation_message);
+                builder.setNegativeButton(R.string.delete_confirmation_negative_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setPositiveButton(R.string.delete_confirmation_positive_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                            deleteGeneratedContacts();
+                        } else {
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                                    Manifest.permission.READ_CONTACTS
+                            }, PERMISSIONS_READ_REQUEST_CODE);
+                        }
+                    }
+                });
+
+                mConfirmationDialog = builder.show();
+
                 return true;
             }
         }
@@ -189,6 +228,13 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        dismissConfirmationPrompt();
+        dismissProgressDialog();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "Stopping " + TAG + "...");
@@ -208,7 +254,13 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         ServiceApi serviceApi = ((GeneratorServiceBinder) binder).getService();
         Intent nextActivityIntent;
-        if (serviceApi.getStats() == null) {
+        if (serviceApi.isDeleting()) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.delete_progress_message));
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+            return;
+        } else if (serviceApi.getStats() == null) {
             Log.d(TAG, "Stats object is null, means generating hasn't started yet");
             nextActivityIntent = new Intent(this, ProgressActivity.class);
             nextActivityIntent.putExtra(ProgressActivity.KEY_NUMBER, mPicker.getValue());
@@ -229,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public void onServiceDisconnected(ComponentName name) {
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
+        dismissProgressDialog();
     }
 
     @Override
@@ -245,6 +298,17 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
                 break;
             }
+            case PERMISSIONS_READ_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // noinspection MissingPermission | We just checked?!
+                    deleteGeneratedContacts();
+                } else {
+                    Toast.makeText(this, R.string.permission_denied_cheeky, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            default:
+                Log.d(TAG, "Random permission request code. Ignore.");
         }
     }
 
@@ -281,4 +345,17 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         preferencesEditor.apply();
     }
 
+    private void dismissConfirmationPrompt() {
+        if (mConfirmationDialog != null && mConfirmationDialog.isShowing()) {
+            mConfirmationDialog.dismiss();
+            mConfirmationDialog = null;
+        }
+    }
+
+    private void dismissProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+            mProgressDialog = null;
+        }
+    }
 }

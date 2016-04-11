@@ -20,6 +20,7 @@
     <string name="progress_email">Email</string>
     <string name="progress_stop">Stop</string>
     <string name="permission_denied_wow">Wow, really?</string>
+    <string name="permission_denied_cheeky">Phew, close call!</string>
     <string name="waiting">Please wait…</string>
 
     <!-- Developer notes -->
@@ -50,5 +51,13 @@
     <string name="desc_ic_name">Person\'s name</string>
     <string name="desc_ic_phone">Person\'s phone</string>
     <string name="desc_ic_email">Person\'s email</string>
+
+    <!-- Deletion strings -->
+    <string name="delete_menu_generated_contacts">Delete generated contacts</string>
+    <string name="delete_confirmation_title">Warning</string>
+    <string name="delete_confirmation_message">Once this action is started, it cannot be canceled nor undone.</string>
+    <string name="delete_confirmation_positive_button">Delete</string>
+    <string name="delete_confirmation_negative_button">Cancel</string>
+    <string name="delete_progress_message">Deleting…</string>
 
 </resources>
