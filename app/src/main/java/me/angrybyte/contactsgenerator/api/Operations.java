@@ -36,7 +36,7 @@ import me.angrybyte.contactsgenerator.parser.json.JsonParser;
 public class Operations {
 
     private static final String TAG = Operations.class.getSimpleName();
-    private static final String URL_TEMPLATE = "http://api.randomuser.me/?results=%s&gender=%s&key=%s";
+    private static final String URL_TEMPLATE = "http://api.randomuser.me/1.0/?results=%s&gender=%s&key=%s";
     private static final int MAX_RESULTS = 1000;
 
     // defined as constants in Genders.java

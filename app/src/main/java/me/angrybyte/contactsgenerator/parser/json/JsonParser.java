@@ -89,12 +89,10 @@ public class JsonParser {
     /**
      * Parses the "user" field found in the JSON response. You can expand this method, alongside the {@link Person} class to get more data.
      *
-     * @param jsonResult The result of the query previously parsed by {@link com.google.gson.JsonParser}
+     * @param jsonUser The result of the query previously parsed by {@link com.google.gson.JsonParser}
      * @return A {@link Person} object filled with the data from #jsonResult
      */
-    private Person parsePerson(JsonObject jsonResult) {
-        JsonObject jsonUser = jsonResult.getAsJsonObject(JsonConstants.USER);
-
+    private Person parsePerson(JsonObject jsonUser) {
         Person person = new Person();
         String gender = uppercaseFirstLetter(jsonUser.get(JsonConstants.GENDER).getAsString());
         person.setGender(gender);
