@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private ActualNumberPicker mPicker;
     private Dialog mConfirmationDialog;
     private ProgressDialog mProgressDialog;
+    private boolean mServiceDisconnected;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -123,6 +124,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private void generateContacts() {
         Intent generatorServiceIntent = new Intent(this, GeneratorService.class);
         startService(generatorServiceIntent);
+
+        if (mServiceDisconnected) {
+            bindService(generatorServiceIntent, this, 0);
+        }
     }
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
@@ -130,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         Intent deleteIntent = new Intent(MainActivity.this, GeneratorService.class);
         deleteIntent.setAction(ServiceApi.DELETE_CONTACTS_ACTION);
         MainActivity.this.startService(deleteIntent);
+
+        if (mServiceDisconnected) {
+            bindService(deleteIntent, this, 0);
+        }
     }
 
     @Override
@@ -141,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
             }
             case R.id.action_info: {
                 closeAboutDialog();
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.ContactsTheme_AlertDialog);
                 builder.setCancelable(false);
                 builder.setTitle(R.string.developer_about);
                 builder.setMessage(R.string.developer_note);
@@ -152,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 return true;
             }
             case R.id.action_delete_generated: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.ContactsTheme_AlertDialog);
                 builder.setTitle(R.string.delete_confirmation_title);
                 builder.setMessage(R.string.delete_confirmation_message);
                 builder.setNegativeButton(R.string.delete_confirmation_negative_button, new DialogInterface.OnClickListener() {
@@ -251,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public void onServiceConnected(ComponentName name, IBinder binder) {
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
+        mServiceDisconnected = false;
 
         ServiceApi serviceApi = ((GeneratorServiceBinder) binder).getService();
         Intent nextActivityIntent;
@@ -281,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public void onServiceDisconnected(ComponentName name) {
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
+        mServiceDisconnected = true;
         dismissProgressDialog();
     }
 
