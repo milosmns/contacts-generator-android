@@ -1,14 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><!-- 7" Tablet - landscape -->
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="ContactsTheme.NumberPickerStyle" parent="Base.Theme.AppCompat">
-        <item name="android:layout_height">100dp</item>
+    <!-- 7" Tablet - landscape -->
+
+    <style name="ContactsTheme.NumberPickerContainerStyle">
         <item name="android:layout_marginBottom">20dp</item>
+    </style>
+
+    <style name="ContactsTheme.NumberPickerStyle">
+        <item name="android:layout_height">100dp</item>
         <item name="android:layout_marginLeft">@dimen/spacing_huge</item>
         <item name="android:layout_marginRight">@dimen/spacing_huge</item>
         <item name="bar_width">1.4dp</item>
         <item name="bars_count">42</item>
         <item name="text_size">22sp</item>
+    </style>
+
+    <style name="ContactsTheme.IncDecButtonStyle">
+        <item name="android:visibility">visible</item>
     </style>
 
     <style name="ContactsTheme.MainAppBarTheme" parent="Widget.AppCompat.Toolbar">

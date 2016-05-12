@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -35,8 +36,8 @@ import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
 
-public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection,
-        AlertDialog.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection, AlertDialog.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -47,14 +48,16 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private static final String PERSISTENT_GENDER = "gender";
     private static final String PERSISTENT_USAGE_OF_PHOTOS = "use_photos";
 
+    private Dialog mConfirmationDialog;
     private CheckBox mUseAvatars;
+    private AlertDialog mAboutDialog;
     private RadioButton mMales;
     private RadioButton mFemales;
     private RadioButton mBothGenders;
-    private AlertDialog mAboutDialog;
-    private ActualNumberPicker mPicker;
-    private Dialog mConfirmationDialog;
+    private ImageButton mIncrement;
+    private ImageButton mDecrement;
     private ProgressDialog mProgressDialog;
+    private ActualNumberPicker mPicker;
     private boolean mServiceDisconnected;
 
     @SuppressWarnings("ConstantConditions")
@@ -72,11 +75,16 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         // initialize views
         mPicker = (ActualNumberPicker) findViewById(R.id.main_number_picker);
-        mMales = (RadioButton) findViewById(R.id.activity_main_gender_male);
-        mFemales = (RadioButton) findViewById(R.id.activity_main_gender_female);
+        mMales = (RadioButton) findViewById(R.id.main_gender_male);
+        mFemales = (RadioButton) findViewById(R.id.main_gender_female);
         mUseAvatars = (CheckBox) findViewById(R.id.main_avatars_checkbox);
-        mBothGenders = (RadioButton) findViewById(R.id.activity_main_gender_both);
-        findViewById(R.id.activity_main_button_generate).setOnClickListener(this);
+        mBothGenders = (RadioButton) findViewById(R.id.main_gender_both);
+        mIncrement = (ImageButton) findViewById(R.id.main_button_increment);
+        mDecrement = (ImageButton) findViewById(R.id.main_button_decrement);
+
+        findViewById(R.id.main_button_generate).setOnClickListener(this);
+        mIncrement.setOnClickListener(this);
+        mDecrement.setOnClickListener(this);
 
         // hack-fix for the buggy RadioGroup
         mBothGenders.setChecked(true);
@@ -107,14 +115,26 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.activity_main_button_generate: {
+            case R.id.main_button_generate: {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                     generateContacts();
                 } else {
-                    ActivityCompat.requestPermissions(this, new String[]{
+                    ActivityCompat.requestPermissions(this, new String[] {
                             Manifest.permission.WRITE_CONTACTS
                     }, PERMISSIONS_WRITE_REQUEST_CODE);
                 }
+                break;
+            }
+            case R.id.main_button_increment: {
+                mPicker.setValue(mPicker.getValue() + 1);
+                // not invalidating automatically to prevent a catastrophic number of invalidations in a single frame
+                mPicker.invalidate();
+                break;
+            }
+            case R.id.main_button_decrement: {
+                mPicker.setValue(mPicker.getValue() - 1);
+                // not invalidating automatically to prevent a catastrophic number of invalidations in a single frame
+                mPicker.invalidate();
                 break;
             }
         }
@@ -173,10 +193,11 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 builder.setPositiveButton(R.string.delete_confirmation_positive_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                             deleteGeneratedContacts();
                         } else {
-                            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                            ActivityCompat.requestPermissions(MainActivity.this, new String[] {
                                     Manifest.permission.READ_CONTACTS
                             }, PERMISSIONS_READ_REQUEST_CODE);
                         }

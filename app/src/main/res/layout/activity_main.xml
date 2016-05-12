@@ -35,22 +35,58 @@
                 android:text="@string/how_many_contacts"
                 android:textSize="24sp" />
 
-            <me.angrybyte.numberpicker.view.ActualNumberPicker
-                android:id="@+id/main_number_picker"
-                style="@style/ContactsTheme.NumberPickerStyle"
-                android:layout_width="match_parent"
+            <LinearLayout
+                style="@style/ContactsTheme.NumberPickerContainerStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:bar_color="?attr/colorAccent"
-                app:draw_over_text="false"
-                app:max_value="1000"
-                app:min_value="1"
-                app:show_bars="true"
-                app:show_controls="false"
-                app:show_fast_controls="false"
-                app:show_highlight="false"
-                app:show_text="true"
-                app:text_color="?attr/colorAccent"
-                app:value="1" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/main_button_decrement"
+                    style="@style/ContactsTheme.IncDecButtonStyle"
+                    android:layout_width="@dimen/action_button_size"
+                    android:layout_height="@dimen/action_button_size"
+                    android:layout_marginLeft="@dimen/spacing_micro"
+                    android:layout_marginStart="@dimen/spacing_micro"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/desc_ic_minus"
+                    android:padding="@dimen/spacing_normal"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_decrement" />
+
+                <me.angrybyte.numberpicker.view.ActualNumberPicker
+                    android:id="@+id/main_number_picker"
+                    style="@style/ContactsTheme.NumberPickerStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    app:bar_color="?attr/colorAccent"
+                    app:draw_over_text="false"
+                    app:max_value="8000"
+                    app:min_value="1"
+                    app:show_bars="true"
+                    app:show_controls="false"
+                    app:show_fast_controls="false"
+                    app:show_highlight="false"
+                    app:show_text="true"
+                    app:text_color="?attr/colorAccent"
+                    app:value="500" />
+
+                <ImageButton
+                    android:id="@+id/main_button_increment"
+                    style="@style/ContactsTheme.IncDecButtonStyle"
+                    android:layout_width="@dimen/action_button_size"
+                    android:layout_height="@dimen/action_button_size"
+                    android:layout_marginEnd="@dimen/spacing_micro"
+                    android:layout_marginRight="@dimen/spacing_micro"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/desc_ic_plus"
+                    android:padding="@dimen/spacing_normal"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_increment" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,14 +111,14 @@
                     android:orientation="vertical">
 
                     <RadioButton
-                        android:id="@+id/activity_main_gender_male"
+                        android:id="@+id/main_gender_male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/all_males"
                         android:textSize="18sp" />
 
                     <RadioButton
-                        android:id="@+id/activity_main_gender_female"
+                        android:id="@+id/main_gender_female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/all_females"
@@ -90,21 +126,19 @@
 
                     <!-- checked by default, but from code - XML didn't work.. -->
                     <RadioButton
-                        android:id="@+id/activity_main_gender_both"
+                        android:id="@+id/main_gender_both"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/do_not_care"
                         android:textSize="18sp" />
+                    
                 </RadioGroup>
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
     <ImageButton
-        android:id="@+id/activity_main_button_generate"
+        android:id="@+id/main_button_generate"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="bottom|end"

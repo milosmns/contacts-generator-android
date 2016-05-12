@@ -51,6 +51,8 @@
     <string name="desc_ic_name">Person\'s name</string>
     <string name="desc_ic_phone">Person\'s phone</string>
     <string name="desc_ic_email">Person\'s email</string>
+    <string name="desc_ic_plus">Increment</string>
+    <string name="desc_ic_minus">Decrement</string>
 
     <!-- Deletion strings -->
     <string name="delete_menu_generated_contacts">Delete generated contacts</string>
