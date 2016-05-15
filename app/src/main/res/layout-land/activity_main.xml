@@ -7,26 +7,30 @@
     android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:baselineAligned="false"
+        android:gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="?attr/actionBarSize">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="top|center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_normal"
+            android:paddingRight="@dimen/spacing_normal">
 
             <TextView
                 android:id="@+id/main_contacts_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="20dp"
                 android:gravity="center"
-                android:maxWidth="300dp"
-                android:padding="@dimen/activity_horizontal_margin"
+                android:maxWidth="280dp"
                 android:text="@string/how_many_contacts"
                 android:textSize="24sp" />
 
@@ -34,7 +38,6 @@
                 style="@style/ContactsTheme.NumberPickerContainerStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -83,54 +86,57 @@
 
             </LinearLayout>
 
-            <LinearLayout
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/spacing_normal"
+            android:paddingRight="@dimen/spacing_normal">
+
+            <CheckBox
+                android:id="@+id/main_avatars_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="top|start"
-                android:orientation="vertical"
-                android:paddingBottom="?attr/actionBarSize">
+                android:layout_marginBottom="20dp"
+                android:checked="true"
+                android:text="@string/want_avatars"
+                android:textSize="18sp" />
 
-                <CheckBox
-                    android:id="@+id/main_avatars_checkbox"
+            <RadioGroup android:id="@+id/main_genders"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/main_gender_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:checked="true"
-                    android:text="@string/want_avatars"
+                    android:text="@string/all_males"
                     android:textSize="18sp" />
 
-                <RadioGroup android:id="@+id/main_genders"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <RadioButton
+                    android:id="@+id/main_gender_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:text="@string/all_females"
+                    android:textSize="18sp" />
 
-                    <RadioButton
-                        android:id="@+id/main_gender_male"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/all_males"
-                        android:textSize="18sp" />
+                <!-- checked by default, but from code - XML didn't work.. -->
+                <RadioButton
+                    android:id="@+id/main_gender_both"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/do_not_care"
+                    android:textSize="18sp" />
 
-                    <RadioButton
-                        android:id="@+id/main_gender_female"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/all_females"
-                        android:textSize="18sp" />
-
-                    <!-- checked by default, but from code - XML didn't work.. -->
-                    <RadioButton
-                        android:id="@+id/main_gender_both"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/do_not_care"
-                        android:textSize="18sp" />
-
-                </RadioGroup>
-            </LinearLayout>
+            </RadioGroup>
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/main_toolbar"
@@ -138,19 +144,26 @@
         android:layout_gravity="center_horizontal|top"
         app:title="@string/app_name" />
 
-    <ImageButton
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
         android:id="@+id/main_button_generate"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom|end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:background="@drawable/circle_states"
+        android:backgroundTint="@color/primary"
+        android:backgroundTintMode="src_atop"
         android:contentDescription="@string/desc_generate"
-        android:elevation="8dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_generate"
+        android:drawableTint="@color/accent"
+        android:drawableTintMode="src_atop"
+        android:minWidth="150dp"
+        android:text="@string/generate"
+        android:textColor="@color/stop_text"
         tools:ignore="UnusedAttribute" />
 
 </FrameLayout>
