@@ -8,6 +8,7 @@
     <dimen name="stats_activity_small_text_size">14sp</dimen>
 
     <dimen name="action_button_size">48dp</dimen>
+    <dimen name="big_app_bar_size">146dp</dimen>
 
     <dimen name="spacing_nano">2dp</dimen>
     <dimen name="spacing_micro">4dp</dimen>
@@ -15,5 +16,11 @@
     <dimen name="spacing_normal">12dp</dimen>
     <dimen name="spacing_large">16dp</dimen>
     <dimen name="spacing_huge">22dp</dimen>
+
+    <dimen name="text_size_small">11sp</dimen>
+    <dimen name="text_size_normal">14sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_huge">22sp</dimen>
+    <dimen name="text_size_crazy">26sp</dimen>
 
 </resources>

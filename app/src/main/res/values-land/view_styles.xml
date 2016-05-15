@@ -4,13 +4,13 @@
     <!-- Phone - landscape -->
 
     <style name="ContactsTheme.NumberPickerContainerStyle">
-        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
     </style>
 
     <style name="ContactsTheme.NumberPickerStyle">
         <item name="android:layout_height">80dp</item>
-        <item name="android:layout_marginLeft">@dimen/spacing_normal</item>
-        <item name="android:layout_marginRight">@dimen/spacing_normal</item>
+        <item name="android:layout_marginLeft">@dimen/spacing_small</item>
+        <item name="android:layout_marginRight">@dimen/spacing_small</item>
         <item name="bar_width">1.2dp</item>
         <item name="bars_count">40</item>
         <item name="text_size">18sp</item>
@@ -26,13 +26,19 @@
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="android:elevation" tools:ignore="NewApi">@dimen/spacing_small</item>
-        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:gravity">center</item>
         <item name="titleTextColor">@android:color/white</item>
         <item name="theme">@style/ContactsTheme.WhiteOverflow</item>
+        <item name="titleTextAppearance">@style/ContactsTheme.MainAppBarTheme.TitleText</item>
     </style>
 
     <style name="ContactsTheme.WhiteOverflow">
+        <item name="android:textSize">@dimen/text_size_huge</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+    </style>
+
+    <style name="ContactsTheme.MainAppBarTheme.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">@dimen/text_size_huge</item>
     </style>
 
 </resources>
