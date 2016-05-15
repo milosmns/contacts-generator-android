@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -54,8 +53,6 @@ public class MainActivity extends AppCompatActivity
     private RadioButton mMales;
     private RadioButton mFemales;
     private RadioButton mBothGenders;
-    private ImageButton mIncrement;
-    private ImageButton mDecrement;
     private ProgressDialog mProgressDialog;
     private ActualNumberPicker mPicker;
     private boolean mServiceDisconnected;
@@ -79,12 +76,10 @@ public class MainActivity extends AppCompatActivity
         mFemales = (RadioButton) findViewById(R.id.main_gender_female);
         mUseAvatars = (CheckBox) findViewById(R.id.main_avatars_checkbox);
         mBothGenders = (RadioButton) findViewById(R.id.main_gender_both);
-        mIncrement = (ImageButton) findViewById(R.id.main_button_increment);
-        mDecrement = (ImageButton) findViewById(R.id.main_button_decrement);
 
         findViewById(R.id.main_button_generate).setOnClickListener(this);
-        mIncrement.setOnClickListener(this);
-        mDecrement.setOnClickListener(this);
+        findViewById(R.id.main_button_increment).setOnClickListener(this);
+        findViewById(R.id.main_button_decrement).setOnClickListener(this);
 
         // hack-fix for the buggy RadioGroup
         mBothGenders.setChecked(true);
