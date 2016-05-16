@@ -75,6 +75,8 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
                     GeneratorService.this.stopSelf();
                 }
             }.execute();
+        } else if (STOP_GENERATING_ACTION.equals(intent.getAction())) {
+            stopGenerating();
         }
 
         return START_NOT_STICKY;
@@ -111,7 +113,13 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         mBuilder.setContentTitle(getString(R.string.app_name));
         mBuilder.setContentText(getString(R.string.generating));
         mBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
-        mBuilder.setProgress(mHowMany, 0, false);
+        mBuilder.setProgress(mHowMany, 0, true);
+
+        Intent stopIntent = new Intent(this, GeneratorService.class);
+        stopIntent.setAction(ServiceApi.STOP_GENERATING_ACTION);
+        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action action = new NotificationCompat.Action(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.progress_stop), stopPendingIntent);
+        mBuilder.addAction(action);
 
         Intent resultIntent = new Intent(this, ProgressActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -20,6 +20,7 @@ import me.angrybyte.contactsgenerator.parser.data.Person;
 public interface ServiceApi {
 
     String DELETE_CONTACTS_ACTION = "delete";
+    String STOP_GENERATING_ACTION = "stop";
 
     /**
      * Checks whether the service is initialized.

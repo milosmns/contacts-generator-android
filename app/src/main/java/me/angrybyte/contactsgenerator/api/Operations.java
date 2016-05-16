@@ -37,7 +37,7 @@ public class Operations {
 
     private static final String TAG = Operations.class.getSimpleName();
     private static final String URL_TEMPLATE = "http://api.randomuser.me/1.0/?results=%s&gender=%s&key=%s";
-    private static final int MAX_RESULTS = 1000;
+    private static final int MAX_RESULTS = 8000;
 
     // defined as constants in Genders.java
     public static final String MALE = "male";
