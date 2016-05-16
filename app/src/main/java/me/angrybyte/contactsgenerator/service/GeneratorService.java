@@ -9,10 +9,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import java.util.Locale;
 
 import me.angrybyte.contactsgenerator.ProgressActivity;
 import me.angrybyte.contactsgenerator.R;
@@ -21,7 +25,7 @@ import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
 
-public class GeneratorService extends Service implements ServiceApi {
+public class GeneratorService extends Service implements ServiceApi, OnGenerateProgressListener, OnGenerateResultListener {
 
     public static final String TAG = GeneratorService.class.getSimpleName();
     public static final int NOTIFICATION_ID = 1475369;
@@ -31,13 +35,15 @@ public class GeneratorService extends Service implements ServiceApi {
     private GeneratorStats mStats;
     private GeneratorThread mGenerator;
     private NotificationManager mNotificationManager;
+    private NotificationCompat.Builder mBuilder;
     private GeneratorServiceBinder mBinder;
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
+    private AsyncTask<Void, Void, Void> mDeletionTask;
     private boolean mIsForceStopped;
     private boolean mIsGenerating;
     private boolean mIsDeleting;
-    private AsyncTask<Void, Void, Void> mDeletionTask;
+    private int mHowMany;
 
     @Override
     public void onCreate() {
@@ -99,17 +105,18 @@ public class GeneratorService extends Service implements ServiceApi {
     }
 
     private void showNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setCategory(NotificationCompat.CATEGORY_SERVICE);
-        builder.setSmallIcon(R.drawable.ic_stat_generator);
-        builder.setContentTitle(getString(R.string.app_name));
-        builder.setContentText(getString(R.string.generating));
-        builder.setPriority(NotificationCompat.PRIORITY_LOW);
+        mBuilder = new NotificationCompat.Builder(this);
+        mBuilder.setCategory(NotificationCompat.CATEGORY_SERVICE);
+        mBuilder.setSmallIcon(R.drawable.ic_stat_generator);
+        mBuilder.setContentTitle(getString(R.string.app_name));
+        mBuilder.setContentText(getString(R.string.generating));
+        mBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
+        mBuilder.setProgress(mHowMany, 0, false);
 
         Intent resultIntent = new Intent(this, ProgressActivity.class);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+        mBuilder.setContentIntent(resultPendingIntent);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
 
     private void hideNotification() {
@@ -160,7 +167,8 @@ public class GeneratorService extends Service implements ServiceApi {
         String format = "Starting generate sequence. Generating %s, gender: %s, with photos: %s";
         Log.i(TAG, String.format(format, howMany, gender, withPhotos));
 
-        mGenerator = new GeneratorThread(mHandler, mProgressListener, mResultListener, this, howMany, withPhotos, gender);
+        mHowMany = howMany;
+        mGenerator = new GeneratorThread(mHandler, this, this, this, howMany, withPhotos, gender);
         mStats = mGenerator.getStats();
         mIsGenerating = true;
         showNotification();
@@ -215,4 +223,29 @@ public class GeneratorService extends Service implements ServiceApi {
         return mIsDeleting;
     }
 
+    @Override
+    public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress, @IntRange(from = 0) int iStep, @IntRange(from = 0) int generated) {
+        mBuilder.setProgress(mHowMany, iStep, false);
+        mBuilder.setContentInfo(getCurrentPercentage(progress));
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+        if (mProgressListener != null) {
+            mProgressListener.onGenerateProgress(progress, iStep, generated);
+        }
+    }
+
+    @Override
+    public void onGenerateResult(@NonNull GeneratorStats stats, boolean forced) {
+        if (mResultListener != null) {
+            mResultListener.onGenerateResult(stats, forced);
+        }
+    }
+
+    private String getCurrentPercentage(@FloatRange(from = 0.0f, to = 1.0f) float progress) {
+        Locale currentLocale = getResources().getConfiguration().locale;
+        String formatString = "%d%%";
+        int currentPercentage = (int) Math.floor(progress * 100);
+
+        return String.format(currentLocale, formatString, currentPercentage);
+    }
 }
