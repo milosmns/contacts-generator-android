@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:animateLayoutChanges="true"
         android:gravity="top|center_horizontal"
         android:orientation="vertical">
 
@@ -20,16 +21,18 @@
             android:id="@+id/activity_progress_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:text="@string/waiting"
-            android:textSize="@dimen/text_size_huge" />
+            android:textSize="@dimen/text_size_large" />
 
         <LinearLayout
             android:id="@+id/activity_progress_contact_info_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.pkmmte.view.CircularImageView
                 android:id="@+id/activity_progress_photo"
@@ -130,31 +133,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/spacing_large"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/spacing_huge"
-        android:paddingRight="@dimen/spacing_huge">
-
-        <Button
-            android:id="@+id/activity_progress_stop_service"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/accent"
-            android:backgroundTintMode="src_atop"
-            android:drawableTint="@color/accent"
-            android:drawableTintMode="src_atop"
-            android:minWidth="150dp"
-            android:text="@string/progress_stop"
-            android:textColor="@color/stop_text"
-            tools:ignore="UnusedAttribute" />
-
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -177,27 +155,49 @@
             android:background="?attr/colorPrimary"
             android:indeterminate="false"
             android:progress="0"
-            tools:progress="30" />
+            android:visibility="gone"
+            tools:progress="30"
+            tools:visibility="visible" />
 
     </FrameLayout>
 
-    <!-- Unused views in this mode -->
+    <Button
+        android:id="@+id/activity_progress_stop_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="@dimen/spacing_large"
+        android:backgroundTint="@color/accent"
+        android:backgroundTintMode="src_atop"
+        android:drawableTint="@color/accent"
+        android:drawableTintMode="src_atop"
+        android:minWidth="150dp"
+        android:text="@string/progress_stop"
+        android:textColor="@color/stop_text"
+        tools:ignore="UnusedAttribute" />
+
+    <!-- Unused views for this device size, they stay below the Toolbar -->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_gravity="top|center_horizontal"
+        android:elevation="0dp"
+        android:visibility="visible"
+        tools:ignore="UnusedAttribute">
 
         <TextView
             android:id="@+id/activity_progress_count_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="80/400" />
 
         <TextView
             android:id="@+id/activity_progress_percentage_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             tools:text="20%" />
     </FrameLayout>
 

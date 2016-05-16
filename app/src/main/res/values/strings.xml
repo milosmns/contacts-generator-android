@@ -23,6 +23,7 @@
     <string name="permission_denied_wow">Wow, really?</string>
     <string name="permission_denied_cheeky">Phew, close call!</string>
     <string name="waiting">Please wait…</string>
+    <string name="progress_display_title">This is how well it is going</string>
 
     <!-- Developer notes -->
     <string name="developer_source">https://github.com/milosmns/contacts-generator-android</string>

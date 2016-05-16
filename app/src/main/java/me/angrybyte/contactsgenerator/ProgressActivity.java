@@ -56,18 +56,18 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
     private int mRequestedNumber;
 
     private ViewGroup mContactInfoView;
-    private TextSwitcher mActivityTitle;
+    private Button mStopButton;
     private TextView mContactDisplayNameView;
     private TextView mContactPhoneNumberView;
     private TextView mContactEmailView;
     private TextView mCurrentCountView;
     private TextView mCurrentPercentageView;
+    private TextView mProgressDisplayTitleView;
     private ImageView mContactPhotoView;
     private ProgressBar mProgressBar;
-    private Button mStopButton;
+    private TextSwitcher mActivityTitle;
 
     private String mHeader;
-    private long mAnimationLength;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,14 +99,13 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mStopButton = (Button) findViewById(R.id.activity_progress_stop_service);
         mCurrentCountView = (TextView) findViewById(R.id.activity_progress_count_progress);
         mCurrentPercentageView = (TextView) findViewById(R.id.activity_progress_percentage_progress);
+        // this one is available only for large screens
+        mProgressDisplayTitleView = (TextView) findViewById(R.id.activity_progress_display_progress_title);
     }
 
     private void performInitialSetup() {
-        mContactInfoView.setAlpha(0f);
         mProgressBar.setMax(mRequestedNumber);
-
         mHeader = getResources().getString(R.string.progress_header);
-        mAnimationLength = getAnimationDuration();
 
         mActivityTitle.setInAnimation(this, android.R.anim.fade_in);
         mActivityTitle.setOutAnimation(this, android.R.anim.fade_out);
@@ -115,9 +114,9 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         mActivityTitle.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
-                TextView holder = new TextView(ProgressActivity.this);
-                holder.setTextSize(26);
-                return holder;
+                TextView created = new TextView(ProgressActivity.this);
+                created.setTextSize(22); // yeah, nothing else works.. good job Android.
+                return created;
             }
         });
 
@@ -144,7 +143,6 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         Person person = mService.getLastGeneratedPerson();
         if (person != null) {
             mActivityTitle.setText(mHeader);
-            mContactInfoView.animate().setDuration(mAnimationLength).alpha(1f);
             mContactDisplayNameView.setText(person.getDisplayName());
             mContactPhoneNumberView.setText(person.getPhone());
             mContactEmailView.setText(person.getEmail());
@@ -157,6 +155,19 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
                 int drawable = AVATARS[(int) Math.round(Math.random() * AVATARS.length)];
                 mContactPhotoView.setImageResource(drawable);
             }
+        }
+
+        if (mProgressDisplayTitleView != null && mProgressDisplayTitleView.getVisibility() != View.VISIBLE) {
+            // text is not shown, show it now
+            mProgressDisplayTitleView.setVisibility(View.VISIBLE);
+        }
+
+        // initially views are hidden, so update visibilities only once here
+        if (mProgressBar.getVisibility() != View.VISIBLE) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            mContactInfoView.setVisibility(View.VISIBLE);
+            mCurrentCountView.setVisibility(View.VISIBLE);
+            mCurrentPercentageView.setVisibility(View.VISIBLE);
         }
 
         mProgressBar.setProgress(iStep);
@@ -186,10 +197,6 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
                 break;
             }
         }
-    }
-
-    private long getAnimationDuration() {
-        return getResources().getInteger(android.R.integer.config_mediumAnimTime);
     }
 
     @Override
