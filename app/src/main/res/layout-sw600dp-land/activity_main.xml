@@ -7,11 +7,29 @@
     android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        style="@style/ContactsTheme.MainAppBarTheme"
+        android:layout_height="@dimen/big_app_bar_size"
+        android:layout_gravity="center_horizontal|top"
+        app:title="">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="60dp"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_huge" />
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/spacing_huge"
-        android:layout_marginRight="@dimen/spacing_huge"
+        android:layout_marginLeft="@dimen/margin_material_wide"
+        android:layout_marginRight="@dimen/margin_material_wide"
         android:layout_marginTop="120dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="@dimen/spacing_normal">
@@ -149,32 +167,14 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/main_toolbar"
-        style="@style/ContactsTheme.MainAppBarTheme"
-        android:layout_height="@dimen/big_app_bar_size"
-        android:layout_gravity="center_horizontal|top"
-        app:title="">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginBottom="60dp"
-            android:text="@string/app_name"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_huge" />
-
-    </android.support.v7.widget.Toolbar>
-
     <ImageButton
         android:id="@+id/main_button_generate"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_gravity="top|end"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="110dp"
         android:background="@drawable/circle_states"
         android:contentDescription="@string/desc_generate"
         android:elevation="14dp"

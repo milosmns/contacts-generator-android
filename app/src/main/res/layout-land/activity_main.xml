@@ -10,11 +10,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_gravity="center"
         android:baselineAligned="false"
-        android:gravity="top|center_horizontal"
-        android:orientation="horizontal"
-        android:paddingTop="?attr/actionBarSize">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -145,17 +144,11 @@
         app:title="@string/app_name" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
         android:id="@+id/main_button_generate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:backgroundTint="@color/primary"
         android:backgroundTintMode="src_atop"
         android:contentDescription="@string/desc_generate"

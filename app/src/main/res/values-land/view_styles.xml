@@ -29,16 +29,10 @@
         <item name="android:gravity">center</item>
         <item name="titleTextColor">@android:color/white</item>
         <item name="theme">@style/ContactsTheme.WhiteOverflow</item>
-        <item name="titleTextAppearance">@style/ContactsTheme.MainAppBarTheme.TitleText</item>
     </style>
 
     <style name="ContactsTheme.WhiteOverflow">
-        <item name="android:textSize">@dimen/text_size_huge</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-    </style>
-
-    <style name="ContactsTheme.MainAppBarTheme.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">@dimen/text_size_huge</item>
     </style>
 
 </resources>
