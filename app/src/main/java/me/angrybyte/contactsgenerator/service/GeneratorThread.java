@@ -24,8 +24,6 @@ public class GeneratorThread extends Thread {
     private Handler mHandler;
     private GeneratorStats mStats;
     private GeneratorService mService;
-    private OnGenerateResultListener mResultListener;
-    private OnGenerateProgressListener mProgressListener;
     private long mTotalStartTime = System.currentTimeMillis();
     private boolean mWithPhotos = true;
     private boolean mLocalInterrupted = false;
@@ -33,8 +31,7 @@ public class GeneratorThread extends Thread {
     @Gender
     private String mGender;
 
-    public GeneratorThread(@NonNull Handler handler, @NonNull OnGenerateProgressListener progressListener,
-            @NonNull OnGenerateResultListener resultListener, @NonNull GeneratorService service, @IntRange(from = 0) int howMany,
+    public GeneratorThread(@NonNull Handler handler, @NonNull GeneratorService service, @IntRange(from = 0) int howMany,
             boolean withPhotos, @Gender String gender) {
         super();
         mStats = new GeneratorStats();
@@ -42,8 +39,6 @@ public class GeneratorThread extends Thread {
         setName(TAG);
 
         mHandler = handler;
-        mProgressListener = progressListener;
-        mResultListener = resultListener;
         mService = service;
 
         mWithPhotos = withPhotos;
@@ -128,9 +123,9 @@ public class GeneratorThread extends Thread {
                     mHandler.post(new Runnable() {
                         @Override
                         public void run() {
-                            if (mProgressListener != null) {
+                            if (mService != null) {
                                 float progressFraction = (float) (finalI + 1) / (float) listSize;
-                                mProgressListener.onGenerateProgress(progressFraction, finalI + 1, mStats.generated);
+                                mService.onGenerateProgress(progressFraction, finalI + 1, mStats.generated);
                             }
                         }
                     });
@@ -179,14 +174,6 @@ public class GeneratorThread extends Thread {
         }
     }
 
-    public void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener) {
-        mResultListener = listener;
-    }
-
-    public void setOnGenerateProgressListener(@Nullable OnGenerateProgressListener listener) {
-        mProgressListener = listener;
-    }
-
     public GeneratorStats getStats() {
         return mStats;
     }
@@ -212,8 +199,8 @@ public class GeneratorThread extends Thread {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (mResultListener != null) {
-                            mResultListener.onGenerateResult(mStats, forcedStop);
+                        if (mService != null) {
+                            mService.onGenerateResult(mStats, forcedStop);
                         }
                         if (mService != null) {
                             mService.onGeneratingFinished(forcedStop);
@@ -244,8 +231,6 @@ public class GeneratorThread extends Thread {
         Log.d(TAG, "Cleaning up " + TAG + "...");
         mHandler = null;
         mService = null;
-        mResultListener = null;
-        mProgressListener = null;
     }
 
 }

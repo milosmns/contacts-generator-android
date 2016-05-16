@@ -176,7 +176,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         Log.i(TAG, String.format(format, howMany, gender, withPhotos));
 
         mHowMany = howMany;
-        mGenerator = new GeneratorThread(mHandler, this, this, this, howMany, withPhotos, gender);
+        mGenerator = new GeneratorThread(mHandler, this, howMany, withPhotos, gender);
         mStats = mGenerator.getStats();
         mIsGenerating = true;
         showNotification();
@@ -194,17 +194,11 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     @Override
     public void setOnGenerateProgressListener(@Nullable OnGenerateProgressListener listener) {
         mProgressListener = listener;
-        if (mGenerator != null && !mGenerator.isInterrupted() && mGenerator.isAlive()) {
-            mGenerator.setOnGenerateProgressListener(mProgressListener);
-        }
     }
 
     @Override
     public void setOnGenerateResultListener(@Nullable OnGenerateResultListener listener) {
         mResultListener = listener;
-        if (mGenerator != null && !mGenerator.isInterrupted() && mGenerator.isAlive()) {
-            mGenerator.setOnGenerateResultListener(mResultListener);
-        }
     }
 
     @Override
