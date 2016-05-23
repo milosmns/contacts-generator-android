@@ -3,10 +3,9 @@
 
     <color name="primary">#2C3E50</color>
     <color name="primary_darker">#1E2B38</color>
-    <color name="primary_lighter">#2B5884</color>
+    <color name="primary_lighter">#3060A0</color>
     <color name="accent">#E74C3C</color>
     <color name="accent_lighter">#F97D6D</color>
-
     <color name="stop_text">@color/primary</color>
 
 </resources>

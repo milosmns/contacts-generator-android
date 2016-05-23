@@ -42,8 +42,8 @@
     <string name="stat_females">Females</string>
     <string name="stat_total_requested">Requested</string>
     <string name="stat_total_generated">Generated</string>
-    <string name="stat_total_time">Time spent</string>
-    <string name="stat_average_time">Contact average time</string>
+    <string name="stat_total_time">Total time spent</string>
+    <string name="stat_average_time">Time per contact</string>
     <string name="stat_longest_contact">Slowest generation</string>
     <string name="stat_shortest_contacts">Quickest generation</string>
     <string name="stat_check_device">Please verify that you have a\nreliable Internet connection</string>

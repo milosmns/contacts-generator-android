@@ -155,7 +155,7 @@
             android:background="?attr/colorPrimary"
             android:indeterminate="false"
             android:progress="0"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:progress="30"
             tools:visibility="visible" />
 
@@ -177,13 +177,12 @@
         tools:ignore="UnusedAttribute" />
 
     <!-- Unused views for this device size, they stay below the Toolbar -->
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:elevation="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:ignore="UnusedAttribute">
 
         <TextView

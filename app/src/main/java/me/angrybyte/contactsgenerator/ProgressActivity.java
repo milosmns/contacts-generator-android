@@ -152,7 +152,8 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
             if (person.getImage() != null) {
                 mContactPhotoView.setImageBitmap(person.getImage());
             } else {
-                int drawable = AVATARS[(int) Math.round(Math.random() * AVATARS.length)];
+                int randomIndex = (int) Math.round(Math.random() * (AVATARS.length - 1));
+                int drawable = AVATARS[randomIndex];
                 mContactPhotoView.setImageResource(drawable);
             }
         }
@@ -163,7 +164,7 @@ public class ProgressActivity extends AppCompatActivity implements ServiceConnec
         }
 
         // initially views are hidden, so update visibilities only once here
-        if (mProgressBar.getVisibility() != View.VISIBLE) {
+        if (mContactInfoView.getVisibility() != View.VISIBLE) {
             mProgressBar.setVisibility(View.VISIBLE);
             mContactInfoView.setVisibility(View.VISIBLE);
             mCurrentCountView.setVisibility(View.VISIBLE);

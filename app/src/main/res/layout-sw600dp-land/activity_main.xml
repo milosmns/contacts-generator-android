@@ -60,6 +60,7 @@
                     android:gravity="center"
                     android:maxWidth="340dp"
                     android:text="@string/how_many_contacts"
+                    android:textColor="@color/primary"
                     android:textSize="24sp" />
 
                 <LinearLayout

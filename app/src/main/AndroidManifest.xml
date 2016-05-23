@@ -62,7 +62,6 @@
             android:label="@string/activity_stats_title"
             android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
             tools:ignore="UnusedAttribute">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

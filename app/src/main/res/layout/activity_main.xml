@@ -28,6 +28,7 @@
                 android:maxWidth="300dp"
                 android:padding="@dimen/activity_horizontal_margin"
                 android:text="@string/how_many_contacts"
+                android:textColor="@color/primary"
                 android:textSize="24sp" />
 
             <LinearLayout

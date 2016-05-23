@@ -3,10 +3,6 @@
     <dimen name="activity_horizontal_margin">24dp</dimen>
     <dimen name="activity_vertical_margin">24dp</dimen>
 
-    <dimen name="stats_activity_text_size">18sp</dimen>
-    <dimen name="stats_activity_large_numbers_text_size">60sp</dimen>
-    <dimen name="stats_activity_small_text_size">14sp</dimen>
-
     <dimen name="action_button_size">48dp</dimen>
     <dimen name="small_app_bar_size">48dp</dimen>
     <dimen name="normal_app_bar_size">56dp</dimen>
@@ -27,5 +23,7 @@
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_huge">22sp</dimen>
     <dimen name="text_size_crazy">26sp</dimen>
+    <dimen name="text_size_wow">50sp</dimen>
+    <dimen name="text_size_omg">60sp</dimen>
 
 </resources>

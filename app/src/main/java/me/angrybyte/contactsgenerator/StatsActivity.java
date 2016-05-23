@@ -54,6 +54,7 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
         // prepare the toolbar with title coloring
         Toolbar toolbar = (Toolbar) findViewById(R.id.stats_toolbar);
+        // noinspection ConstantConditions
         toolbar.setTitleTextColor(Color.WHITE);
     }
 
@@ -92,7 +93,7 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
             if (!serviceApi.isForceStopped() && (stats.requested == 0 || stats.generated < stats.requested)) {
                 mCheckDeviceView.setVisibility(View.VISIBLE);
             } else {
-                mCheckDeviceView.setVisibility(View.INVISIBLE);
+                mCheckDeviceView.setVisibility(View.GONE);
             }
 
             String requested = String.valueOf(stats.requested);
