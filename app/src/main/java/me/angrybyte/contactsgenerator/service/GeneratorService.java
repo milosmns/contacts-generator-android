@@ -130,11 +130,13 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         mBuilder.setProgress(mHowMany, 0, true);
         mBuilder.setOngoing(true);
 
+        int iconId = R.drawable.ic_clear_black_24dp;
+        String contentText = getString(R.string.progress_stop);
         Intent stopIntent = new Intent(this, GeneratorService.class);
         stopIntent.setAction(ServiceApi.STOP_GENERATING_ACTION);
-        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action action = new NotificationCompat.Action(android.R.drawable.ic_menu_close_clear_cancel,
-                getString(R.string.progress_stop), stopPendingIntent);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 0, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action action = new NotificationCompat.Action(iconId, contentText, pendingIntent);
         mBuilder.addAction(action);
 
         Intent resultIntent = new Intent(this, ProgressActivity.class);
@@ -243,7 +245,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
 
     @Override
     public void onGenerateProgress(@FloatRange(from = 0.0f, to = 1.0f) float progress, @IntRange(from = 0) int iStep,
-            @IntRange(from = 0) int generated) {
+                                   @IntRange(from = 0) int generated) {
         mBuilder.setProgress(mHowMany, iStep, false);
         mBuilder.setContentInfo(getCurrentPercentage(progress));
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
