@@ -93,9 +93,16 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Destroying " + TAG + "...");
+
         if (mDeletionTask != null) {
             mDeletionTask.cancel(true);
         }
+
+        if (isGenerating()) {
+            stopGenerating();
+            hideNotification();
+        }
+
         mStats = null;
         mBinder = null;
         mHandler.removeCallbacksAndMessages(null);
@@ -106,6 +113,13 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         mNotificationManager = null;
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.d(TAG, "onTaskRemoved: Process getting killed, task was removed");
+        hideNotification();
+    }
+
     private void showNotification() {
         mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setCategory(NotificationCompat.CATEGORY_SERVICE);
@@ -114,6 +128,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         mBuilder.setContentText(getString(R.string.generating));
         mBuilder.setPriority(NotificationCompat.PRIORITY_LOW);
         mBuilder.setProgress(mHowMany, 0, true);
+        mBuilder.setOngoing(true);
 
         Intent stopIntent = new Intent(this, GeneratorService.class);
         stopIntent.setAction(ServiceApi.STOP_GENERATING_ACTION);
