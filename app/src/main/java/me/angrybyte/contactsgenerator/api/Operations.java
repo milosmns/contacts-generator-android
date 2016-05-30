@@ -37,7 +37,6 @@ public class Operations {
 
     private static final String TAG = Operations.class.getSimpleName();
     private static final String URL_TEMPLATE = "http://api.randomuser.me/1.0/?results=%s&gender=%s&key=%s";
-    private static final int MAX_RESULTS = 8000;
 
     // defined as constants in Genders.java
     public static final String MALE = "male";
@@ -103,8 +102,8 @@ public class Operations {
      */
     @NonNull
     public String getPersonsJson(@IntRange(from = 0) int howMany, @Gender String gender) {
-        if (howMany < 0 || howMany > MAX_RESULTS) {
-            Log.e(TAG, "Cannot fetch less than 0 or more than " + MAX_RESULTS + " persons.");
+        if (howMany < 0) {
+            Log.e(TAG, "Cannot fetch less than 0 persons.");
             return "";
         }
 

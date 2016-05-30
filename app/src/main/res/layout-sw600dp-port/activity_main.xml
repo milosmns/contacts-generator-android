@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     app:bar_color="?attr/colorAccent"
                     app:draw_over_text="false"
-                    app:max_value="8000"
+                    app:max_value="@integer/max_persons"
                     app:min_value="1"
                     app:show_bars="true"
                     app:show_controls="false"
