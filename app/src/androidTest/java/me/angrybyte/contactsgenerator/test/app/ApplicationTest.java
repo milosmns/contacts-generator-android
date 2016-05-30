@@ -9,11 +9,10 @@ import android.test.ApplicationTestCase;
  */
 public class ApplicationTest extends ApplicationTestCase<Application> {
 
-    /**
-     * The main constructor.
-     */
     public ApplicationTest() {
         super(Application.class);
     }
+
+    // ... nothing to see here.
 
 }

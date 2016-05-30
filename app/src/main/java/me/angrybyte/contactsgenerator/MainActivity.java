@@ -35,8 +35,8 @@ import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
 
-public class MainActivity extends AppCompatActivity
-        implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection, AlertDialog.OnClickListener {
+public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection,
+        AlertDialog.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                     generateContacts();
                 } else {
                     ActivityCompat.requestPermissions(this, new String[] {
-                            Manifest.permission.WRITE_CONTACTS
+                        Manifest.permission.WRITE_CONTACTS
                     }, PERMISSIONS_WRITE_REQUEST_CODE);
                 }
                 break;
@@ -188,12 +188,11 @@ public class MainActivity extends AppCompatActivity
                 builder.setPositiveButton(R.string.delete_confirmation_positive_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (ActivityCompat.checkSelfPermission(MainActivity.this,
-                                Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                             deleteGeneratedContacts();
                         } else {
                             ActivityCompat.requestPermissions(MainActivity.this, new String[] {
-                                    Manifest.permission.READ_CONTACTS
+                                Manifest.permission.READ_CONTACTS
                             }, PERMISSIONS_READ_REQUEST_CODE);
                         }
                     }
@@ -385,4 +384,5 @@ public class MainActivity extends AppCompatActivity
             mProgressDialog = null;
         }
     }
+
 }

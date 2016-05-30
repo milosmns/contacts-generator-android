@@ -78,7 +78,6 @@ public class StatsActivity extends AppCompatActivity implements ServiceConnectio
 
         Intent backToMain = new Intent(this, MainActivity.class);
         startActivity(backToMain);
-
         finish();
     }
 

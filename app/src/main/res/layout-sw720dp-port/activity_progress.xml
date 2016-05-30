@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="me.angrybyte.contactsgenerator.ProgressActivity">
+
+    <android.support.v7.widget.Toolbar
+        style="@style/ContactsTheme.MainAppBarTheme"
+        android:layout_height="@dimen/big_app_bar_size"
+        android:layout_gravity="center_horizontal|top"
+        app:title="">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/activity_progress_title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_crazy" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin_material_wide"
+        android:layout_marginRight="@dimen/margin_material_wide"
+        android:layout_marginTop="50dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Left pane -->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_large">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_huge">
+
+                <TextSwitcher
+                    android:id="@+id/activity_progress_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/waiting"
+                    android:textSize="@dimen/text_size_large"
+                    tools:background="#F0F0F0"
+                    tools:height="60dp"
+                    tools:width="100dp" />
+
+                <LinearLayout
+                    android:id="@+id/activity_progress_contact_info_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <com.pkmmte.view.CircularImageView
+                        android:id="@+id/activity_progress_photo"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginEnd="@dimen/spacing_large"
+                        android:layout_marginRight="@dimen/spacing_large"
+                        android:src="@drawable/avatar_30"
+                        app:border="true"
+                        app:border_color="#F2F2F2"
+                        app:border_width="8dp"
+                        app:shadow="false"
+                        tools:background="#F0F0F0" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center_vertical"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:alpha="0.8"
+                                android:contentDescription="@string/desc_ic_name"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_person_name" />
+
+                            <TextView
+                                android:id="@+id/activity_progress_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/progress_name"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:alpha="0.8"
+                                android:contentDescription="@string/desc_ic_phone"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_person_phone" />
+
+                            <TextView
+                                android:id="@+id/activity_progress_number"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/progress_number"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:alpha="0.8"
+                                android:contentDescription="@string/desc_ic_email"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_person_email" />
+
+                            <TextView
+                                android:id="@+id/activity_progress_email"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="6dp"
+                                android:layout_marginStart="6dp"
+                                android:text="@string/progress_email"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- Right pane -->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_large">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activity_progress_display_progress_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_huge"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/spacing_large"
+                    android:paddingRight="@dimen/spacing_large"
+                    android:text="@string/progress_display_title"
+                    android:textSize="@dimen/text_size_huge"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="70dp"
+                    android:paddingRight="70dp">
+
+                    <TextView
+                        android:id="@+id/activity_progress_count_progress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        tools:text="80/400"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/activity_progress_percentage_progress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        tools:text="20%"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/activity_progress_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:indeterminate="false"
+                    android:paddingLeft="70dp"
+                    android:paddingRight="70dp"
+                    android:progress="0"
+                    android:visibility="gone"
+                    tools:progress="30"
+                    tools:visibility="visible" />
+
+                <Button
+                    android:id="@+id/activity_progress_stop_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/accent"
+                    android:backgroundTintMode="src_atop"
+                    android:drawableTint="@color/accent"
+                    android:drawableTintMode="src_atop"
+                    android:minWidth="150dp"
+                    android:text="@string/progress_stop"
+                    android:textColor="@color/stop_text"
+                    tools:ignore="UnusedAttribute" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</FrameLayout>

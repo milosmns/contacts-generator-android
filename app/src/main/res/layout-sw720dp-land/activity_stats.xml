@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="me.angrybyte.contactsgenerator.StatsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/stats_toolbar"
+        style="@style/ContactsTheme.MainAppBarTheme"
+        android:layout_height="@dimen/big_app_bar_size"
+        android:layout_gravity="center_horizontal|top"
+        app:title="">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/stat_title"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_crazy" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin_material_super_wide"
+        android:layout_marginRight="@dimen/margin_material_super_wide"
+        android:layout_marginTop="50dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Left pane -->
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_normal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_huge"
+                        android:layout_marginRight="@dimen/spacing_huge"
+                        android:gravity="end"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/stats_generated_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary_lighter"
+                            android:textSize="@dimen/text_size_wow"
+                            android:textStyle="bold"
+                            tools:text="320" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_total_generated"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary_lighter"
+                            android:textSize="@dimen/text_size_large" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/stats_requested_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_wow"
+                            android:textStyle="bold"
+                            tools:text="400" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_total_requested"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_large" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/stats_longest_generated_contact_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/stat_longest_contact"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/stats_longest_generated_contact_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="gone"
+                    tools:text="Martha Jones (2.9s)"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/stats_shortest_generated_contact_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/stat_shortest_contacts"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/stats_shortest_generated_contact_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|top"
+                    android:padding="2dp"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="gone"
+                    tools:text="Captain Jack Harkness (2.0s)"
+                    tools:visibility="visible" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <!-- Right pane -->
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_normal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="70dp"
+                android:paddingRight="70dp">
+
+                <TextView
+                    android:id="@+id/stats_generated_total_time_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/stat_total_time"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/stats_generated_total_time_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="62.3s" />
+
+                <TextView
+                    android:id="@+id/stats_generated_average_time_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/stat_average_time"
+                    android:textAllCaps="true"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/stats_generated_average_time_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_large"
+                    android:gravity="center"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="2.3s" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_large"
+                    android:layout_marginStart="@dimen/spacing_large"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_large"
+                        android:layout_marginRight="@dimen/spacing_large"
+                        android:gravity="end"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:text="@string/stat_males"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/stats_generated_males"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_large"
+                            tools:text="100" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/stat_females"
+                            android:textAllCaps="true"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_large"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/stats_generated_females"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/primary"
+                            android:textSize="@dimen/text_size_large"
+                            tools:text="220" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/stats_check_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:text="@string/stat_check_device"
+        android:textColor="@color/accent"
+        android:textSize="@dimen/text_size_normal"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+</FrameLayout>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context=".MainActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        style="@style/ContactsTheme.MainAppBarTheme"
+        android:layout_height="@dimen/big_app_bar_size"
+        android:layout_gravity="center_horizontal|top"
+        app:title="">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_crazy" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin_material_super_wide"
+        android:layout_marginRight="@dimen/margin_material_super_wide"
+        android:layout_marginTop="50dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_normal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_huge">
+
+                <TextView
+                    android:id="@+id/main_contacts_question"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_normal"
+                    android:gravity="center"
+                    android:maxWidth="340dp"
+                    android:text="@string/how_many_contacts"
+                    android:textColor="@color/primary"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    style="@style/ContactsTheme.NumberPickerContainerStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/main_button_decrement"
+                        style="@style/ContactsTheme.IncDecButtonStyle"
+                        android:layout_width="@dimen/action_button_size"
+                        android:layout_height="@dimen/action_button_size"
+                        android:layout_marginLeft="@dimen/spacing_micro"
+                        android:layout_marginStart="@dimen/spacing_micro"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/desc_ic_minus"
+                        android:padding="@dimen/spacing_normal"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_decrement" />
+
+                    <me.angrybyte.numberpicker.view.ActualNumberPicker
+                        android:id="@+id/main_number_picker"
+                        style="@style/ContactsTheme.NumberPickerStyle"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        app:bar_color="?attr/colorAccent"
+                        app:draw_over_text="false"
+                        app:max_value="8000"
+                        app:min_value="1"
+                        app:show_bars="true"
+                        app:show_controls="false"
+                        app:show_fast_controls="false"
+                        app:show_highlight="false"
+                        app:show_text="true"
+                        app:text_color="?attr/colorAccent"
+                        app:value="500" />
+
+                    <ImageButton
+                        android:id="@+id/main_button_increment"
+                        style="@style/ContactsTheme.IncDecButtonStyle"
+                        android:layout_width="@dimen/action_button_size"
+                        android:layout_height="@dimen/action_button_size"
+                        android:layout_marginEnd="@dimen/spacing_micro"
+                        android:layout_marginRight="@dimen/spacing_micro"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/desc_ic_plus"
+                        android:padding="@dimen/spacing_normal"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_increment" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/spacing_huge"
+            android:layout_marginLeft="@dimen/spacing_huge"
+            android:layout_marginRight="@dimen/spacing_huge"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:layout_weight="1"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="@dimen/spacing_normal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_normal"
+                android:paddingRight="@dimen/spacing_normal">
+
+                <CheckBox
+                    android:id="@+id/main_avatars_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:checked="true"
+                    android:text="@string/want_avatars"
+                    android:textSize="18sp" />
+
+                <RadioGroup android:id="@+id/main_genders"
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/main_gender_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_males"
+                        android:textSize="18sp" />
+
+                    <RadioButton
+                        android:id="@+id/main_gender_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all_females"
+                        android:textSize="18sp" />
+
+                    <!-- checked by default, but from code - XML didn't work.. -->
+                    <RadioButton
+                        android:id="@+id/main_gender_both"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/do_not_care"
+                        android:textSize="18sp" />
+
+                </RadioGroup>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/main_button_generate"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="110dp"
+        android:background="@drawable/circle_states"
+        android:contentDescription="@string/desc_generate"
+        android:elevation="14dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_generate"
+        tools:ignore="UnusedAttribute" />
+
+</FrameLayout>

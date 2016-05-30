@@ -15,6 +15,7 @@
     <dimen name="spacing_large">16dp</dimen>
     <dimen name="spacing_huge">22dp</dimen>
 
+    <dimen name="margin_material_super_wide">90dp</dimen>
     <dimen name="margin_material_wide">120dp</dimen>
     <dimen name="margin_material_narrow">200dp</dimen>
 

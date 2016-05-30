@@ -17,6 +17,7 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,6 +40,7 @@
                     android:host="contacts.angrybyte.me"
                     android:scheme="https" />
             </intent-filter>
+
         </activity>
 
         <activity
@@ -47,6 +49,7 @@
             android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             tools:ignore="UnusedAttribute">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.angrybyte.contactsgenerator.MainActivity" />
@@ -55,6 +58,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
 
         <activity
@@ -63,6 +67,7 @@
             android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             tools:ignore="UnusedAttribute">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.angrybyte.contactsgenerator.MainActivity" />
@@ -71,6 +76,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
         </activity>
 
         <service
