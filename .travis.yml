@@ -9,7 +9,7 @@ os:
 env:
   matrix:
     # Uncomment to use
-    - ANDROID_SDKS=android-23 ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-23 SYS_IMGE_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-22 ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-22 SYS_IMGE_ABI=armeabi-v7a
     # - ANDROID_SDKS=android-21 ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-21 SYS_IMGE_ABI=armeabi-v7a
     # - ANDROID_SDKS=android-20 ANDROID_TARGET=android-20 ANDROID_ABI=android-wear/armeabi-v7a SYS_IMG_TARGET=android-wear-20, SYS_IMGE_ABI=armeabi-v7a
     # - ANDROID_SDKS=android-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-19 SYS_IMGE_ABI=armeabi-v7a
@@ -43,7 +43,7 @@ android:
     - build-tools-23.0.3
 
     # The SDK version used to compile the project
-    - android-23
+    - android-22
 
     # Uncomment to use
     # - android-21
@@ -57,7 +57,7 @@ android:
     - extra-google-m2repository             # Maven Google repo
     - extra-android-m2repository            # Maven Android repo
     - extra-android-support                 # Android Support Library
-    - addon-google_apis-google-23           # Google APIs 23
+    - addon-google_apis-google-22           # Google APIs 22
     - extra-google-webdriver                # Web device driver
 
     # System images required for building the project
