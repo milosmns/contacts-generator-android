@@ -67,7 +67,6 @@ public class Operations {
     public List<Person> getPersons(int amount, @Gender String gender) {
         String response = getPersonsJson(amount, gender);
         JsonParser jsonParser = new JsonParser();
-
         return jsonParser.parseResponse(response);
     }
 

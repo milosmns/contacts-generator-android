@@ -8,7 +8,7 @@ os:
 # Define environment variables
 env:
   matrix:
-    - ANDROID_SDKS=android-23 ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-22 SYS_IMGE_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-23 ANDROID_TARGET=android-23 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-23 SYS_IMGE_ABI=armeabi-v7a
     # Uncomment to use
     # - ANDROID_SDKS=android-21 ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-21 SYS_IMGE_ABI=armeabi-v7a
     # - ANDROID_SDKS=android-20 ANDROID_TARGET=android-20 ANDROID_ABI=android-wear/armeabi-v7a SYS_IMG_TARGET=android-wear-20, SYS_IMGE_ABI=armeabi-v7a
@@ -57,7 +57,7 @@ android:
     - extra-google-m2repository             # Maven Google repo
     - extra-android-m2repository            # Maven Android repo
     - extra-android-support                 # Android Support Library
-    - addon-google_apis-google-22           # Google APIs 22
+    - addon-google_apis-google-23           # Google APIs 23
     - extra-google-webdriver                # Web device driver
 
     # System images required for building the project
@@ -74,8 +74,8 @@ script:
   - adb devices
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - adb shell input keyevent 82 &
-  - ./gradlew connectedCheck
-  - ./gradlew connectedAndroidTest
+  - ./gradlew clean build connectedCheck
+  - ./gradlew clean build connectedAndroidTest
 
 # Uncomment to use
 # after_success:
