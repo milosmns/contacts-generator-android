@@ -63,10 +63,6 @@ android:
     # System images required for building the project
     - sys-img-${SYS_IMGE_ABI}-${SYS_IMG_TARGET}
 
-before_install:
-  - chmod +x gradlew
-  - chmod +x script.sh
-
 before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
