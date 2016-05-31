@@ -1,0 +1,60 @@
+language: android
+
+# Configure environment matrix for the build job
+env:
+  matrix:
+    - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+# Configure the cache
+before_cache:
+- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+# Configure JDK
+jdk:
+- oraclejdk7
+
+android:
+  # All components are listed using 
+  # android list sdk --no-ui --all --extended
+  components:
+
+    # Android SDK Tools
+    - tools
+    - platform-tools
+
+    # The Build Tools version used by the project
+    - build-tools-23.0.3
+
+    # The SDK version used to compile the project
+    - android-23
+
+    # Additional components
+    - extra-google-m2repository             # Maven Google repo
+    - extra-android-m2repository            # Maven Android repo
+    - extra-android-support                 # Android Support Library
+    - addon-google_apis-google-23           # Google APIs 23
+    - extra-google-webdriver                # Web device driver
+
+    # Need to specify at least one system image
+    # because these tests need an emulator
+    - sys-img-armeabi-v7a-google_apis-23    # ARM v7   API 23 + Google
+    - sys-img-x86_64-google_apis-23         # Atom_x64 API 23 + Google
+    - sys-img-x86-google_apis-23            # Atom_x86 API 23 + Google
+    - sys-img-armeabi-v7a-android-21        # ARM v7   API 21
+    - sys-img-armeabi-v7a-android-20        # ARM v7   API 20
+    - sys-img-armeabi-v7a-android-16        # ARM v7   API 16
+    - sys-img-armeabi-v7a-android-14        # ARM v7   API 14
+
+# The actual build script
+script: ./gradlew clean build connectedCheck
