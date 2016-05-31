@@ -16,8 +16,8 @@ env:
     # - ANDROID_SDKS=android-16 ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-16 SYS_IMGE_ABI=armeabi-v7a
     # - ANDROID_SDKS=android-14 ANDROID_TARGET=android-14 ANDROID_ABI=armeabi-v7a SYS_IMG_TARGET=android-14 SYS_IMGE_ABI=armeabi-v7a
   global:
-    # Wait up to 10 minutes for adb to connect to the emulator
-    - ADB_INSTALL_TIMEOUT=10
+    # Wait up to 12 minutes for adb to connect to the emulator
+    - ADB_INSTALL_TIMEOUT=12
 
 # Configure the cache
 before_cache:
@@ -74,8 +74,7 @@ script:
   - adb devices
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - adb shell input keyevent 82 &
-  - ./gradlew clean build connectedCheck
-  - ./gradlew clean build connectedAndroidTest
+  - ./gradlew clean build connectedCheck --stacktrace
 
 # Uncomment to use
 # after_success:
