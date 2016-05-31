@@ -2,9 +2,12 @@
 package me.angrybyte.contactsgenerator.test.app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.RemoteException;
 import android.support.v4.app.ActivityCompat;
@@ -61,18 +64,33 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
 
     @SmallTest
     public void testBHttpRequest() {
+        if (!hasInternet()) {
+            Log.w(TAG, "Cannot run this test without Internet access");
+            return;
+        }
+
         String pageText = mApi.readUsingHttp(HTTP_TEST_URL);
         assertEquals("Invalid page content: '" + pageText + "'.", HTTP_TEST_CONTENT, pageText);
     }
 
     @SmallTest
     public void testCJsonRequest() {
+        if (!hasInternet()) {
+            Log.w(TAG, "Cannot run this test without Internet access");
+            return;
+        }
+
         String jsonText = mApi.getPersonsJson(1, Operations.BOTH);
         assertEquals("Json response is empty.", true, jsonText.length() > 0);
     }
 
     @MediumTest
     public void testDQueryPersons() {
+        if (!hasInternet()) {
+            Log.w(TAG, "Cannot run this test without Internet access");
+            return;
+        }
+
         List<Person> persons = mApi.getPersons(1, Operations.BOTH);
         assertNotNull("Persons list is null", persons);
         assertEquals("Persons list is empty", 1, persons.size());
@@ -88,6 +106,11 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
 
     @SmallTest
     public void testEImageDownload() {
+        if (!hasInternet()) {
+            Log.w(TAG, "Cannot run this test without Internet access");
+            return;
+        }
+
         List<Person> persons = mApi.getPersons(1, Operations.BOTH);
         Person person = persons.get(0);
 
@@ -101,6 +124,11 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
     public void testFContactStorage() throws RemoteException, OperationApplicationException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasPermission(Manifest.permission.WRITE_CONTACTS)) {
             Log.w(TAG, "Cannot run this test without the user permission");
+            return;
+        }
+
+        if (!hasInternet()) {
+            Log.w(TAG, "Cannot run this test without Internet access");
             return;
         }
 
@@ -142,6 +170,12 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
 
     private boolean hasPermission(String which) {
         return ActivityCompat.checkSelfPermission(mActivity, which) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean hasInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager == null ? null : connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override
