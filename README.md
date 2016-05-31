@@ -1,5 +1,8 @@
 # Lorem Contacts
 
+[![Build Status](https://travis-ci.org/milosmns/contacts-generator-android.svg?branch=master)](https://travis-ci.org/milosmns/contacts-generator-android)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/496513ff12ae42cbbfae805077744698)](https://www.codacy.com/app/milosmns/contacts-generator-android?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=milosmns/contacts-generator-android&amp;utm_campaign=Badge_Grade)
+
 A simple contacts generating app (with contact photos)
 
 How it works
@@ -49,6 +52,8 @@ Testing
 -------
 
 You should be able to either test from AndroidStudio (```right click -> Run Test```) or from Gradle CLI (```gradlew connectedCheck```). Some tests require private user permissions, so you need to enable those manually from device settings in order for the tests to pass.
+
+You can also check the code quality analysis [here](https://www.codacy.com/app/milosmns/contacts-generator-android), and automated build status with available Unit and Integration tests [here](https://travis-ci.org/milosmns/contacts-generator-android).
 
 Additional information, credits and contribution
 ------------------------------------------------
