@@ -1,4 +1,3 @@
-
 package me.angrybyte.contactsgenerator.service;
 
 import android.app.NotificationManager;
@@ -64,7 +63,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
                 @Override
                 protected Void doInBackground(Void... voids) {
                     ContactOperations contacts = new ContactOperations(GeneratorService.this);
-                    contacts.deleteContacts("example.com");
+                    contacts.prepareCursorForScrubbing("example.com");
                     return null;
                 }
 

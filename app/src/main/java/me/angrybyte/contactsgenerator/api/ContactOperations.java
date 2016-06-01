@@ -1,4 +1,3 @@
-
 package me.angrybyte.contactsgenerator.api;
 
 import android.content.ContentProviderOperation;
@@ -26,9 +25,13 @@ public class ContactOperations {
 
     private static final String TAG = ContactOperations.class.getSimpleName();
     private final Context mContext;
+    private Cursor mCursor;
+    private String mMatchingEmail;
+    private ContentResolver mContentResolver;
 
     public ContactOperations(Context context) {
         mContext = context;
+        mContentResolver = mContext.getContentResolver();
     }
 
     /**
@@ -84,10 +87,6 @@ public class ContactOperations {
             close(stream);
         }
 
-        // gives priority to other threads after the chunk before this line has been executed
-        // fake.
-        // providerOperation.withYieldAllowed(true);
-
         operations.add(providerOperation.build());
         Log.d(TAG, "Creating contact: " + person.getFirstName() + " " + person.getLastName());
 
@@ -107,52 +106,85 @@ public class ContactOperations {
     }
 
     /**
-     * Deletes all contacts with a matching email provider from the contacts database. <b><font color="#FF3030">Not thread-safe.</font></b>
+     * Prepares the cursor for the scrubbing (erasing) action. It is <b>mandatory</b> to call this method before
+     * calling {@link #getFoundContactsCount()} and {@link #deleteNextContact()}. Failing to do so will result in a crash.
      *
-     * @param matchingEmail An email provider website (domain) which all obsolete contacts have in common. If set to {@code null}, all
-     *            contacts will be deleted
-     * @return {@code True} if all contacts are deleted properly, {@code false} if anything fails
+     * @param matchingEmail You can parametrize the search query of the cursor with an email address. Sending {@code null} will find
+     *                      all the contacts, while sending in a valid email address will find contacts with only that email address
+     *                      associated with them
+     * @return {@code True} if the cursor has been opened successfully, {@code false} otherwise
      */
-    public boolean deleteContacts(@Nullable String matchingEmail) {
+    public boolean prepareCursorForScrubbing(@Nullable String matchingEmail) {
         // create a projection based on the given email
-        ContentResolver contentResolver = mContext.getContentResolver();
         String[] projection;
+        String where;
+        String[] whereArgs;
         if (matchingEmail != null) {
+            mMatchingEmail = matchingEmail;
             projection = new String[] {
                     ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.CommonDataKinds.Email.ADDRESS
             };
-        } else {
-            projection = new String[] {
-                ContactsContract.Contacts.LOOKUP_KEY
+
+            where = ContactsContract.CommonDataKinds.Email.ADDRESS + " LIKE ?";
+            whereArgs = new String[] {
+                    "%" + matchingEmail
             };
+        } else {
+            projection = new String[]{
+                    ContactsContract.Contacts.LOOKUP_KEY
+            };
+
+            where = null;
+            whereArgs = null;
         }
 
         // try to create a cursor
-        Cursor cursor = contentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, projection, null, null, null);
-        if (cursor == null) {
+        mCursor = mContentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, projection, where, whereArgs, null);
+
+        if (mCursor == null) {
             Log.e(TAG, "Cursor not available");
             return false;
         }
 
-        // loop through them and delete all matching
-        while (cursor.moveToNext()) {
-            int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
-            boolean delete = matchingEmail == null || cursor.getString(column).contains(matchingEmail);
+        return true;
+    }
+
+    /**
+     * Retrieve the number of contacts that were found when the query was set up in {@link #prepareCursorForScrubbing(String)}. Do not call this
+     * method before calling that one!
+     *
+     * @return The number of contacts that are available to be deleted in the cursor.
+     */
+    public int getFoundContactsCount() {
+        return mCursor.getCount();
+    }
+
+    /**
+     * Deletes one single contact from the Cursor that was prepared with {@link #prepareCursorForScrubbing(String)}. Do not call this method
+     * before calling that one!
+     *
+     * @return {@code true} if the contact was deleted successfully, {@code false} otherwise.
+     */
+    public boolean deleteNextContact() {
+        if (mCursor.moveToNext()) {
+            int column = mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+            boolean delete = mMatchingEmail == null || mCursor.getString(column).contains(mMatchingEmail);
             if (delete) {
-                String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                String lookupKey = mCursor.getString(mCursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                 Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
-                int deletedRows = contentResolver.delete(uri, null, null);
+                int deletedRows = mContentResolver.delete(uri, null, null);
                 if (deletedRows < 1) {
                     Log.w(TAG, "Nothing deleted for URI " + String.valueOf(uri));
+                    return false;
                 }
             }
-        }
-
-        // close the cursor ignoring the close error
-        try {
-            cursor.close();
-        } catch (Exception e) {
-            Log.w(TAG, "Error closing cursor");
+        } else {
+            // close the cursor ignoring the close error, if there are no more contacts to erase
+            try {
+                mCursor.close();
+            } catch (Exception e) {
+                Log.w(TAG, "Error closing cursor");
+            }
         }
 
         return true;

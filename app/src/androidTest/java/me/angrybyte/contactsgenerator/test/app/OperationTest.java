@@ -1,4 +1,3 @@
-
 package me.angrybyte.contactsgenerator.test.app;
 
 import android.Manifest;
@@ -152,7 +151,7 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
         }
 
         ContactOperations contacts = new ContactOperations(mActivity);
-        boolean deleted = contacts.deleteContacts(null);
+        boolean deleted = contacts.prepareCursorForScrubbing(null);
         assertTrue("Contacts not deleted", deleted);
     }
 
@@ -164,7 +163,9 @@ public class OperationTest extends ActivityInstrumentationTestCase2<MainActivity
         }
 
         ContactOperations contacts = new ContactOperations(mActivity);
-        boolean deleted = contacts.deleteContacts("example.com");
+        boolean prepared = contacts.prepareCursorForScrubbing("example.com");
+        assertTrue("Cursor ready", prepared);
+        boolean deleted = contacts.deleteNextContact();
         assertTrue("Contacts not deleted", deleted);
     }
 
