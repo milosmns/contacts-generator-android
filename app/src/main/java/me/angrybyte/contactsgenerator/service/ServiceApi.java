@@ -9,6 +9,7 @@ import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.api.Operations;
 import me.angrybyte.contactsgenerator.parser.data.Person;
+import rx.Observable;
 
 /**
  * Public API available to all clients that need to use the contact generating service. The service is not considered initialized until
@@ -87,4 +88,11 @@ public interface ServiceApi {
      * @return {@code true} if the service is currently deleting contacts, {@code false} otherwise
      */
     boolean isDeleting();
+
+    /**
+     * @return An {@link Observable} which will notify about the data that is being deleted by providing a
+     * {@link Person} object for each deleted row from the database. Will only delete contacts that have an email
+     * address ending with {@link me.angrybyte.contactsgenerator.api.ContactOperations#EXAMPLE_DOMAIN}.
+     */
+    Observable<Person> getDeletionsObservable();
 }

@@ -11,10 +11,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
@@ -28,12 +30,16 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.Operations;
+import me.angrybyte.contactsgenerator.parser.data.Person;
 import me.angrybyte.contactsgenerator.service.GeneratorService;
 import me.angrybyte.contactsgenerator.service.GeneratorServiceBinder;
 import me.angrybyte.contactsgenerator.service.ServiceApi;
 import me.angrybyte.numberpicker.view.ActualNumberPicker;
+import rx.Subscriber;
+import rx.Subscription;
 
 public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, ServiceConnection,
         AlertDialog.OnClickListener {
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     private ProgressDialog mProgressDialog;
     private ActualNumberPicker mPicker;
     private boolean mServiceDisconnected;
+    private Subscription mSubscription;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -147,9 +154,9 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
     @RequiresPermission(Manifest.permission.READ_CONTACTS)
     private void deleteGeneratedContacts() {
-        Intent deleteIntent = new Intent(MainActivity.this, GeneratorService.class);
+        Intent deleteIntent = new Intent(this, GeneratorService.class);
         deleteIntent.setAction(ServiceApi.DELETE_CONTACTS_ACTION);
-        MainActivity.this.startService(deleteIntent);
+        startService(deleteIntent);
 
         if (mServiceDisconnected) {
             bindService(deleteIntent, this, 0);
@@ -270,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "Destroy " + TAG + "...");
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            mSubscription.unsubscribe();
+        }
     }
 
     @Override
@@ -277,13 +287,31 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         Log.d(TAG, "Service " + name.getShortClassName() + " connected to " + TAG);
         mServiceDisconnected = false;
 
-        ServiceApi serviceApi = ((GeneratorServiceBinder) binder).getService();
+        final ServiceApi serviceApi = ((GeneratorServiceBinder) binder).getService();
         Intent nextActivityIntent;
         if (serviceApi.isDeleting()) {
             mProgressDialog = new ProgressDialog(this);
             mProgressDialog.setMessage(getString(R.string.delete_progress_message));
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
+
+            mSubscription = serviceApi.getDeletionsObservable().subscribe(new Subscriber<Person>() {
+                @Override
+                public void onCompleted() {
+                    Log.d(TAG, "onCompleted: Completed!");
+                    mProgressDialog.dismiss();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e(TAG, "onError: Error!", e);
+                }
+
+                @Override
+                public void onNext(Person person) {
+                    Log.d(TAG, "onNext: " + person);
+                }
+            });
             return;
         } else if (serviceApi.getStats() == null) {
             Log.d(TAG, "Stats object is null, means generating hasn't started yet");

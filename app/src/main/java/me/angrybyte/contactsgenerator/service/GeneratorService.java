@@ -23,6 +23,7 @@ import me.angrybyte.contactsgenerator.api.ContactOperations;
 import me.angrybyte.contactsgenerator.api.Gender;
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 import me.angrybyte.contactsgenerator.parser.data.Person;
+import rx.Observable;
 
 public class GeneratorService extends Service implements ServiceApi, OnGenerateProgressListener, OnGenerateResultListener {
 
@@ -43,6 +44,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     private boolean mIsGenerating;
     private boolean mIsDeleting;
     private int mHowMany;
+    private ContactOperations mContactOperations;
 
     @Override
     public void onCreate() {
@@ -58,22 +60,8 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
         Log.d(TAG, "Starting " + TAG + " with intent " + String.valueOf(intent));
 
         if (ServiceApi.DELETE_CONTACTS_ACTION.equals(intent.getAction())) {
+            mContactOperations = new ContactOperations(this);
             mIsDeleting = true;
-            mDeletionTask = new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    ContactOperations contacts = new ContactOperations(GeneratorService.this);
-                    contacts.prepareCursorForScrubbing("example.com");
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    mIsDeleting = false;
-                    GeneratorService.this.stopSelf();
-                }
-            }.execute();
         } else if (STOP_GENERATING_ACTION.equals(intent.getAction())) {
             stopGenerating();
         }
@@ -239,7 +227,18 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
 
     @Override
     public boolean isDeleting() {
-        return mIsDeleting;
+        if (mIsDeleting) {
+            mIsDeleting = false;
+            return true;
+        }
+        return false;
+    }
+
+    // TODO: Fix this, nullable is bad here.
+    @Override
+    @Nullable
+    public Observable<Person> getDeletionsObservable() {
+        return mContactOperations.getDeletionObservable();
     }
 
     @Override

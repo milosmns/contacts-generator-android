@@ -13,6 +13,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.squareup.sqlbrite.BriteContentResolver;
+import com.squareup.sqlbrite.SqlBrite;
+import com.venmo.cursor.IterableCursor;
+import com.venmo.cursor.IterableCursorWrapper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
@@ -20,6 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.angrybyte.contactsgenerator.parser.data.Person;
+import rx.Observable;
+import rx.functions.Action0;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class ContactOperations {
 
@@ -28,47 +37,82 @@ public class ContactOperations {
     private Cursor mCursor;
     private String mMatchingEmail;
     private ContentResolver mContentResolver;
+    private BriteContentResolver mBriteContentResolver;
+
+    //<editor-fold desc="Contact query constants">
+    private static final String EXAMPLE_DOMAIN = "@example.com";
+    private static final Uri CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+    private static final String[] PROJECTION = new String[] {
+            ContactsContract.CommonDataKinds.Email.CONTACT_ID,
+            ContactsContract.CommonDataKinds.Email.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Email.ADDRESS,
+            ContactsContract.CommonDataKinds.Email.PHOTO_THUMBNAIL_URI,
+            ContactsContract.CommonDataKinds.Email.LOOKUP_KEY
+    };
+    private static final String SELECTION = ContactsContract.CommonDataKinds.Email.ADDRESS + " LIKE ?";
+    private static final String[] SELECTION_ARGS = new String[] {"%" + EXAMPLE_DOMAIN};
+
+    private static final int ID = 0;
+    private static final int DISPLAY_NAME = 1;
+    private static final int EMAIL = 2;
+    private static final int PHOTO_THUMBNAIL = 3;
+    private static final int LOOKUP_KEY = 4;
+    //</editor-fold>
 
     public ContactOperations(Context context) {
+        // TODO: See if the lifecycle of this object needs to be managed
         mContext = context;
         mContentResolver = mContext.getContentResolver();
+        SqlBrite sqlBrite = new SqlBrite.Builder().build();
+        mBriteContentResolver = sqlBrite.wrapContentProvider(mContentResolver, Schedulers.io());
     }
 
     /**
-     * Stores a {@link Person} object to the Android database. Doesn't use accounts, the contact should be stored locally only. <b><font
-     * color="#FF3030">Not thread-safe.</font></b>
+     * Stores a {@link Person} object to the Android database. Doesn't use accounts, the contact should be stored
+     * locally only. <b><font color="#FF3030">Not thread-safe.</font></b>
      *
      * @param person The person to be persisted to the database
      */
     public void storeContact(@NonNull Person person) throws RemoteException, OperationApplicationException {
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
 
-        ContentProviderOperation.Builder providerOperation = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null);
+        ContentProviderOperation.Builder providerOperation = ContentProviderOperation
+                .newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null);
 
         operations.add(providerOperation.build());
 
+        // TODO: Maybe we should insert first name and last name separately
         providerOperation = ContentProviderOperation
                 .newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, person.getFirstName() + " " + person.getLastName());
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                        person.getFirstName() + " " + person.getLastName());
 
         operations.add(providerOperation.build());
 
         providerOperation = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, person.getPhone())
-                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER,
+                        person.getPhone())
+                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                        ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
 
         operations.add(providerOperation.build());
 
         providerOperation = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, person.getEmail())
-                .withValue(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_HOME);
+                .withValue(ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE)
+                .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS,
+                        person.getEmail())
+                .withValue(ContactsContract.CommonDataKinds.Email.TYPE,
+                        ContactsContract.CommonDataKinds.Email.TYPE_HOME);
 
         if (person.getImage() != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -76,8 +120,10 @@ public class ContactOperations {
 
             operations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
-                    .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO, stream.toByteArray()).build());
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Photo.PHOTO,
+                            stream.toByteArray()).build());
 
             try {
                 stream.flush();
@@ -94,8 +140,8 @@ public class ContactOperations {
     }
 
     /**
-     * Stores a {@link Person}s list to the Android database. Doesn't use accounts, all contacts from the list should be stored locally
-     * only. <b><font color="#FF3030">Not thread-safe.</font></b>
+     * Stores a {@link Person}s list to the Android database. Doesn't use accounts, all contacts from the list should be
+     * stored locally only. <b><font color="#FF3030">Not thread-safe.</font></b>
      *
      * @param persons Persons list to be persisted to the database
      */
@@ -106,12 +152,13 @@ public class ContactOperations {
     }
 
     /**
-     * Prepares the cursor for the scrubbing (erasing) action. It is <b>mandatory</b> to call this method before
-     * calling {@link #getFoundContactsCount()} and {@link #deleteNextContact()}. Failing to do so will result in a crash.
+     * Prepares the cursor for the scrubbing (erasing) action. It is <b>mandatory</b> to call this method before calling
+     * {@link #getFoundContactsCount()} and {@link #deleteNextContact()}. Failing to do so will result in a crash.
      *
-     * @param matchingEmail You can parametrize the search query of the cursor with an email address. Sending {@code null} will find
-     *                      all the contacts, while sending in a valid email address will find contacts with only that email address
-     *                      associated with them
+     * @param matchingEmail You can parametrize the search query of the cursor with an email address. Sending {@code
+     *                      null} will find all the contacts, while sending in a valid email address will find contacts
+     *                      with only that email address associated with them
+     *
      * @return {@code True} if the cursor has been opened successfully, {@code false} otherwise
      */
     public boolean prepareCursorForScrubbing(@Nullable String matchingEmail) {
@@ -130,7 +177,7 @@ public class ContactOperations {
                     "%" + matchingEmail
             };
         } else {
-            projection = new String[]{
+            projection = new String[] {
                     ContactsContract.Contacts.LOOKUP_KEY
             };
 
@@ -139,7 +186,11 @@ public class ContactOperations {
         }
 
         // try to create a cursor
-        mCursor = mContentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, projection, where, whereArgs, null);
+        mCursor = mContentResolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+                projection,
+                where,
+                whereArgs,
+                null);
 
         if (mCursor == null) {
             Log.e(TAG, "Cursor not available");
@@ -150,8 +201,8 @@ public class ContactOperations {
     }
 
     /**
-     * Retrieve the number of contacts that were found when the query was set up in {@link #prepareCursorForScrubbing(String)}. Do not call this
-     * method before calling that one!
+     * Retrieve the number of contacts that were found when the query was set up in {@link
+     * #prepareCursorForScrubbing(String)}. Do not call this method before calling that one!
      *
      * @return The number of contacts that are available to be deleted in the cursor.
      */
@@ -160,8 +211,8 @@ public class ContactOperations {
     }
 
     /**
-     * Deletes one single contact from the Cursor that was prepared with {@link #prepareCursorForScrubbing(String)}. Do not call this method
-     * before calling that one!
+     * Deletes one single contact from the Cursor that was prepared with {@link #prepareCursorForScrubbing(String)}. Do
+     * not call this method before calling that one!
      *
      * @return {@code true} if the contact was deleted successfully, {@code false} otherwise.
      */
@@ -200,4 +251,57 @@ public class ContactOperations {
         }
     }
 
+    private class PersonCursor extends IterableCursorWrapper<Person> {
+
+        /**
+         * Convenience class to create a {@link IterableCursor} backed by the {@link Cursor} {@code cursor}.
+         */
+        PersonCursor(Cursor cursor) {
+            super(cursor);
+        }
+
+        @Override
+        public Person peek() {
+            Person person = new Person();
+            person.setId(getInt(ID));
+            person.setFirstName(getString(DISPLAY_NAME));
+            person.setEmail(getString(EMAIL));
+            person.setThumbImageUrl(getString(PHOTO_THUMBNAIL));
+            person.setLookupUri(getString(LOOKUP_KEY));
+            return person;
+        }
+    }
+
+    // TODO: Refactor and move this to the service. Currently, because this is here, we have a bug where - after we
+    // delete all contacts - the service does not get stopped on the completion of this observable, and that triggers
+    // a new generation request once we start up the application again from the recents, for example
+    public Observable<Person> getDeletionObservable() {
+        // TODO: This is probably very wrong, still learning RxJava
+        return mBriteContentResolver.createQuery(CONTENT_URI, PROJECTION, SELECTION, SELECTION_ARGS, null, false)
+                .take(1)
+                .flatMap(new Func1<SqlBrite.Query, Observable<Person>>() {
+                    @Override
+                    public Observable<Person> call(SqlBrite.Query query) {
+                        final PersonCursor personCursor = new PersonCursor(query.run());
+                        return Observable.from(personCursor)
+                                .doOnTerminate(new Action0() {
+                                    @Override
+                                    public void call() {
+                                        personCursor.close();
+                                    }
+                                });
+                    }
+                })
+                .map(new Func1<Person, Person>() {
+                    @Override
+                    public Person call(Person person) {
+                        Uri contactUri = ContactsContract.Contacts.getLookupUri(person.getId(), person.getLookupUri());
+                        int deletedRows = mContentResolver.delete(contactUri, null, null);
+                        if (deletedRows < 1) {
+                            Log.e(TAG, "Nothing deleted for ID " + person.getId());
+                        }
+                        return person;
+                    }
+                });
+    }
 }

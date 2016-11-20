@@ -14,6 +14,11 @@ public class Person {
 
     private static final String NEW_LINE = "\n";
 
+    // TODO: These two fields can't be populated when we pull data from the server and make a contact in memory
+    // We should probably make a separate data structure, that we will use for deleting
+    private int id;
+    private String lookupUri;
+
     private String gender;
     private String title;
     private String firstName;
@@ -147,6 +152,22 @@ public class Person {
 
     public String getDisplayName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setLookupUri(String lookupUri) {
+        this.lookupUri = lookupUri;
+    }
+
+    public String getLookupUri() {
+        return lookupUri;
     }
 
     @Override

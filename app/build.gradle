@@ -58,6 +58,14 @@ dependencies {
 
     compile 'me.angrybyte.picker:picker:1.2.0'
 
+    compile 'io.reactivex:rxandroid:1.2.1'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile 'io.reactivex:rxjava:1.2.2'
+
+    compile 'com.squareup.sqlbrite:sqlbrite:0.8.0'
+    compile 'com.venmo.cursor:library:0.4'
+
     // set this dependency to use the JUnit instrumentation runner
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     // set this dependency to use JUnit 4 rules
