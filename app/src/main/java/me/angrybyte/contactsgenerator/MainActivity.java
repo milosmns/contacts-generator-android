@@ -21,11 +21,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import me.angrybyte.contactsgenerator.api.Gender;
@@ -168,11 +172,21 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.ContactsTheme_AlertDialog);
                 builder.setCancelable(false);
                 builder.setTitle(R.string.developer_about);
-                builder.setMessage(R.string.developer_note);
+                builder.setMessage(getDeveloperNote());
                 builder.setPositiveButton(R.string.developer_share, this);
                 builder.setNegativeButton(R.string.developer_dont_care, this);
                 builder.setNeutralButton(R.string.developer_github, this);
-                mAboutDialog = builder.show();
+                mAboutDialog = builder.create();
+                mAboutDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        TextView message = (TextView) mAboutDialog.findViewById(android.R.id.message);
+                        if (message != null) {
+                            message.setMovementMethod(LinkMovementMethod.getInstance());
+                        }
+                    }
+                });
+                mAboutDialog.show();
                 return true;
             }
             case R.id.action_delete_generated: {
@@ -385,4 +399,9 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         }
     }
 
+    public Spanned getDeveloperNote() {
+        String string = getString(R.string.developer_note)
+                + "<br/><br/><a href=\"http://angrybyte.me/privacy\">Privacy Policy</a>";
+        return Html.fromHtml(string);
+    }
 }
