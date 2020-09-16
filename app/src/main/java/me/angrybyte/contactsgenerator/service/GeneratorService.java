@@ -8,12 +8,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
+
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import android.util.Log;
 
 import java.util.Locale;
 
@@ -29,6 +30,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
 
     public static final String TAG = GeneratorService.class.getSimpleName();
     public static final int NOTIFICATION_ID = 1475369;
+    public static final String CONTACTS_GENERATOR_CHANNEL = "CONTACTS_GENERATOR_CHANNEL";
 
     private Person mLastGenerated;
     private Handler mHandler;
@@ -40,6 +42,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     private OnGenerateResultListener mResultListener;
     private OnGenerateProgressListener mProgressListener;
     private AsyncTask<Void, Void, Void> mDeletionTask;
+
     private boolean mIsForceStopped;
     private boolean mIsGenerating;
     private boolean mIsDeleting;
@@ -57,7 +60,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Starting " + TAG + " with intent " + String.valueOf(intent));
+        Log.d(TAG, "Starting " + TAG + " with intent " + intent);
 
         if (ServiceApi.DELETE_CONTACTS_ACTION.equals(intent.getAction())) {
             mContactOperations = new ContactOperations(this);
@@ -72,7 +75,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "Binding " + TAG + " with intent " + String.valueOf(intent));
+        Log.d(TAG, "Binding " + TAG + " with intent " + intent);
         return mBinder;
     }
 
@@ -108,7 +111,7 @@ public class GeneratorService extends Service implements ServiceApi, OnGenerateP
     }
 
     private void showNotification() {
-        mBuilder = new NotificationCompat.Builder(this);
+        mBuilder = new NotificationCompat.Builder(this, CONTACTS_GENERATOR_CHANNEL);
         mBuilder.setCategory(NotificationCompat.CATEGORY_SERVICE);
         mBuilder.setSmallIcon(R.drawable.ic_stat_generator);
         mBuilder.setContentTitle(getString(R.string.app_name));

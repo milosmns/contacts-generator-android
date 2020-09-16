@@ -9,9 +9,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import android.util.Log;
 
 import com.squareup.sqlbrite.BriteContentResolver;
 import com.squareup.sqlbrite.SqlBrite;
@@ -22,7 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import me.angrybyte.contactsgenerator.parser.data.Person;
 import rx.Observable;
@@ -42,7 +45,7 @@ public class ContactOperations {
     //<editor-fold desc="Contact query constants">
     private static final String EXAMPLE_DOMAIN = "@example.com";
     private static final Uri CONTENT_URI = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-    private static final String[] PROJECTION = new String[] {
+    private static final String[] PROJECTION = new String[]{
             ContactsContract.CommonDataKinds.Email.CONTACT_ID,
             ContactsContract.CommonDataKinds.Email.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -50,7 +53,7 @@ public class ContactOperations {
             ContactsContract.CommonDataKinds.Email.LOOKUP_KEY
     };
     private static final String SELECTION = ContactsContract.CommonDataKinds.Email.ADDRESS + " LIKE ?";
-    private static final String[] SELECTION_ARGS = new String[] {"%" + EXAMPLE_DOMAIN};
+    private static final String[] SELECTION_ARGS = new String[]{"%" + EXAMPLE_DOMAIN};
 
     private static final int ID = 0;
     private static final int DISPLAY_NAME = 1;
@@ -94,16 +97,20 @@ public class ContactOperations {
 
         operations.add(providerOperation.build());
 
-        providerOperation = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-                .withValue(ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER,
-                        person.getPhone())
-                .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
-                        ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+        // Phone
+        final List<String> phoneNumbers = Arrays.asList(person.getPhone(), generatePhoneNumber());
+        final Random rndPhoneTypeGenerator = new Random();
 
-        operations.add(providerOperation.build());
+        for (String phoneNumber : phoneNumbers) {
+            operations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER,
+                            phoneNumber)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE,
+                            getPhoneType(rndPhoneTypeGenerator)).build());
+        }
 
         providerOperation = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
@@ -158,7 +165,6 @@ public class ContactOperations {
      * @param matchingEmail You can parametrize the search query of the cursor with an email address. Sending {@code
      *                      null} will find all the contacts, while sending in a valid email address will find contacts
      *                      with only that email address associated with them
-     *
      * @return {@code True} if the cursor has been opened successfully, {@code false} otherwise
      */
     public boolean prepareCursorForScrubbing(@Nullable String matchingEmail) {
@@ -168,16 +174,16 @@ public class ContactOperations {
         String[] whereArgs;
         if (matchingEmail != null) {
             mMatchingEmail = matchingEmail;
-            projection = new String[] {
+            projection = new String[]{
                     ContactsContract.Contacts.LOOKUP_KEY, ContactsContract.CommonDataKinds.Email.ADDRESS
             };
 
             where = ContactsContract.CommonDataKinds.Email.ADDRESS + " LIKE ?";
-            whereArgs = new String[] {
+            whereArgs = new String[]{
                     "%" + matchingEmail
             };
         } else {
-            projection = new String[] {
+            projection = new String[]{
                     ContactsContract.Contacts.LOOKUP_KEY
             };
 
@@ -225,7 +231,7 @@ public class ContactOperations {
                 Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
                 int deletedRows = mContentResolver.delete(uri, null, null);
                 if (deletedRows < 1) {
-                    Log.w(TAG, "Nothing deleted for URI " + String.valueOf(uri));
+                    Log.w(TAG, "Nothing deleted for URI " + uri);
                     return false;
                 }
             }
@@ -241,12 +247,36 @@ public class ContactOperations {
         return true;
     }
 
+    private String generatePhoneNumber() {
+        Random rndGenerator = new Random();
+        StringBuilder stringBuilder = new StringBuilder();
+
+        while (stringBuilder.length() < 11) {
+            stringBuilder.append(rndGenerator.nextInt(9));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private int getPhoneType(Random rndPhoneTypeGenerator) {
+        switch (rndPhoneTypeGenerator.nextInt(2) + 1) {
+
+            case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
+                return ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE;
+
+            case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
+                return ContactsContract.CommonDataKinds.Phone.TYPE_WORK;
+
+            default: return ContactsContract.CommonDataKinds.Phone.TYPE_HOME;
+        }
+    }
+
     private void close(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
             } catch (Exception e) {
-                Log.w(TAG, "Cannot close the closeable " + String.valueOf(closeable));
+                Log.w(TAG, "Cannot close the closeable " + closeable);
             }
         }
     }
