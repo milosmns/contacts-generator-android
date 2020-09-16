@@ -1,7 +1,7 @@
 
 package me.angrybyte.contactsgenerator.service;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import me.angrybyte.contactsgenerator.api.GeneratorStats;
 

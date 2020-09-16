@@ -2,7 +2,7 @@
 package me.angrybyte.contactsgenerator.service;
 
 import android.os.Binder;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
 
