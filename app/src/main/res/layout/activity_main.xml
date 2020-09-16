@@ -133,7 +133,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/main_toolbar"
         style="@style/ContactsTheme.MainAppBarTheme"
         android:layout_gravity="center_horizontal|top"

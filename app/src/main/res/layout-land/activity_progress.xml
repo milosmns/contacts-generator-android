@@ -139,7 +139,7 @@
         android:elevation="@dimen/spacing_small"
         tools:ignore="UnusedAttribute">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             style="@style/ContactsTheme.MainAppBarTheme"
             android:layout_height="@dimen/normal_app_bar_size"
             android:layout_marginTop="6dp"

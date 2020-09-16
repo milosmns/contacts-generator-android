@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.StatsActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/stats_toolbar"
         style="@style/ContactsTheme.MainAppBarTheme"
         android:layout_height="@dimen/big_app_bar_size"
@@ -24,7 +24,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_crazy" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
         android:orientation="vertical">
 
         <!-- Left pane -->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="40dp"
@@ -166,10 +166,10 @@
                     tools:visibility="visible" />
 
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <!-- Right pane -->
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="40dp"
@@ -291,7 +291,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
     </LinearLayout>
 

@@ -1,7 +1,7 @@
 
 package me.angrybyte.contactsgenerator.test.app;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 

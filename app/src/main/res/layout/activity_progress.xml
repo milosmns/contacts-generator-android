@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.ProgressActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         style="@style/ContactsTheme.MainAppBarTheme"
         app:title="@string/activity_progress_title" />
 

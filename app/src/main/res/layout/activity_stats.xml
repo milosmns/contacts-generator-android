@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="me.angrybyte.contactsgenerator.StatsActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/stats_toolbar"
         style="@style/ContactsTheme.MainAppBarTheme"
         app:title="@string/stat_title" />

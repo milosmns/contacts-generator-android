@@ -1,7 +1,7 @@
 
 package me.angrybyte.contactsgenerator.api;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import java.io.Serializable;
 

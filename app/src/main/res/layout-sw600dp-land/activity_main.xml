@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/main_toolbar"
         style="@style/ContactsTheme.MainAppBarTheme"
         android:layout_height="@dimen/big_app_bar_size"
@@ -23,9 +23,9 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_huge" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_material_wide"
@@ -166,7 +166,7 @@
                 </RadioGroup>
             </LinearLayout>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <ImageButton
         android:id="@+id/main_button_generate"
